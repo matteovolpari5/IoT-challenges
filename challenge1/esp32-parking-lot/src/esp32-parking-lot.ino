@@ -30,7 +30,6 @@ esp_now_peer_info_t peerInfo;
 // distance [cm]
 #define DISTANCE_LIMIT 50
 
-
 // setup ESP-NOW
 void setupESP_NOW() {
   // WiFi setup 
@@ -116,7 +115,7 @@ void setup() {
 
   // send message
   esp_now_send(broadcastAddress, (uint8_t*)occupancy.c_str(), occupancy.length() + 1);
-  
+
   if (DEBUG) {
     // add some delay to receive the message 
     delay(10);
