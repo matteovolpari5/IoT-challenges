@@ -11,6 +11,8 @@
 unsigned long board_start = 0;
 unsigned long measurements_start = 0;
 unsigned long wifi_start = 0;
+unsigned long send_message_start = 0;
+unsigned long send_message_end = 0;
 unsigned long deep_sleep_start = 0;
 
 // pins 
@@ -29,6 +31,7 @@ esp_now_peer_info_t peerInfo;
 
 // distance [cm]
 #define DISTANCE_LIMIT 50
+
 
 // setup ESP-NOW
 void setupESP_NOW() {
@@ -113,9 +116,16 @@ void setup() {
   // setup ESP-NOW
   setupESP_NOW();
 
+  if (TIME_MEASUREMENT) {
+    send_message_start = micros();
+  }
   // send message
   esp_now_send(broadcastAddress, (uint8_t*)occupancy.c_str(), occupancy.length() + 1);
-
+  if (TIME_MEASUREMENT) {
+    send_message_end = micros();
+    Serial.println("Sending duration: " + String(send_message_end - send_message_start));
+  }
+  
   if (DEBUG) {
     // add some delay to receive the message 
     delay(10);
