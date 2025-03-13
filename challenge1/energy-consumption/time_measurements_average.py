@@ -2,7 +2,7 @@ import re
 import statistics
 
 # open log file
-with open("log.txt", "r") as file:
+with open("time_measurements_log.txt", "r") as file:
     log_text = file.read()
 
 # extract values from log using a regex 
