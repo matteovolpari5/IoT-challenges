@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.12)  13 MAR 2025 18:14
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.12)  13 MAR 2025 18:37
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1333,9 +1333,7 @@ on input line 129.
 
 ]
 Chapter 1.
-(./Chapters/ChapterOne.tex)
-No file ReportParkingLot.bbl.
-
+(./Chapters/CodeExplanation.tex)
 
 [1
 
@@ -1352,20 +1350,24 @@ o.pdf>
 (epstopdf)                    size: 40131 bytes
 (epstopdf)             Command: <repstopdf --outfile=./Images/./raggiera_polimi
 -eps-converted-to.pdf ./Images/./raggiera_polimi.eps>
-(epstopdf)             \includegraphics on input line 172.
+(epstopdf)             \includegraphics on input line 159.
 Package epstopdf Info: Output file is already uptodate.
 File: ./Images/./raggiera_polimi-eps-converted-to.pdf Graphic file (type pdf)
 <use ./Images/./raggiera_polimi-eps-converted-to.pdf>
 Package pdftex.def Info: ./Images/./raggiera_polimi-eps-converted-to.pdf  used 
-on input line 172.
+on input line 159.
 (pdftex.def)             Requested size: 507.88533pt x 507.88051pt.
 [2
 
-] (./ReportParkingLot.lof)
-\tf@lof=\write6
-\openout6 = `ReportParkingLot.lof'.
+]
+Chapter 2.
+(./Chapters/EnergyConsumptionEstimation.tex
+Overfull \hbox (11.76003pt too wide) in paragraph at lines 1--6
+\T1/cmr/m/n/12 Mea-sure-ment du-ra-tion: 18647.79411764706 uS Av-er-age Send-in
+g du-ra-tion: 59.6044776119403
+ []
 
-
+)
 
 [3
 
@@ -1380,14 +1382,70 @@ o.pdf>
 (epstopdf)                    size: 40131 bytes
 (epstopdf)             Command: <repstopdf --outfile=./Images/./raggiera_polimi
 -eps-converted-to.pdf ./Images/./raggiera_polimi.eps>
-(epstopdf)             \includegraphics on input line 175.
+(epstopdf)             \includegraphics on input line 163.
 Package epstopdf Info: Output file is already uptodate.
 File: ./Images/./raggiera_polimi-eps-converted-to.pdf Graphic file (type pdf)
 <use ./Images/./raggiera_polimi-eps-converted-to.pdf>
 Package pdftex.def Info: ./Images/./raggiera_polimi-eps-converted-to.pdf  used 
-on input line 175.
+on input line 163.
 (pdftex.def)             Requested size: 507.88533pt x 507.88051pt.
 [4
+
+]
+Chapter 3.
+(./Chapters/Improvements.tex)
+No file ReportParkingLot.bbl.
+
+
+[5
+
+]
+
+Package epstopdf Info: Source file: <./Images/./raggiera_polimi.eps>
+(epstopdf)                    date: 2021-10-26 08:15:40
+(epstopdf)                    size: 1813066 bytes
+(epstopdf)             Output file: <./Images/./raggiera_polimi-eps-converted-t
+o.pdf>
+(epstopdf)                    date: 2024-10-17 15:32:52
+(epstopdf)                    size: 40131 bytes
+(epstopdf)             Command: <repstopdf --outfile=./Images/./raggiera_polimi
+-eps-converted-to.pdf ./Images/./raggiera_polimi.eps>
+(epstopdf)             \includegraphics on input line 179.
+Package epstopdf Info: Output file is already uptodate.
+File: ./Images/./raggiera_polimi-eps-converted-to.pdf Graphic file (type pdf)
+<use ./Images/./raggiera_polimi-eps-converted-to.pdf>
+Package pdftex.def Info: ./Images/./raggiera_polimi-eps-converted-to.pdf  used 
+on input line 179.
+(pdftex.def)             Requested size: 507.88533pt x 507.88051pt.
+[6
+
+] (./ReportParkingLot.lof)
+\tf@lof=\write6
+\openout6 = `ReportParkingLot.lof'.
+
+
+
+[7
+
+]
+
+Package epstopdf Info: Source file: <./Images/./raggiera_polimi.eps>
+(epstopdf)                    date: 2021-10-26 08:15:40
+(epstopdf)                    size: 1813066 bytes
+(epstopdf)             Output file: <./Images/./raggiera_polimi-eps-converted-t
+o.pdf>
+(epstopdf)                    date: 2024-10-17 15:32:52
+(epstopdf)                    size: 40131 bytes
+(epstopdf)             Command: <repstopdf --outfile=./Images/./raggiera_polimi
+-eps-converted-to.pdf ./Images/./raggiera_polimi.eps>
+(epstopdf)             \includegraphics on input line 182.
+Package epstopdf Info: Output file is already uptodate.
+File: ./Images/./raggiera_polimi-eps-converted-to.pdf Graphic file (type pdf)
+<use ./Images/./raggiera_polimi-eps-converted-to.pdf>
+Package pdftex.def Info: ./Images/./raggiera_polimi-eps-converted-to.pdf  used 
+on input line 182.
+(pdftex.def)             Requested size: 507.88533pt x 507.88051pt.
+[8
 
 ] (./ReportParkingLot.lot)
 \tf@lot=\write7
@@ -1408,32 +1466,46 @@ See the caption package documentation for explanation.
 
 
 
-[5
+[9
 
 ] (./ReportParkingLot.aux)
  ***********
 LaTeX2e <2024-11-01>
 L3 programming layer <2024-11-02>
  ***********
-Package rerunfilecheck Info: File `ReportParkingLot.out' has not changed.
-(rerunfilecheck)             Checksum: 795BDEE357A65B86DA6817EAB746CE99;430.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `ReportParkingLot.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `ReportParkingLot.out':
+(rerunfilecheck)             Before: 795BDEE357A65B86DA6817EAB746CE99;430
+(rerunfilecheck)             After:  34155F2CE696383A0842B500FD9F0DBA;752.
  ) 
 Here is how much of TeX's memory you used:
- 31726 strings out of 473362
- 589186 string characters out of 5720983
+ 31757 strings out of 473362
+ 590033 string characters out of 5720983
  1067062 words of memory out of 5000000
- 54236 multiletter control sequences out of 15000+600000
+ 54252 multiletter control sequences out of 15000+600000
  573116 words of font info for 73 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  84i,12n,93p,1205b,476s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb>
-</usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></
-usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></us
-r/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfxc1200.pfb>
-Output written on ReportParkingLot.pdf (9 pages, 182404 bytes).
+
+pdfTeX warning (dest): name{chapter*.5} has been referenced but does not exist,
+ replaced by a fixed one
+
+</usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></
+usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></us
+r/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/
+local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfxc1200.pfb>
+Output written on ReportParkingLot.pdf (13 pages, 188465 bytes).
 PDF statistics:
- 115 PDF objects out of 1000 (max. 8388607)
- 88 compressed objects within 1 object stream
- 16 named destinations out of 1000 (max. 500000)
+ 140 PDF objects out of 1000 (max. 8388607)
+ 108 compressed objects within 2 object streams
+ 25 named destinations out of 1000 (max. 500000)
  61 words of extra memory for PDF output out of 10000 (max. 10000000)
 
