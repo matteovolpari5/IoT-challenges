@@ -178,6 +178,11 @@ print("Average Sending duration:", avg_sending)
 print("Average WiFi duration:", avg_wifi)
 \end{python}
 
+The deep sleep duration is computed from the last two digits of the person code, 10773593, as:
+\begin{align*}
+	T_{deep\_sleep} &= (93 \% 50) + 5 = 48\,\text{s} \\ 
+\end{align*}
+
 The duration of different states is reported in the following table.
 
 \begin{table}[H]
@@ -200,9 +205,10 @@ The duration of different states is reported in the following table.
 \end{table}
 
 \section{Energy consumption estimation}
-Starting from the power consumption and states durations estimations, we can easily compute energy consume by ESP32 by multiplying the power and the time of each state.\\
+Starting from the power consumption and states durations estimations, we can easily compute energy consumed by the ESP32 by multiplying the power and the time of each state.\\
 At start, the ESP32 is in idle mode for T\_{idle}. Then it enters measurement mode to measure the distance with the ultrasonic distance sensor HC-SR04 for T\_{measurement}. When the measurement is completed, the ESP32 turns the WiFi on for T\_{WiFi} and, during this same period, it transmits data at 2 dBm for T\_{transmission}. Finally, it enters deep sleep for T\_{deep\_sleep}. \\
 
+The energy for different states is computed as follows.
 \begin{align*}
 	E_{idle} &= P_{idle} \cdot T_{idle} = 0.268 \,\text{mJ} \\ 
 	E_{measurement} &= P_{measurement} \cdot T_{measurement} = 8.675 \,\text{mJ} \\
@@ -211,14 +217,35 @@ At start, the ESP32 is in idle mode for T\_{idle}. Then it enters measurement mo
    	E_{deep\_sleep} &= P_{deep\_sleep} \cdot T_{deep\_sleep} = 2863,680\,\text{mJ} 
 \end{align*}
 
+The energy consumption for a cycle is computed as the sum.
 \[
-E = E_{idle} + E_{measurement} + E_{WiFi} + E_{transmission} + E_{deep\_sleep} = 3009,313\,\text{mJ} 
+E_{cycle} = E_{idle} + E_{measurement} + E_{WiFi} + E_{transmission} + E_{deep\_sleep} = 3009,313\,\text{mJ} 
 \]
 
-Battery size
-18593 J
+The available energy is computed from the last four digits of the person code, 10773593, as: 
+\begin{align*}
+	E_{b} &= (3593 \% 5000) + 15000 = 18593\,\text{J} = 18593000\,\text{mJ}
+\end{align*}
+
+The sensor node has a lifetime, measured in cycles, of:
+\begin{align*}
+	L_{cycles}&= 18593000\,\text{mJ} / 3009,313\,\text{mJ} = 6178.487 \,\text{cycles} 
+\end{align*}
+
+The total time for a cycle is:
+\begin{align*}
+	T_{cycle} &= T_{idle} + T_{measurement} + T_{WiFi} + T_{deep\_sleep} = 48.208 \text{s}
+\end{align*}
+
+The lifetime, measured in time, is of:
+\begin{align*}
+	L_{time}&= L_{cycles} \cdot T_{cycle} = 297852.501 \text{s}
+\end{align*}
+
+The lifetime is equivalent to 3 days, 10 hours, 44 minutes and 12 seconds.
 
 
+COORDINATES
 6.87168 7.65929 8.15501
 
 
