@@ -1,16 +1,34 @@
 Power consumption estimation
 Deep sleep duration: 48 s
-Average Idle duration: 833.6985294117648 uS
-Average Measurement duration: 18647.79411764706 uS
-Average WiFi duration: 188640.86842105264 uS
-Average Sending duration: 59.6044776119403 uS
+Average Idle duration: 833.6985294117648 uS => 833.70 uS
+Average Measurement duration: 18647.79411764706 uS => 18647.79 uS
+Average WiFi duration: 188640.86842105264 uS => 188640.86 uS
+Average Sending duration: 59.6044776119403 uS => 59.60 uS
 
 Battery size
 18593 J
 
 Average power consumption 
-Average power consumption deep sleep:  59.66093555093555 mW
-Average power consumption idle:  322.62464743589743 mW
-Average power consumption measurement:  465.18097744360904 mW
-Average power consumption WiFi on:  724.5793571428571 mW
-Average power consumption transmission at 2dBm:  797.2942857142858 mW
+Average power consumption deep sleep:  59.66093555093555 mW => 59.66 mW
+Average power consumption idle:  322.62464743589743 mW => 322.62 mW
+Average power consumption measurement:  465.18097744360904 mW => 465.18 mW
+Average power consumption WiFi on:  724.5793571428571 mW => 724.58 mW
+Average power consumption transmission at 2dBm:  797.2942857142858 mW => 797.29 mW
+
+
+
+\begin{flalign*}
+    E_{idle} &= P_{idle} \cdot T_{idle} = 322.62 \text{ mW} \cdot 833.70 \text{ µS} = 2.69 \times 10^{-4} \text{ J} \\
+    E_{measurement} &= P_{measurement} \cdot T_{measurement} = 465.18 \text{ mW} \cdot 18647.79 \text{ µS} = 8.67 \times 10^{-3} \text{ J} \\
+    E_{WiFi} &= P_{WiFi} \cdot (T_{WiFi} - T_{transmission}) = 724.58 \text{ mW} \cdot (188640.86 \text{ µS} - 59.60 \text{ µS}) = 0.136642 \text{ J} \\
+    E_{transmission} &= P_{transmission} \cdot T_{transmission} = 797.29 \text{ mW} \cdot 59.60 \text{ µS} = 4.7518484 \times 10^{-5} \text{ J} \\
+    E_{deep sleep} &= P_{deep\_sleep} \cdot T_{deep\_sleep} = 59.66 \text{ mW} \cdot 48 \times 10^6 \text{ µS} = 2.86386 \text{ J}
+\end{flalign*}
+
+
+\[E = E_{idle} + E_{measurement} + E_{WiFi} + E_{transmission} + E_{deep\_sleep} = 3.00931 J\]
+
+
+
+
+6.87168 7.65929 8.15501
