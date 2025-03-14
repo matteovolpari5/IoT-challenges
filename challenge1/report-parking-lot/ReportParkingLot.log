@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.12)  13 MAR 2025 18:37
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.12)  14 MAR 2025 17:28
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1084,31 +1084,54 @@ File: listings.cfg 2024/09/23 1.10c listings configuration
 ))
 Package: listings 2024/09/23 1.10c (Carsten Heinz)
 )
-(./Configuration_Files/config.tex
+(/usr/local/texlive/2024/texmf-dist/tex/latex/pythonhighlight/pythonhighlight.s
+ty
+Package: pythonhighlight 2024/03/18 python code highlighting; provided by Olivi
+er Verdier <olivier.verdier@gmail.com>
+ (/usr/local/texlive/2024/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+Package: xparse 2024-08-16 L3 Experimental document command parser
+)) (./Configuration_Files/config.tex
 \c@theorem=\count381
 \c@proposition=\count382
 \c@algsubstate=\count383
-) (./ReportParkingLot.aux)
+) (./ReportParkingLot.aux
+
+LaTeX Warning: Label `fig:Power consumption deep sleep state' multiply defined.
+
+
+
+LaTeX Warning: Label `fig:Power consumption deep sleep state@cref' multiply def
+ined.
+
+
+LaTeX Warning: Label `fig:Power consumption deep sleep state' multiply defined.
+
+
+
+LaTeX Warning: Label `fig:Power consumption deep sleep state@cref' multiply def
+ined.
+
+)
 \openout1 = `ReportParkingLot.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 89.
-LaTeX Font Info:    ... okay on input line 89.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 90.
+LaTeX Font Info:    ... okay on input line 90.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 90.
+LaTeX Font Info:    ... okay on input line 90.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 90.
+LaTeX Font Info:    ... okay on input line 90.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 90.
+LaTeX Font Info:    ... okay on input line 90.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 90.
+LaTeX Font Info:    ... okay on input line 90.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 90.
+LaTeX Font Info:    ... okay on input line 90.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 90.
+LaTeX Font Info:    ... okay on input line 90.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 90.
+LaTeX Font Info:    ... okay on input line 90.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 90.
+LaTeX Font Info:    ... okay on input line 90.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1177,9 +1200,9 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-LaTeX Info: Redefining \[ on input line 89.
-LaTeX Info: Redefining \] on input line 89.
-Package hyperref Info: Link coloring ON on input line 89.
+LaTeX Info: Redefining \[ on input line 90.
+LaTeX Info: Redefining \] on input line 90.
+Package hyperref Info: Link coloring ON on input line 90.
 
 (./ReportParkingLot.out) (./ReportParkingLot.out)
 \@outlinefile=\write4
@@ -1210,34 +1233,34 @@ O-eps-converted-to.pdf>
 (epstopdf)             Command: <repstopdf --outfile=Images/02_ING_IND_INFORMAZ
 IONE_COL_POSITIVO-eps-converted-to.pdf Images/02_ING_IND_INFORMAZIONE_COL_POSIT
 IVO.eps>
-(epstopdf)             \includegraphics on input line 113.
+(epstopdf)             \includegraphics on input line 114.
 Package epstopdf Info: Output file is already uptodate.
-<Images/02_ING_IND_INFORMAZIONE_COL_POSITIVO-eps-converted-to.pdf, id=23, 493.8
+<Images/02_ING_IND_INFORMAZIONE_COL_POSITIVO-eps-converted-to.pdf, id=47, 493.8
 45pt x 227.85126pt>
 File: Images/02_ING_IND_INFORMAZIONE_COL_POSITIVO-eps-converted-to.pdf Graphic 
 file (type pdf)
 <use Images/02_ING_IND_INFORMAZIONE_COL_POSITIVO-eps-converted-to.pdf>
 Package pdftex.def Info: Images/02_ING_IND_INFORMAZIONE_COL_POSITIVO-eps-conver
-ted-to.pdf  used on input line 113.
+ted-to.pdf  used on input line 114.
 (pdftex.def)             Requested size: 302.73503pt x 150.052pt.
 
-./ReportParkingLot.tex:113: Undefined control sequence.
+./ReportParkingLot.tex:114: Undefined control sequence.
 \@puttitle ...ce {6.3em} \Large \bfseries {\nameC 
                                                   }} \end {minipage} \\ \vsp...
-l.113 }
+l.114 }
        
 ? 
 
-Underfull \hbox (badness 10000) in paragraph at lines 113--113
+Underfull \hbox (badness 10000) in paragraph at lines 114--114
 
  []
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 113
+LaTeX Font Info:    Trying to load font information for U+msa on input line 114
 .
 (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 113
+LaTeX Font Info:    Trying to load font information for U+msb on input line 114
 .
 
 (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -1253,14 +1276,14 @@ o.pdf>
 (epstopdf)                    size: 40131 bytes
 (epstopdf)             Command: <repstopdf --outfile=./Images/./raggiera_polimi
 -eps-converted-to.pdf ./Images/./raggiera_polimi.eps>
-(epstopdf)             \includegraphics on input line 113.
+(epstopdf)             \includegraphics on input line 114.
 Package epstopdf Info: Output file is already uptodate.
-<./Images/./raggiera_polimi-eps-converted-to.pdf, id=25, 502.87875pt x 502.8787
+<./Images/./raggiera_polimi-eps-converted-to.pdf, id=49, 502.87875pt x 502.8787
 5pt>
 File: ./Images/./raggiera_polimi-eps-converted-to.pdf Graphic file (type pdf)
 <use ./Images/./raggiera_polimi-eps-converted-to.pdf>
 Package pdftex.def Info: ./Images/./raggiera_polimi-eps-converted-to.pdf  used 
-on input line 113.
+on input line 114.
 (pdftex.def)             Requested size: 418.25368pt x 418.24866pt.
 [1
 
@@ -1280,12 +1303,12 @@ o.pdf>
 (epstopdf)                    size: 40131 bytes
 (epstopdf)             Command: <repstopdf --outfile=./Images/./raggiera_polimi
 -eps-converted-to.pdf ./Images/./raggiera_polimi.eps>
-(epstopdf)             \includegraphics on input line 118.
+(epstopdf)             \includegraphics on input line 119.
 Package epstopdf Info: Output file is already uptodate.
 File: ./Images/./raggiera_polimi-eps-converted-to.pdf Graphic file (type pdf)
 <use ./Images/./raggiera_polimi-eps-converted-to.pdf>
 Package pdftex.def Info: ./Images/./raggiera_polimi-eps-converted-to.pdf  used 
-on input line 118.
+on input line 119.
 (pdftex.def)             Requested size: 507.88533pt x 507.88051pt.
 [2
 
@@ -1300,7 +1323,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.i}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.129 \cleardoublepage
+l.130 \cleardoublepage
                        [1
 
 
@@ -1311,7 +1334,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.ii}) has
  been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.129 \cleardoublepage
+l.130 \cleardoublepage
                       
 Package epstopdf Info: Source file: <./Images/./raggiera_polimi.eps>
 (epstopdf)                    date: 2021-10-26 08:15:40
@@ -1322,12 +1345,12 @@ o.pdf>
 (epstopdf)                    size: 40131 bytes
 (epstopdf)             Command: <repstopdf --outfile=./Images/./raggiera_polimi
 -eps-converted-to.pdf ./Images/./raggiera_polimi.eps>
-(epstopdf)             \includegraphics on input line 129.
+(epstopdf)             \includegraphics on input line 130.
 Package epstopdf Info: Output file is already uptodate.
 File: ./Images/./raggiera_polimi-eps-converted-to.pdf Graphic file (type pdf)
 <use ./Images/./raggiera_polimi-eps-converted-to.pdf>
 Package pdftex.def Info: ./Images/./raggiera_polimi-eps-converted-to.pdf  used 
-on input line 129.
+on input line 130.
 (pdftex.def)             Requested size: 507.88533pt x 507.88051pt.
  [2
 
@@ -1350,54 +1373,87 @@ o.pdf>
 (epstopdf)                    size: 40131 bytes
 (epstopdf)             Command: <repstopdf --outfile=./Images/./raggiera_polimi
 -eps-converted-to.pdf ./Images/./raggiera_polimi.eps>
-(epstopdf)             \includegraphics on input line 159.
+(epstopdf)             \includegraphics on input line 160.
 Package epstopdf Info: Output file is already uptodate.
 File: ./Images/./raggiera_polimi-eps-converted-to.pdf Graphic file (type pdf)
 <use ./Images/./raggiera_polimi-eps-converted-to.pdf>
 Package pdftex.def Info: ./Images/./raggiera_polimi-eps-converted-to.pdf  used 
-on input line 159.
+on input line 160.
 (pdftex.def)             Requested size: 507.88533pt x 507.88051pt.
 [2
 
 ]
 Chapter 2.
 (./Chapters/EnergyConsumptionEstimation.tex
-Overfull \hbox (11.76003pt too wide) in paragraph at lines 1--6
-\T1/cmr/m/n/12 Mea-sure-ment du-ra-tion: 18647.79411764706 uS Av-er-age Send-in
-g du-ra-tion: 59.6044776119403
- []
-
+(/usr/local/texlive/2024/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2024/09/23 1.10c listings language file
 )
+
+LaTeX Font Warning: Font shape `T1/cmtt/bx/n' in size <10> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 9.
+
+<./Images/power_consumption_deep_sleep.pdf, id=104, 626.44936pt x 393.98067pt>
+File: ./Images/power_consumption_deep_sleep.pdf Graphic file (type pdf)
+<use ./Images/power_consumption_deep_sleep.pdf>
+Package pdftex.def Info: ./Images/power_consumption_deep_sleep.pdf  used on inp
+ut line 29.
+(pdftex.def)             Requested size: 423.48506pt x 266.33426pt.
+
 
 [3
 
 ]
+<./Images/power_consumption_sensor_read.pdf, id=129, 614.44559pt x 393.98067pt>
 
-Package epstopdf Info: Source file: <./Images/./raggiera_polimi.eps>
-(epstopdf)                    date: 2021-10-26 08:15:40
-(epstopdf)                    size: 1813066 bytes
-(epstopdf)             Output file: <./Images/./raggiera_polimi-eps-converted-t
-o.pdf>
-(epstopdf)                    date: 2024-10-17 15:32:52
-(epstopdf)                    size: 40131 bytes
-(epstopdf)             Command: <repstopdf --outfile=./Images/./raggiera_polimi
--eps-converted-to.pdf ./Images/./raggiera_polimi.eps>
-(epstopdf)             \includegraphics on input line 163.
-Package epstopdf Info: Output file is already uptodate.
-File: ./Images/./raggiera_polimi-eps-converted-to.pdf Graphic file (type pdf)
-<use ./Images/./raggiera_polimi-eps-converted-to.pdf>
-Package pdftex.def Info: ./Images/./raggiera_polimi-eps-converted-to.pdf  used 
-on input line 163.
-(pdftex.def)             Requested size: 507.88533pt x 507.88051pt.
-[4
+File: ./Images/power_consumption_sensor_read.pdf Graphic file (type pdf)
+<use ./Images/power_consumption_sensor_read.pdf>
+Package pdftex.def Info: ./Images/power_consumption_sensor_read.pdf  used on in
+put line 38.
+(pdftex.def)             Requested size: 415.3704pt x 266.33426pt.
 
-]
+
+[4 <./Images/power_consumption_deep_sleep.pdf>]
+<./Images/power_consumption_transmission.pdf, id=171, 620.82881pt x 393.98067pt
+>
+File: ./Images/power_consumption_transmission.pdf Graphic file (type pdf)
+<use ./Images/power_consumption_transmission.pdf>
+Package pdftex.def Info: ./Images/power_consumption_transmission.pdf  used on i
+nput line 47.
+(pdftex.def)             Requested size: 419.68553pt x 266.33426pt.
+
+
+[5 <./Images/power_consumption_sensor_read.pdf>]
+
+[6 <./Images/power_consumption_transmission.pdf>]
+
+[7]
+Overfull \hbox (45.23647pt too wide) in paragraph at lines 104--110
+[]\T1/cmr/m/n/12 Power con-sump-tion es-ti-ma-tion Deep sleep du-ra-tion: 48 s 
+Av-er-age Idle du-ra-tion: 833.6985294117648
+ []
+
+
+Overfull \hbox (67.71033pt too wide) in paragraph at lines 104--110
+\T1/cmr/m/n/12 uS Av-er-age Mea-sure-ment du-ra-tion: 18647.79411764706 uS Av-e
+r-age WiFi du-ra-tion: 188640.86842105264
+ []
+
+)
+Overfull \hbox (27.12701pt too wide) in paragraph at lines 114--163
+\T1/cmr/m/n/12 724.5793571428571 mW Av-er-age power con-sump-tion trans-mis-sio
+n at 2dBm: 797.2942857142858
+ []
+
+
+
+[8]
 Chapter 3.
 (./Chapters/Improvements.tex)
 No file ReportParkingLot.bbl.
 
 
-[5
+[9
+
 
 ]
 
@@ -1410,14 +1466,14 @@ o.pdf>
 (epstopdf)                    size: 40131 bytes
 (epstopdf)             Command: <repstopdf --outfile=./Images/./raggiera_polimi
 -eps-converted-to.pdf ./Images/./raggiera_polimi.eps>
-(epstopdf)             \includegraphics on input line 179.
+(epstopdf)             \includegraphics on input line 180.
 Package epstopdf Info: Output file is already uptodate.
 File: ./Images/./raggiera_polimi-eps-converted-to.pdf Graphic file (type pdf)
 <use ./Images/./raggiera_polimi-eps-converted-to.pdf>
 Package pdftex.def Info: ./Images/./raggiera_polimi-eps-converted-to.pdf  used 
-on input line 179.
+on input line 180.
 (pdftex.def)             Requested size: 507.88533pt x 507.88051pt.
-[6
+[10
 
 ] (./ReportParkingLot.lof)
 \tf@lof=\write6
@@ -1425,7 +1481,7 @@ on input line 179.
 
 
 
-[7
+[11
 
 ]
 
@@ -1438,23 +1494,19 @@ o.pdf>
 (epstopdf)                    size: 40131 bytes
 (epstopdf)             Command: <repstopdf --outfile=./Images/./raggiera_polimi
 -eps-converted-to.pdf ./Images/./raggiera_polimi.eps>
-(epstopdf)             \includegraphics on input line 182.
+(epstopdf)             \includegraphics on input line 183.
 Package epstopdf Info: Output file is already uptodate.
 File: ./Images/./raggiera_polimi-eps-converted-to.pdf Graphic file (type pdf)
 <use ./Images/./raggiera_polimi-eps-converted-to.pdf>
 Package pdftex.def Info: ./Images/./raggiera_polimi-eps-converted-to.pdf  used 
-on input line 182.
+on input line 183.
 (pdftex.def)             Requested size: 507.88533pt x 507.88051pt.
-[8
+[12
 
 ] (./ReportParkingLot.lot)
 \tf@lot=\write7
 \openout7 = `ReportParkingLot.lot'.
 
-
-
-Package caption Warning: Unused \captionsetup[figure] on input line 11.
-See the caption package documentation for explanation.
 
 
 Package caption Warning: Unused \captionsetup[table] on input line 12.
@@ -1466,7 +1518,7 @@ See the caption package documentation for explanation.
 
 
 
-[9
+[13
 
 ] (./ReportParkingLot.aux)
  ***********
@@ -1475,7 +1527,7 @@ L3 programming layer <2024-11-02>
  ***********
 
 
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+LaTeX Warning: There were multiply-defined labels.
 
 
 Package rerunfilecheck Warning: File `ReportParkingLot.out' has changed.
@@ -1483,29 +1535,39 @@ Package rerunfilecheck Warning: File `ReportParkingLot.out' has changed.
 (rerunfilecheck)                or use package `bookmark'.
 
 Package rerunfilecheck Info: Checksums for `ReportParkingLot.out':
-(rerunfilecheck)             Before: 795BDEE357A65B86DA6817EAB746CE99;430
-(rerunfilecheck)             After:  34155F2CE696383A0842B500FD9F0DBA;752.
+(rerunfilecheck)             Before: 50159D0D338D7C1CD9D0ECA491CB8B17;1654
+(rerunfilecheck)             After:  0FB825DA696194B2ED75A4B23F197BBA;1424.
  ) 
 Here is how much of TeX's memory you used:
- 31757 strings out of 473362
- 590033 string characters out of 5720983
- 1067062 words of memory out of 5000000
- 54252 multiletter control sequences out of 15000+600000
- 573116 words of font info for 73 fonts, out of 8000000 for 9000
+ 32287 strings out of 473362
+ 599582 string characters out of 5720983
+ 1428652 words of memory out of 5000000
+ 54707 multiletter control sequences out of 15000+600000
+ 575584 words of font info for 78 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,12n,93p,1205b,476s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,12n,100p,1205b,2209s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-pdfTeX warning (dest): name{chapter*.5} has been referenced but does not exist,
- replaced by a fixed one
+pdfTeX warning (dest): name{chapter*.15} has been referenced but does not exist
+, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{chapter*.13} has been referenced but does not exist
+, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.2.1.3} has been referenced but does not 
+exist, replaced by a fixed one
 
 </usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></
 usr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></us
 r/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/
-local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfxc1200.pfb>
-Output written on ReportParkingLot.pdf (13 pages, 188465 bytes).
+local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfst1000.pfb></usr/lo
+cal/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb></usr/loca
+l/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfxc1200.pfb>
+Output written on ReportParkingLot.pdf (17 pages, 303045 bytes).
 PDF statistics:
- 140 PDF objects out of 1000 (max. 8388607)
- 108 compressed objects within 2 object streams
- 25 named destinations out of 1000 (max. 500000)
- 61 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 368 PDF objects out of 1000 (max. 8388607)
+ 237 compressed objects within 3 object streams
+ 85 named destinations out of 1000 (max. 500000)
+ 124 words of extra memory for PDF output out of 10000 (max. 10000000)
 

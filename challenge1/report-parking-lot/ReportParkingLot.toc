@@ -3,7 +3,18 @@
 \vspace {2em}
 \contentsline {chapter}{\numberline {1}Code explanation}{1}{chapter.1}%
 \contentsline {chapter}{\numberline {2}Energy consumption estimation}{3}{chapter.2}%
-\contentsline {chapter}{\numberline {3}Improvements}{5}{chapter.3}%
+\contentsline {section}{\numberline {2.1}Power consumption esitmation}{3}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Power consumption data plots}{3}{subsection.2.1.1}%
+\contentsline {subsubsection}{Power consumption deep\_sleep.csv}{3}{subsubsection*.5}%
+\contentsline {subsubsection}{Power consumption sensor\_read.csv}{4}{subsubsection*.7}%
+\contentsline {subsubsection}{Power consumption transmission\_power.csv}{5}{subsubsection*.9}%
+\contentsline {subsection}{\numberline {2.1.2}Numerical power consumption estimation}{6}{subsection.2.1.2}%
+\contentsline {subsubsection}{Power consumption in deep sleep state}{6}{subsubsection*.11}%
+\contentsline {subsubsection}{Power consumption in idle state}{7}{subsubsection*.12}%
+\contentsline {subsubsection}{Power consumption in measurement state}{7}{subsubsection*.13}%
+\contentsline {subsubsection}{Power consumption in WiFi on state}{8}{subsubsection*.14}%
+\contentsline {subsubsection}{Power consumption when transmitting at 2 dBm}{8}{subsubsection*.15}%
+\contentsline {chapter}{\numberline {3}Improvements}{9}{chapter.3}%
 \vspace {2em}
-\contentsline {chapter}{List of Figures}{7}{chapter*.7}%
-\contentsline {chapter}{List of Tables}{9}{chapter*.9}%
+\contentsline {chapter}{List of Figures}{11}{chapter*.18}%
+\contentsline {chapter}{List of Tables}{13}{chapter*.20}%
