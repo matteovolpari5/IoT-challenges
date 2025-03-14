@@ -122,8 +122,6 @@
     			 {\color{black} \Large {Authors:} \hspace{0.35em} \bfseries{\nameA}} \\ \\
            		 \vspace{0.51cm}
 		 	{\color{black} \hspace{6.3em} \Large \bfseries{\nameB}} \\
-        			\vspace{0.51cm}
-	                 {\color{black} \hspace{6.3em} \Large \bfseries{\nameC}}
 			\end{minipage}
 			\\
 			\vspace*{\fill}

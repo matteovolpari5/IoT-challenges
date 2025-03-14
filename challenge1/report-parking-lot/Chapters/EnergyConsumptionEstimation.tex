@@ -1,8 +1,8 @@
-\section{Power consumption esitmation}
+\section{Power consumption estimation}
 In this section, there is a description of the power consumption of the ESP32 node in all states: deep sleep, idle, sensor reading, WiFi turned on and transmission.\\
 In order to estimate power consumption based on the provided CSV files, we first plotted data using Python and Matplotlib library. Based on the plot, we computed the average power consumption in the analyzed working state.
 
-\subsection{Power consumption data plots}
+\subsection{Power consumption plots}
 In order to plot the data contained in the provided CSV files, we used the following algorithm.
 
 \begin{python}
@@ -49,7 +49,7 @@ The following plot represents the power consumption when the ESP32 has the WiFi 
     \label{fig:Power consumption deep sleep state}
 \end{figure}
 
-\subsection{Numerical power consumption estimation}
+\subsection{Average power consumption values}
 In order to find a numerical estimation of the power consumption in different states, we used some Python algorithms, using the library Pandas. Starting from the plot we selected the range of values regarding a particular state, discarding the others, and computed the average power consumption. For some states, the values of power can be found in multiple CSV files; in such cases, we merged different files in order to have a more accurate estimation.\\
 In the following sections we also report two example of algorithms used to compute the average, both using a single dataset and multiple datasets.
 
@@ -77,9 +77,9 @@ import pandas as pd
 # read CSV file 
 dataset_deep_sleep = pd.read_csv("deep_sleep.csv", parse_dates=['Timestamp'])
 dataset_sensor_reading = pd.read_csv("sensor_read.csv", parse_dates=['Timestamp'])
-# filter data with power between 200mW and 500mW, referring to idle mode
+# filter data with power between 200 mW and 500 mW, referring to idle mode
 idle_data_deep_sleep = dataset_deep_sleep[(dataset_deep_sleep['Data'] >= 200) & (dataset_deep_sleep['Data'] <= 500)]
-# filter data with power <= 400mW, reffering to idle mode
+# filter data with power <= 400 mW, reffering to idle mode
 idle_data_sensor_reading = dataset_sensor_reading[dataset_sensor_reading['Data'] <= 400]
 # merge values 
 idle_merged = pd.concat([idle_data_deep_sleep, idle_data_sensor_reading], ignore_index=True)
@@ -100,13 +100,112 @@ We estimated the power consumption when the WiFi is turned on and the ESP32 is n
 \subsubsection{Power consumption when transmitting at 2 dBm}
 Finally, we estimated the average power consumption when ESP32 is transmitting at 2 dBm, based on transmission\_power.csv. We compute the average of values between 750 mW and 900 mW, obtaining an average value of 797.29 mW.
 
+\subsubsection{Summary power consumption}
+The summary of power consumption of ESP32 in different states is reported below.
 
-Power consumption estimation
-Deep sleep duration: 48 s
-Average Idle duration: 833.6985294117648 uS => 833.70 uS
-Average Measurement duration: 18647.79411764706 uS => 18647.79 uS
-Average WiFi duration: 188640.86842105264 uS => 188640.86 uS
-Average Sending duration: 59.6044776119403 uS => 59.60 uS
+\begin{table}[H]
+\centering 
+\begin{tabular}{| c | c |}
+	\hline 
+	\rowcolor{bluepoli!40}
+	\textbf{State} & \textbf{Power}\T\B \\
+	\hline 
+	$P_{idle}$ & $322.62\,\text{mW}$ \T\B\\
+	$P_{measurement}$ & $465.18\,\text{mW}$ \T\B\\
+	$P_{WiFi}$ & $724.58\,\text{mW}$ \T\B\\
+	$P_{transmission}$ & $797.29\,\text{mW}$ \T\B\\
+	$P_{deep\_sleep}$  & $59.66\,\text{mW}$ \T\B\\
+	\hline
+\end{tabular}
+\\[10pt]
+\caption{States power table}
+\label{table:states_power_table}
+\end{table}
+
+
+
+\section{States duration estimation}
+We estimated the duration of different states by simulating the ESP32 on Wokwi and measuring them. We saved the timestamps in different points of execution, computed the duration of each state and printed it on the serial log.\\
+We simulated the execution for about a hundred cycles and saved the serial log. We provide few examples of entries of the serial log, in which the durations are in microseconds.
+
+\begin{verbatim}
+entry 0x400805dc
+Idle duration: 882
+Measurement duration: 24116
+Sending duration: 64
+WiFi duration: 189158
+ets Jul 29 2019 12:21:46
+
+entry 0x400805dc
+Idle duration: 846
+Measurement duration: 24212
+Sending duration: 65
+WiFi duration: 188548
+ets Jul 29 2019 12:21:46
+
+entry 0x400805dc
+Idle duration: 845
+Measurement duration: 24211
+Sending duration: 64
+WiFi duration: 187548
+ets Jul 29 2019 12:21:46
+\end{verbatim}
+
+We computed the duration of different states using a Python algorithm to extract the values from the log, using regexes, filtering outliers and computing the average. \\
+In the measurement of the sending duration, during which the ESP32 uses WiFi, we noticed the presence of some values completely different from the others, caused by the simulation on Wokwi; we filtered them out to get a more accurate estimation. \\
+Finally, we observed that the duration of the measurement with the HC-SR04 ultrasonic distance sensor varies based on the resulting distance: the higher the distance, the longer the duration. In order to have a realistic duration, we gathered data with different values of measured distance.
+
+\begin{python}
+import re
+import statistics
+# open log file
+with open("time_measurements_log.txt", "r") as file:
+    log_text = file.read()
+# extract values from log using a regex 
+idle_values = list(map(int, re.findall(r"Idle duration:\s*(\d+)", log_text)))
+measurement_values = list(map(int, re.findall(r"Measurement duration:\s*(\d+)", log_text)))
+sending_values = list(map(int, re.findall(r"Sending duration:\s*(\d+)", log_text)))
+wifi_values = list(map(int, re.findall(r"WiFi duration:\s*(\d+)", log_text)))
+# filter wrong values, given by the simulation
+wifi_values = [value for value in wifi_values if value <= 200000]
+# compute averages
+avg_idle = statistics.mean(idle_values) if idle_values else 0
+avg_measurement = statistics.mean(measurement_values) if measurement_values else 0
+avg_sending = statistics.mean(sending_values) if sending_values else 0
+avg_wifi = statistics.mean(wifi_values) if wifi_values else 0
+#print values
+print("Average Idle duration:", avg_idle)
+print("Average Measurement duration:", avg_measurement)
+print("Average Sending duration:", avg_sending)
+print("Average WiFi duration:", avg_wifi)
+\end{python}
+
+The duration of different states is reported in the following table.
+
+\begin{table}[H]
+\centering 
+\begin{tabular}{| c | c |}
+	\hline 
+	\rowcolor{bluepoli!40}
+	\textbf{State} & \textbf{Duration}\T\B \\
+	\hline 
+	$T_{idle}$ & $833.70\,\mu\text{s}$ \T\B\\
+	$T_{measurement}$ & $18647.79\,\mu\text{s}$ \T\B\\
+	$T_{WiFi}$ & $188640.86\,\mu\text{s}$ \T\B\\
+	$T_{transmission}$ & $59.60\,\mu\text{s}$ \T\B\\
+	$T_{deep\_sleep}$  & $48\times10^6\,\mu\text{s}$ \T\B\\
+	\hline
+\end{tabular}
+\\[10pt]
+\caption{States duration table}
+\label{table:states_duration_table}
+\end{table}
+
+
+\section{Energy consumption estimation}
+
+
+
 
 Battery size
 18593 J
