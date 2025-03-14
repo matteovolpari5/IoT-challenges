@@ -32,7 +32,7 @@ The following plot represents the power consumption when the ESP32 is in deep sl
 \end{figure}
 
 \subsubsection{Power consumption sensor\_read.csv}
-The following plot represents the power consumption when the ESP32 alternates the idle mode and sensor reading mode, in which it performs a measurement using the Ultrasonic Distance Sensor HC-SR04.
+The following plot represents the power consumption when the ESP32 alternates the idle mode and sensor reading mode, in which it performs a measurement using the ultrasonic distance sensor HC-SR04.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth, height=0.4\textheight, keepaspectratio]{power_consumption_sensor_read.pdf}
@@ -122,8 +122,6 @@ The summary of power consumption of ESP32 in different states is reported below.
 \label{table:states_power_table}
 \end{table}
 
-
-
 \section{States duration estimation}
 We estimated the duration of different states by simulating the ESP32 on Wokwi and measuring them. We saved the timestamps in different points of execution, computed the duration of each state and printed it on the serial log.\\
 We simulated the execution for about a hundred cycles and saved the serial log. We provide few examples of entries of the serial log, in which the durations are in microseconds.
@@ -201,36 +199,26 @@ The duration of different states is reported in the following table.
 \label{table:states_duration_table}
 \end{table}
 
-
 \section{Energy consumption estimation}
+Starting from the power consumption and states durations estimations, we can easily compute energy consume by ESP32 by multiplying the power and the time of each state.\\
+At start, the ESP32 is in idle mode for T\_{idle}. Then it enters measurement mode to measure the distance with the ultrasonic distance sensor HC-SR04 for T\_{measurement}. When the measurement is completed, the ESP32 turns the WiFi on for T\_{WiFi} and, during this same period, it transmits data at 2 dBm for T\_{transmission}. Finally, it enters deep sleep for T\_{deep\_sleep}. \\
 
+\begin{align*}
+	E_{idle} &= P_{idle} \cdot T_{idle} = 0.268 \,\text{mJ} \\ 
+	E_{measurement} &= P_{measurement} \cdot T_{measurement} = 8.675 \,\text{mJ} \\
+	E_{WiFi} &= P_{WiFi} \cdot \Bigl(T_{WiFi} - T_{transmission} \Bigr) = 136.642\,\text{mJ} \\
+	E_{transmission} &= P_{transmission} \cdot T_{transmission} = 0.048\,\text{mJ} \\
+   	E_{deep\_sleep} &= P_{deep\_sleep} \cdot T_{deep\_sleep} = 2863,680\,\text{mJ} 
+\end{align*}
 
-
+\[
+E = E_{idle} + E_{measurement} + E_{WiFi} + E_{transmission} + E_{deep\_sleep} = 3009,313\,\text{mJ} 
+\]
 
 Battery size
 18593 J
 
-Average power consumption 
-Average power consumption deep sleep:  59.66093555093555 mW => 59.66 mW
-Average power consumption idle:  322.62464743589743 mW => 322.62 mW
-Average power consumption measurement:  465.18097744360904 mW => 465.18 mW
-Average power consumption WiFi on:  724.5793571428571 mW => 724.58 mW
-Average power consumption transmission at 2dBm:  797.2942857142858 mW => 797.29 mW
-
-
-
-\begin{flalign*}
-    E_{idle} &= P_{idle} \cdot T_{idle} = 322.62 \text{ mW} \cdot 833.70 \text{ µS} = 2.69 \times 10^{-4} \text{ J} \\
-    E_{measurement} &= P_{measurement} \cdot T_{measurement} = 465.18 \text{ mW} \cdot 18647.79 \text{ µS} = 8.67 \times 10^{-3} \text{ J} \\
-    E_{WiFi} &= P_{WiFi} \cdot (T_{WiFi} - T_{transmission}) = 724.58 \text{ mW} \cdot (188640.86 \text{ µS} - 59.60 \text{ µS}) = 0.136642 \text{ J} \\
-    E_{transmission} &= P_{transmission} \cdot T_{transmission} = 797.29 \text{ mW} \cdot 59.60 \text{ µS} = 4.7518484 \times 10^{-5} \text{ J} \\
-    E_{deep sleep} &= P_{deep\_sleep} \cdot T_{deep\_sleep} = 59.66 \text{ mW} \cdot 48 \times 10^6 \text{ µS} = 2.86386 \text{ J}
-\end{flalign*}
-
-
-\[E = E_{idle} + E_{measurement} + E_{WiFi} + E_{transmission} + E_{deep\_sleep} = 3.00931 J\]
-
-
-
 
 6.87168 7.65929 8.15501
+
+
