@@ -41,7 +41,7 @@ We have used various auxiliary functions to make the code more readable and func
 void setupESP_NOW()
 \end{verbatim}
 This function is used to switch on the WiFi and do the setup.
-In the setup phase, we set the transmission power to 2 dBm and called two other auxiliary functions that are used in the debugging phase (\textit{OnDataSent} and \textit{OnDataRecv}). \\
+In the setup phase, we set the transmission power to 2 dBm and assign two callback functions which are used during debugging and triggered when messages are sent or received (\textit{OnDataSent} and \textit{OnDataRecv}). \\
 \begin{verbatim}
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status)
 void OnDataRecv(const uint8_t * mac, const uint8_t *data, int len) 
@@ -50,7 +50,9 @@ These are two callback functions which are used in debugging to print out whethe
 \begin{verbatim}
 float getDistanceSensorMeasurement()
 \end{verbatim}
-This function is used to perform a single measurement via the ultrasonic sensor, after taking the data it converts it into cm and returns it.
+This function is used to perform a single measurement via the ultrasonic sensor.
+The measurement is made by setting the trig pin to high, after which a delay of 10 $\mu\text{S}$ is waited and the value of the trig pin is reset to low. \\
+The delay is required by the HC-SR04 component specification, which needs the \textit{TRIG} pin to remain high for at least 10 $\mu\text{S}$ in order to make a measurement. After taking the data it converts it into cm and returns it.
 
 \section{Setup function}
 The setup function is the heart of the system; each time it wakes up, the board performs this function to complete a life cycle.\\
