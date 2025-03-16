@@ -59,7 +59,8 @@ Then the modes of the two pins \textit{TRIG} and \textit{ECHO} are set to output
 After this, a measurement is made via the ultrasonic sensor and only then is the \textit{setupESP\_NOW()} function called to activate WiFi.\\
 When the WiFi is switched on and ready to be used, a message is sent to the MAC address of the sink, which in this case is set to the broadcast address 8C:AA:B5:84:FB:90.\\
 Once the measurement is sent, the WiFi is switched off to reduce the energy consumption and the system is sent into deep sleep.
-On awakening from deep sleep the card will restart from the beginning of the setup function and will then perform all the operations already seen in the same order.
+On awakening from deep sleep the card will restart from the beginning of the setup function and will then perform all the operations already seen in the same order.\\
+We have chosen not to use the loop function because the system will never execute a loop since after being sent into deep sleep it will have to start over from setup each time.
 
 
 
