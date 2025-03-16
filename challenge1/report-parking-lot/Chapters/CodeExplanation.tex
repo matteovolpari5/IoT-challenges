@@ -1,0 +1,62 @@
+In this section, we will describe the main structure of the code written to meet the specification provided to us.
+\section{Global variables}
+\subsection{Auxiliary variables}
+We have defined two global variables that are not strictly necessary for the correct operation of the system but are useful for future points of the challenge.
+\begin{verbatim}
+#define DEBUG 0
+\end{verbatim}
+Variable which when set to 1 is used in testing to print the messages arriving in broadcast to the board and the status of the messages sent. This variable also introduces a minimum delay of 10 ms to print the messages before going into deep sleep.\\
+\begin{verbatim}
+#define TIME_MEASUREMENT 1
+\end{verbatim}
+This variable when set to 1 is used to measure all the inter-times of the various phases of a system operation cycle. To function correctly, DEBUG must be set to 0, otherwise the data collected is distorted by the delay introduced by DEBUG.
+
+
+\subsection{Pin declaration}
+\begin{verbatim}
+#define TRIG 4
+#define ECHO 2
+\end{verbatim}
+Here we have defined 2 variables which identify the functional pins of the HC-SR04 component and which we have connected to pins 4 and 2 of the ESP32 board.
+
+\subsection{Exercise constants}
+\begin{verbatim}
+#define TIME_TO_SLEEP 48
+\end{verbatim}
+Variable used to define the time for which the board will go into deep sleep. The value 48 is calculated using the formula: TIME\_TO\_SLEEP = 93\%50+5 = 48 \\
+where 93 is coming from the person code 10773593. \\
+\begin{verbatim}
+#define uS_TO_S_FACTOR 1000000
+\end{verbatim}
+Constant equal to $10^6$ used to convert from seconds to $\mu\text{S}$.\\
+\begin{verbatim}
+#define DISTANCE_LIMIT 50
+\end{verbatim}
+Threshold distance of 50 cm set by the exercise to consider the parking space occupied or not.
+
+
+\section{Auxiliary functions}
+We have used various auxiliary functions to make the code more readable and functional, and this section will look at them one by one. \\
+\begin{verbatim}
+void setupESP_NOW()
+\end{verbatim}
+This function is used to switch on the WiFi and do the setup.
+In the setup phase, we set the transmission power to 2 dBm and called two other auxiliary functions that are used in the debugging phase (OnDataSent and OnDataRecv). \\
+\begin{verbatim}
+void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status)
+void OnDataRecv(const uint8_t * mac, const uint8_t *data, int len) 
+\end{verbatim}
+These are two callback functions which are used in debugging to print out whether a message has been sent correctly or whether there have been errors and all messages arriving on the board. \\
+\begin{verbatim}
+float getDistanceSensorMeasurement()
+\end{verbatim}
+This function is used to perform a single measurement via the ultrasonic sensor, after taking the data it converts it into cm and returns it.
+
+\section{Setup function}
+
+
+
+
+
+
+
