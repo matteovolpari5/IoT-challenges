@@ -92,7 +92,24 @@ In order to maximize the system's lifetime, we need to maximize the lifetime of 
 E_{cycle} = E_c \cdot b + E_{tx}(d) \cdot b = E_c \cdot b + k \cdot d^2 \cdot b
 \]
 Since the energy for the circuitry, $E_c$, is constant, the energy consumption grows with the distance. In order to maximize the lifetime of the system, we need to minimize the maximum distance between the sink and the furthest node. This problem is equivalent to that of finding the smallest circle enclosing all point on the cartesian plane, representing the positions of nodes.\\
-A very efficient algorithm that can be used to solve the smallest enclosing circle problem is Welzl's algorithm, which finds a solution in O(n) time. A Python implementation of the algorithm can be found below.
+A very efficient algorithm that can be used to solve the smallest enclosing circle problem is Welzl's algorithm, which finds a solution in O(n) time. 
+The algorithm is recursive and uses two sets:
+\begin{itemize}
+	\item P: contains all input points;
+	\item R: initially empty, at the end, contains point on the boundary of the minimum enclosing circle;
+\end{itemize}
+The base cases are the ones in which the smallest circle encloses three or less points:
+\begin{itemize}
+	\item if it doesn't enclose any point, the circle is undefined;
+	\item if it encloses one point, the degenerate circle is the point itself and has radius zero;
+	\item if it encloses two points or three points, there is just one circle passing through them;
+\end{itemize}
+At each step, select a point p from P and find the smallest enclosing circle of the other points:
+\begin{itemize}
+	\item  if p lies in D, D is the minimum enclosing circle;
+	\item otherwise, p must be part of the boundary, remove p from P and add it to R, recurse on the next element of set P;
+\end{itemize}
+A Python implementation of the algorithm can be found below.
 
 \begin{python}
 import math
