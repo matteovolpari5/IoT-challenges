@@ -207,6 +207,14 @@ The duration of different states is reported in the following table.
 \section{Energy consumption estimation}
 Starting from the power consumption and states durations estimations, we can easily compute energy consumed by the ESP32 by multiplying the power and the time of each state.\\
 At start, the ESP32 is in idle mode for $T_{idle}$. Then it enters measurement mode to measure the distance with the ultrasonic distance sensor HC-SR04 for $T_{measurement}$. When the measurement is completed, the ESP32 turns the WiFi on for $T_{WiFi}$ and, during this same period, it transmits data at 2 dBm for $T_{transmission}$. Finally, it enters deep sleep for $T_{deep\_sleep}$. \\
+The power profile of the ESP32 board is represented in the following plot that shows the active part of the ESP32 cycle.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth, height=0.4\textheight, keepaspectratio]{power_consumption_implementation.pdf}
+    \caption{Power consumption ESP32}
+    \label{fig:Power consumption ESP32}
+\end{figure}
 
 The energy for different states is computed as follows.
 \begin{align*}
