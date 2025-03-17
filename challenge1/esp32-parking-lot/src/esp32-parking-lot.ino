@@ -8,12 +8,16 @@
 // to be used with DEBUG off, because DEBUG introduces delays
 #define TIME_MEASUREMENT 0
 
-unsigned long board_start = 0;
-unsigned long measurements_start = 0;
-unsigned long wifi_start = 0;
-unsigned long send_message_start = 0;
-unsigned long send_message_end = 0;
-unsigned long deep_sleep_start = 0;
+unsigned long setup_start = 0;
+unsigned long setup_end = 0;
+unsigned long measurement_start = 0;
+unsigned long measurement_end = 0;
+unsigned long calculations_start = 0;
+unsigned long calculations_end = 0;
+unsigned long wifi_on = 0;
+unsigned long wifi_off = 0;
+unsigned long transmission_start = 0;
+unsigned long transmission_end = 0;
 
 // pins 
 #define TRIG 4
@@ -80,6 +84,12 @@ float getDistanceSensorMeasurement() {
 
   // read result 
   int durationPulseMicros = pulseIn(ECHO, HIGH);
+
+  if (TIME_MEASUREMENT) {
+    measurement_end = micros();
+    calculations_start = measurement_end;
+  }
+
   float distanceCm = durationPulseMicros / 58;
 
   return distanceCm;
@@ -87,7 +97,7 @@ float getDistanceSensorMeasurement() {
 
 void setup() {
   if (TIME_MEASUREMENT) {
-    board_start = micros();
+    setup_start = micros();
   }
   
   // serial setup
@@ -98,8 +108,8 @@ void setup() {
   pinMode(ECHO, INPUT);
 
   if (TIME_MEASUREMENT) {
-    measurements_start = micros();
-    Serial.println("Idle duration: " + String(measurements_start - board_start));
+    setup_end = micros();
+    measurement_start = setup_end;
   }
 
   // get a new measurement
@@ -108,21 +118,21 @@ void setup() {
   String occupancy = distanceCm <= DISTANCE_LIMIT ? "OCCUPIED" : "FREE";
 
   if (TIME_MEASUREMENT) {
-    wifi_start = micros();
-    Serial.println("Measurement duration: " + String(wifi_start - measurements_start));
+    calculations_end = micros();
+    wifi_on = measurement_end;
   }
 
   // setup ESP-NOW
   setupESP_NOW();
 
   if (TIME_MEASUREMENT) {
-    send_message_start = micros();
+    transmission_start = micros();
   }
   // send message
   esp_now_send(broadcastAddress, (uint8_t*)occupancy.c_str(), occupancy.length() + 1);
+  
   if (TIME_MEASUREMENT) {
-    send_message_end = micros();
-    Serial.println("Sending duration: " + String(send_message_end - send_message_start));
+    transmission_end = micros();
   }
   
   if (DEBUG) {
@@ -134,8 +144,12 @@ void setup() {
   WiFi.mode(WIFI_OFF);
 
   if (TIME_MEASUREMENT) {
-    deep_sleep_start = micros();
-    Serial.println("WiFi duration: " + String(deep_sleep_start - wifi_start));
+    wifi_off = micros();
+
+    Serial.println("Idle duration: " + String((setup_end - setup_start) + (calculations_end - calculations_start)));
+    Serial.println("Measurement duration: " + String(measurement_end - measurement_start));
+    Serial.println("Sending duration: " + String(transmission_end - transmission_start));
+    Serial.println("WiFi duration: " + String(wifi_off - wifi_on));
   }
 
   // set deep sleep time 
