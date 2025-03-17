@@ -1,13 +1,17 @@
 \subsubsection{Data}
+
+The data of the exercise is reported here.
 \begin{itemize}
 	\item 10 sensors
 	\item $T_{transmission} = 10 \text{ minutes}$
 	\item $b = 2000 \text{ bit}$
 	\item $E_b = 5 \text{ mJ}$
 	\item $E_c = 50 \text{ nJ/bit}$
-	\item $E_{tx} = k \cdot d^2 \text{ nJ/bit}$
+	\item $E_{tx}(d) = k \cdot d^2 \text{ nJ/bit}$
 	\item $k = 1 \text{ nJ/bit/$m^2$}$
 \end{itemize}
+
+The sensors of the parking lot have fixed positions, reported in the following table.
 \begin{table}[H]
 \centering 
 \begin{tabular}{| c | c |}
@@ -32,32 +36,60 @@
 \label{table:sensor_position_table}
 \end{table}
 
+The following picture describes the distributions of sensors.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth, height=0.4\textheight, keepaspectratio]{points.pdf}
+    \includegraphics[width=\linewidth, height=0.3\textheight, keepaspectratio]{points.pdf}
     \caption{Sensor distribution}
     \label{fig:Sensor_distribution}
 \end{figure}
 
 
 \subsubsection{Lifetime of the system with sink in (20,20)}
-Sink position = ($x_s, y_s$) = (20, 20)\\
+In order to compute the lifetime of the system when the sink position is ($x_s, y_s$) = (20, 20), we need to compute the lifetime of the furthest sensor from the sink.\\
+We calculated the distance of every sensor from the sink, the values are reported in the following table.
 
-We calculated the distance of the furthest sensor (sensor 1) from the sink using the cartesian distance: \[ distance_1 = d \{(1, 2) , (20, 20)\} = \sqrt{(20-1)^2 + (20-2)^2} = \sqrt{685} m \]
+\begin{table}[H]
+\centering 
+\begin{tabular}{| c | c | c |}
+	\hline 
+	\rowcolor{bluepoli!40}
+	\textbf{Sensor} & \textbf{Position} & \textbf{Distance from sink}\T\B \\
+	\hline 
+	1 & (1, 2) & $\sqrt{685} \text{ m}$ \T\B\\
+	2 &(10, 3) & $\sqrt{389} \text{ m}$ \T\B\\
+	3 & (4, 8) & 20 m\T\B\\
+	4 & (15, 7) & $\sqrt{194} \text{ m}$ \T\B\\
+	5  & (6, 1) & $\sqrt{557} \text{ m}$ \T\B\\
+	6  & (9, 12) & $\sqrt{185} \text{ m}$ \T\B\\
+	7  & (14, 4) & $2\sqrt{73} \text{ m}$ \T\B\\
+	8  & (3, 10) & $\sqrt{389} \text{ m}$ \T\B\\
+	9  & (7, 7) & $13\sqrt{2} \text{ m}$ \T\B\\
+	10  & (12, 14) & 10 m\T\B\\
+	\hline
+\end{tabular}
+\\[10pt]
+\caption{Distances from sink}
+\end{table}
 
-\[
-E_{cycle, 1} = E_c \cdot b + E_{tx(1)} \cdot b = 50 nJ/bit \cdot 2000 \text{ bit} + 1 nJ/bit/m^2 \cdot 685 m^2 \cdot 2000 \text{ bit} = 1.47 \cdot 10^{-3} J
+The distance between the sink and the furthest sensor, sensor 1, is: 
+\[ 
+distance_1 = d \{(1, 2) , (20, 20)\} = \sqrt{(20-1)^2 + (20-2)^2} = \sqrt{685} m 
 \]
-
+We compute the energy consumed by sensor 1 as:
 \[
-n = \text{\# cycles} = E_b / E_{cycle, 1} = 3.4 \text{ cycles}
+E_{cycle, 1} = E_c \cdot b + E_{tx, 1}(d) \cdot b = 50 nJ/bit \cdot 2000 \text{ bit} + 1 nJ/bit/m^2 \cdot 685 m^2 \cdot 2000 \text{ bit} = 1.47 mJ
+\]
+The lifetime, measured in number of cycles, is:
+\[
+L_{cycles} = E_b / E_{cycle, 1} = 3.401 \text{ cycles}
 \]
 Assuming that each sensor transmits at the beginning of the ten minutes, the system will last for three cycles and during the fourth cycle the furthest sensor will die.
 
 \subsubsection{Optimal sink position}
 In order to maximize the system's lifetime, we need to maximize the lifetime of the sensor node that consumes the most energy. The energy consumption for a transmission is given by:
 \[
-E_{cycle} = E_c \cdot b + E_{tx} \cdot b = E_c \cdot b + k \cdot d^2 \cdot b
+E_{cycle} = E_c \cdot b + E_{tx}(d) \cdot b = E_c \cdot b + k \cdot d^2 \cdot b
 \]
 Since the energy for the circuitry, $E_c$, is constant, the energy consumption grows with the distance. In order to maximize the lifetime of the system, we need to minimize the maximum distance between the sink and the furthest node. This problem is equivalent to that of finding the smallest circle enclosing all point on the cartesian plane, representing the positions of nodes.\\
 A very efficient algorithm that can be used to solve the smallest enclosing circle problem is Welzl's algorithm, which finds a solution in O(n) time. A Python implementation of the algorithm can be found below.
@@ -172,18 +204,13 @@ Thus, the optimal position of the sink is approximately (6.87, 7.66) and the max
 We can compute the lifetime of the system when the sink is in position (6.87, 7.66) as follows.
 
 \[
-E_{cycle, furthest} = E_c \cdot b + E_{tx, furthest} \cdot b = 0.233 mJ
+E_{cycle, furthest} = E_c \cdot b + E_{tx, furthest}(d) \cdot b = 0.233 mJ
 \]
 
 \[
-n = \text{\# cycles} = E_b / E_{cycle, furthest} = 21.443 \text{ cycles}
+L_{cycles} = E_b / E_{cycle, furthest} = 21.443 \text{ cycles}
 \]
 
 Under the assumption that each sensor transmits at the beginning of the ten minutes, it will last 21 cycles and die in the next one.
-
-
-
-
-
 
 \subsubsection{Tradeoff static and dynamic sink position}
