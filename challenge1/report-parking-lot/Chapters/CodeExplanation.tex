@@ -9,7 +9,7 @@ Variable which when set to 1 is used in testing to print the messages arriving i
 \begin{verbatim}
 #define TIME_MEASUREMENT 1
 \end{verbatim}
-This variable when set to 1 is used to measure all the inter-times of the various phases of a system operation cycle. To function correctly,  \textit{DEBUG} must be set to 0, otherwise the data collected is distorted by the delay introduced by  \textit{DEBUG}.
+This variable when set to 1 is used to measure all the inter-times of the various phases of a system operation cycle. To function correctly, \textit{DEBUG} must be set to 0, otherwise the data collected is distorted by the delay introduced by \textit{DEBUG}.
 
 
 \subsection{Pin declaration}
@@ -23,7 +23,7 @@ Here we have defined 2 variables which identify the functional pins of the HC-SR
 \begin{verbatim}
 #define TIME_TO_SLEEP 48
 \end{verbatim}
-Variable used to define the time for which the board will go into deep sleep. The value 48 is calculated using the formula:  \textit{TIME\_TO\_SLEEP} = 93\%50+5 = 48 \\
+Variable used to define the time for which the board will go into deep sleep. The value 48 is calculated using the formula: \textit{TIME\_TO\_SLEEP} = 93\%50+5 = 48 \\
 where 93 is coming from the person code 10773593. \\
 \begin{verbatim}
 #define uS_TO_S_FACTOR 1000000
@@ -41,7 +41,7 @@ We have used various auxiliary functions to make the code more readable and func
 void setupESP_NOW()
 \end{verbatim}
 This function is used to switch on the WiFi and do the setup.
-In the setup phase, we set the transmission power to 2 dBm and called two other auxiliary functions that are used in the debugging phase (\textit{OnDataSent} and  \textit{OnDataRecv}). \\
+In the setup phase, we set the transmission power to 2 dBm and assign two callback functions which are used during debugging and triggered when messages are sent or received (\textit{OnDataSent} and \textit{OnDataRecv}). \\
 \begin{verbatim}
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status)
 void OnDataRecv(const uint8_t * mac, const uint8_t *data, int len) 
@@ -50,16 +50,19 @@ These are two callback functions which are used in debugging to print out whethe
 \begin{verbatim}
 float getDistanceSensorMeasurement()
 \end{verbatim}
-This function is used to perform a single measurement via the ultrasonic sensor, after taking the data it converts it into cm and returns it.
+This function is used to perform a single measurement via the ultrasonic sensor.
+The measurement is made by setting the trig pin to high, after which a delay of 10 $\mu\text{S}$ is waited and the value of the trig pin is reset to low. \\
+The delay is required by the HC-SR04 component specification, which needs the \textit{TRIG} pin to remain high for at least 10 $\mu\text{S}$ in order to make a measurement. After taking the data it converts it into cm and returns it.
 
 \section{Setup function}
 The setup function is the heart of the system; each time it wakes up, the board performs this function to complete a life cycle.\\
 The first thing this function does is set the data rate for serial data transmission to write to the serial.
-Then the modes of the two pins  \textit{TRIG} and  \textit{ECHO} are set to output and input respectively.
-After this, a measurement is made via the ultrasonic sensor and only then is the  \textit{setupESP\_NOW()} function called to activate WiFi.\\
+Then the modes of the two pins \textit{TRIG} and \textit{ECHO} are set to output and input respectively.
+After this, a measurement is made via the ultrasonic sensor and only then is the \textit{setupESP\_NOW()} function called to activate WiFi.\\
 When the WiFi is switched on and ready to be used, a message is sent to the MAC address of the sink, which in this case is set to the broadcast address 8C:AA:B5:84:FB:90.\\
-Once the measurement is sent, the WiFi is switched off to conserve energy and the system is sent into deep sleep.
-On awakening from deep sleep the card will restart from the beginning of the setup function and will then perform all the operations already seen in the same order.
+Once the measurement is sent, the WiFi is switched off to reduce the energy consumption and the system is sent into deep sleep.
+On awakening from deep sleep the card will restart from the beginning of the setup function and will then perform all the operations already seen in the same order.\\
+We have chosen not to use the loop function because the system will never execute a loop since after being sent into deep sleep it will have to start over from setup each time.
 
 
 
