@@ -1,0 +1,12 @@
+Sink position = ($x_s, y_s$) = (20, 20)\\
+
+We calculated the distance of the furthest sensor (sensor 1) from the sink using the cartesian distance: \[ distance_1 = d \{(1, 2) , (20, 20)\} = \sqrt{(20-1)^2 + (20-2)^2} = \sqrt{685} m \]
+
+\[
+E_{cycle, 1} = E_c \cdot b + E_{tx(1)} \cdot b = 50 nJ/bit \cdot 2000 \text{ bit} + 1 nJ/bit/m^2 \cdot 685 m^2 \cdot 2000 \text{ bit} = 1.47 \cdot 10^{-3} J
+\]
+
+\[
+n = \text{\# cycles} = E_b / E_{cycle, 1} = 3.4 \text{ cycles}
+\]
+Assuming that each sensor transmits at the beginning of the ten minutes, the system will last for three cycles and during the fourth cycle the furthest sensor will die.

@@ -78,6 +78,7 @@
 \fancyhf{}
 \usepackage{listingsutf8}
 \usepackage{xcolor}
+\usepackage{pythonhighlight}
 
 % Input of configuration file. Do not change config.tex file unless you really know what you are doing. 
 \input{Configuration_Files/config}
@@ -152,10 +153,21 @@
 % NUMBERED CHAPTERS % Regular chapters following
 % --------------------------------------------------------------------------
 
-\chapter{Chapter one}
-\label{ch:chapter_one}%
-\input{Chapters/ChapterOne}
+\chapter{Data}
+\label{ch:data}%
+\input{Chapters/Data}
 
+\chapter{Lifetime of the system with sink in (20,20)}
+\label{ch:esA}%
+\input{Chapters/EsA}
+
+\chapter{Optimal sink position}
+\label{ch:esB}%
+\input{Chapters/EsB}
+
+\chapter{Tradeoff static and dynamic sink position}
+\label{ch:esC}%
+\input{Chapters/EsC}
 
 %-------------------------------------------------------------------------
 %	BIBLIOGRAPHY
@@ -167,13 +179,6 @@
 %-------------------------------------------------------------------------
 %	APPENDICES
 %-------------------------------------------------------------------------
-
-% LIST OF FIGURES
-\listoffigures
-
-% LIST OF TABLES
-\listoftables
-
 
 \end{document}
 
