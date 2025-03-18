@@ -6,7 +6,7 @@
 
 // 1 prints the time measurement, 0 doesn't 
 // to be used with DEBUG off, because DEBUG introduces delays
-#define TIME_MEASUREMENT 1
+#define TIME_MEASUREMENT 0
 
 unsigned long setup_start = 0;
 unsigned long setup_end = 0;
@@ -30,7 +30,7 @@ esp_now_peer_info_t peerInfo;
 
 // deep sleep time
 // person code 10773593: (93 % 50) + 5 = 48 seconds
-#define TIME_TO_SLEEP 5                                   // TODO 48 
+#define TIME_TO_SLEEP 48
 #define uS_TO_S_FACTOR 1000000
 
 // distance [cm]
