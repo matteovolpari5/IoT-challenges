@@ -27,7 +27,7 @@ E_{cycle}' = E_{idle} + E_{measurement} + E_{deep\_sleep}'
 \end{align*}
 Since we want to maintain a constant time for a cycle, the time spent in deep sleep is slightly higher, and can be computed as:
 \begin{align*}
-	T_{deep\_sleep}' = T_{cycle} - T_{idle} - T_{measurement} = 48.189 s\\
+	T_{deep\_sleep}' = T_{cycle} - T_{idle} - T_{measurement} = 48.189 \text{s}\\
 \end{align*}
 The new energy consumption in deep sleep is:
 \begin{align*}
@@ -45,8 +45,9 @@ The energy consumption for 6 cycles, in which only one transmission is made is:
 
 The new sensor node's lifetime, measured in cycles, is:
 \begin{align*}
-	L_{cycles}&= 6 \cdot E_{b} / E_{6\_cycles} = 6400,782 \,\text{cycles} 
+	L_{cycles}&= 6 \cdot E_{b} / E_{6\_cycles} = 6400.782 \,\text{cycles} 
 \end{align*}
+The sensor will perform 6400 complete cycles and will die during the following one.
 
 The total time for a cycle is always the same, $T_{cycle} = 48.208 s$, so the lifetime measured in time is of:
 \begin{align*}

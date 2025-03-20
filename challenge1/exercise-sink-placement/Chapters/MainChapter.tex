@@ -84,7 +84,7 @@ The lifetime, measured in number of cycles, is:
 \[
 L_{cycles} = E_b / E_{cycle, 1} = 3.401 \text{ cycles}
 \]
-Assuming that each sensor transmits at the beginning of the ten minutes, the system will last for three cycles and during the fourth cycle the furthest sensor will die.
+Assuming that each sensor transmits at the beginning of the ten minutes, the system will last for three cycles and during the fourth cycle the furthest sensor will die, after about 30 minutes.
 
 \subsubsection{Optimal sink position}
 In order to maximize the system's lifetime, we need to maximize the lifetime of the sensor node that consumes the most energy. The energy consumption for a transmission is given by:
@@ -228,31 +228,29 @@ E_{cycle, furthest} = E_c \cdot b + E_{tx, furthest}(d) \cdot b = 0.233 mJ
 L_{cycles} = E_b / E_{cycle, furthest} = 21.443 \text{ cycles}
 \]
 
-Under the assumption that each sensor transmits at the beginning of the ten minutes, it will last 21 cycles and die in the next one.
+Under the assumption that each sensor transmits at the beginning of the ten minutes, it will last 21 cycles and die in the next one, after about 3 hours and 30 minutes.
 
 \subsubsection{Trade-offs fixed versus dynamic sink position}
 
-The ability of the sink to move can optimize the energy efficiency of the network in certain scenarios, but it also introduces complexity and infrastructure challenges.
+In some scenarios, the ability of the sink to move can optimize the energy efficiency of the sensors network, but it also introduces infrastructure challenges and complexity in the management of both sensors and sink.
 
 \textbf{Pros of a mobile sink:} 
 \begin{itemize}
 
-\item If one sensor's battery runs out faster than the others, a static sink may continue to force inefficient transmissions from the remaining sensors. A mobile sink, on the other hand, can dynamically relocate itself to optimize communication distances with the remaining active sensors, thereby extending their operating life and ensuring more balanced energy consumption.
+\item Let's consider a scenario in which the sensors network changes over time, for example because one sensor's battery runs out faster than the others and is not replaced immediately. In such a system, a static sink, which initially was in the optimal position, may continue to force inefficient transmissions from the remaining sensors. A mobile sink, on the other hand, can dynamically relocate itself to optimize communication distances with the remaining active sensors, thereby extending their operating life and ensuring more balanced energy consumption.
 
-\item Sensors can be divided into four or more macro areas, each with a specific transmission interval. By knowing in advance when a macro area is about to transmit, the sink can move closer to it, shortening transmission distances and reducing the power consumption of the sensors in that area. This approach improves battery efficiency and allows sensors to operate longer before requiring maintenance or replacement.
+\item A mobile sink can also be beneficial in a static sensors network. Let's consider a scenario in which we can partition the sensors network into a small number of macro-area. All sensors transmit data with the same $T_{cycle}$, but sensors in different areas do so in different time instants. By knowing in advance when sensors in a macro-area are about to transmit, the sink can move closer to the area, shortening transmission distances and reducing the power consumption of the sensors in that area. This approach improves battery efficiency and allows sensors to operate longer before requiring maintenance or replacement.
 \end{itemize}
 
 \textbf{Cons of a mobile sink:} 
 \begin{itemize}
-\item While moving the sink closer to specific macro-areas improves energy efficiency, it also requires precise synchronization between groups of sensors. Each macro area must coordinate its transmission schedule to ensure that data is sent when the sink is optimally positioned. This synchronization adds complexity to the network communication protocol and may introduce delays or require additional control mechanisms.
+\item While moving the sink closer to specific macro-areas improves energy efficiency, it also requires precise synchronization between groups of sensors. Each macro-area must coordinate its transmission schedule to ensure that data is sent when the sink is optimally positioned. This synchronization adds complexity to the network communication protocol and may introduce delays or require additional control mechanisms.
 
-\item A moving sink requires infrastructure to facilitate movement, such as robotic systems or external guidance mechanisms, which adds cost and maintenance challenges. Alternatively, equipping the sink with an external battery to support mobility creates another tradeoff - once the sink's battery is depleted, the entire system ceases to function. This dependence on the sink's mobility infrastructure can make the system more susceptible to failure and reduce overall reliability.
+\item The moving sink can be connected to cables, but this requires an infrastructure to facilitate movement, such as robotic systems or external guidance mechanisms, which adds cost and maintenance challenges.\\
+Alternatively, it can be battery operated. Equipping the sink with an external battery to support mobility creates another tradeoff: once the sink's battery is depleted, the entire system ceases to function. This dependence on the sink's mobility infrastructure can make the system more susceptible to failure and reduce overall reliability.
 \end{itemize}
 
 \textbf{Conclusions:} \\
-Given the premises, a mobile sink, for the sensor configuration we have, definitely brings more advantages than disadvantages in the long term, but also requires initial design efforts to develop an autonomous and intelligent motion system for the sink.
-
-
-
-
+Given the premises, there are scenarios in which a mobile sink is certainly beneficial for the sensors, since they can transmit data to a closer sink and save energy, achieving a better life time.\\
+Considering the whole system, it may be beneficial in the long term, but this also depends on the size of the area covered by sensors and on the frequency with which the sensors network changes, as well as on the way we implement the mobile sink and how much it can move.
 
