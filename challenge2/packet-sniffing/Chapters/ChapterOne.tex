@@ -22,3 +22,11 @@ Stream 8 - Client ID: dzcxnwdqef
 Stream 15 - Client ID: tukvxesuhe
 Stream 20 - Client ID: fcthvjikxjul
 Tutti diversi, 4 client.
+
+Domanda 4
+Filtro wireshark:
+mqtt && mqtt.msgtype == 1 && mqtt.willtopic matches "^university"
+
+Oppure:
+mqtt && mqtt.msgtype == 1 && mqtt.willtopic
+Ne escono 4 e li controllo, solo uno inizia per university 
