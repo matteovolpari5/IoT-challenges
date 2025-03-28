@@ -50,3 +50,69 @@ mqtt && mqtt.msgtype == 1 && mqtt.willtopic matches "^university"
 Oppure:
 mqtt && mqtt.msgtype == 1 && mqtt.willtopic
 Ne escono 4 e li controllo, solo uno inizia per university 
+
+Domanda 5:
+
+mqtt && mqtt.msgtype== 1 && mqtt.willmsg
+Ottengo 4 fram di tipo CONNECT che specificano un last will message e last will topic.
+
+4	0.000117188	::1	::1	MQTT	176	Connect Command
+196	2.116585177	10.0.2.15	5.196.78.28	MQTT	126	Connect Command
+352	5.034840089	10.0.2.15	5.196.78.28	MQTT	123	Connect Command
+557	7.043177949	10.0.2.15	5.196.78.28	MQTT	120	Connect Command
+
+1
+Will Topic: university/department12/room1/temperature
+Will Message Length: 29
+Will Message: 6572726f723a20612056495020436c69656e74206a7573742064696564
+2
+Will Topic: metaverse/room2/floor4
+Will Message Length: 15
+Will Message: 6572726f723a20706575697664716c
+3
+Will Topic: hospital/facility3/area3
+Will Message Length: 15
+Will Message: 6572726f723a20786c7a6171707464
+4
+Will Topic: metaverse/room2/room2
+Will Message Length: 15
+Will Message: 6572726f723a207a6a7a7772636470
+
+Per il primo:
+Messaggi pubblicati su quel topic:
+mqtt && mqtt.msgtype==3 && mqtt.topic == "university/department12/room1/temperature" 
+4 risultati
+Messaggi pubblicati su quel topic con messaggio uguale a last will message:
+mqtt && mqtt.msgtype==3 && mqtt.topic == "university/department12/room1/temperature" && mqtt.msg contains 6572726f723a20612056495020436c69656e74206a7573742064696564
+Stessi 4 risultati
+Però non ha retain true!
+mqtt && mqtt.msgtype==3 && mqtt.topic == "university/department12/room1/temperature" && mqtt.msg contains 6572726f723a20612056495020436c69656e74206a7573742064696564 && mqtt.retain == 1
+Nessun risultato
+
+Devono avere il retain? Se sì, allora non sono last will, altrimenti???
+
+Per quelli da 2 a 4:
+5.196.78.28 è src solamente per PUBACK, PUBREC, CONNACK.
+Filtro che estrae i messaggi pubblicati:
+mqtt && ip.src == 5.196.78.28 && mqtt.msgtype == 3 
+non ritorna risultati
+Se non ha pubblicato nulla, non può aver mandato dei last will message.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
