@@ -1,3 +1,23 @@
+Domanda 1
+Confirmable put request 
+coap && coap.type == 0 && coap.code == 3
+45 frames
+Response 
+coap && (coap.code >= 128)
+228 frames 
+Dovrei matcharli per token/message id, troppi.
+Quindi pyshark.
+
+Domanda 2
+Get request confirmable a coap.me
+coap.type == 0 && coap.code == 1 && ip.dst==134.102.218.18
+39 frames
+Get non confirmable a coap.me
+coap.type == 1 && coap.code == 1 && ip.dst==134.102.218.18
+31 frames
+Dovrei vedere a quale risorsa fanno riferimento e poi confrontare.
+Troppo, quindi pyshark.
+
 Domanda 3
 dns.qry.name == "broker.hivemq.com"
 ::1 dovrebbe essere il loopback in ipv6, tipo 127.0.0.1 per ipv4
