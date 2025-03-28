@@ -90,6 +90,21 @@ mqtt && mqtt.msgtype==3 && mqtt.topic == "university/department12/room1/temperat
 Nessun risultato
 
 Devono avere il retain? Se sì, allora non sono last will, altrimenti???
+Non penso. Il retain dovrebbe essere sul messaggio di connect, non su quello di last will!
+
+Inoltre sono i pacchetti 6560, 6562, 6564, 6566. A 6559 c'è un reset ??.
+Si tratta di questi pacchetti 
+6559	146.691800286	::1	::1	TCP	88	38083 → 1883 [RST, ACK] Seq=9316 Ack=85 Win=65536 Len=0 TSval=2654936537 TSecr=2654934931
+6560	146.692096889	::1	::1	MQTT	162	Publish Message [university/department12/room1/temperature]
+6561	146.692172650	::1	::1	TCP	88	39551 → 1883 [ACK] Seq=77 Ack=86 Win=65536 Len=0 TSval=2654936537 TSecr=2654936537
+6562	146.692187516	::1	::1	MQTT	164	Publish Message (id=1) [university/department12/room1/temperature]
+6563	146.692189976	::1	::1	TCP	88	53557 → 1883 [ACK] Seq=94 Ack=86 Win=65536 Len=0 TSval=2654936537 TSecr=2654936537
+6564	146.692199911	::1	::1	MQTT	165	Publish Message (id=12) [university/department12/room1/temperature]
+6565	146.692202117	::1	::1	TCP	88	51743 → 1883 [ACK] Seq=573 Ack=14152 Win=64896 Len=0 TSval=2654936537 TSecr=2654936537
+6566	146.692209983	::1	::1	MQTT	164	Publish Message (id=1) [university/department12/room1/temperature]
+6560, 6562, 6564 e 6466 sono quelli con contenuto pari al last will message sul last will topic.
+Per questi pacchetti, ho notato che la source port è sempre 1883, mentre la destination port cambia.
+Infine il tcp stream cambia.
 
 Per quelli da 2 a 4:
 5.196.78.28 è src solamente per PUBACK, PUBREC, CONNACK.
