@@ -106,6 +106,12 @@ Si tratta di questi pacchetti
 Per questi pacchetti, ho notato che la source port è sempre 1883, mentre la destination port cambia.
 Infine il tcp stream cambia.
 
+RST è un reset, indica disconnessione brusca.
+Successivamente il broker, sempre porta 1883, manda messaggi tutti con last will topic e last will message in loopback, sempre a porte diverse.
+Secondo me sono dei last will messages.
+
+ATTENZIONE NON HO CONSIDERATO CHE NON DEVONO USARE WILDCARD, MA COME FACCIO?????
+
 Per quelli da 2 a 4:
 5.196.78.28 è src solamente per PUBACK, PUBREC, CONNACK.
 Filtro che estrae i messaggi pubblicati:
