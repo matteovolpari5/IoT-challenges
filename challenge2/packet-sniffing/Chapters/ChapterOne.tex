@@ -1,0 +1,24 @@
+Domanda 3
+dns.qry.name == "broker.hivemq.com"
+::1 dovrebbe essere il loopback in ipv6, tipo 127.0.0.1 per ipv4
+
+Filtro wireshark:
+mqtt && mqtt.msgtype == 8 && ip.dst == 18.192.151.104 && mqtt.topic contains "#"
+
+Ottieni 6 pacchetti.
+Per ognuno prendi tcp stream:
+N 375 - TCP stream = 8
+N 2442 - TCP stream 15
+N 3293 - TCP stream 20
+N 3303 - TCP stream 15
+N 3362 - TCP stream 3 
+N 3693 - TCP stream 15 
+
+Per ogni stream prendo il client id 
+mqtt && mqtt.msgtype == 1 && tcp.stream == 3 
+uguale per tutti gli stream, cambiando valore, ottengo client id 
+Stream 3 - Client ID: cpoepjzkhibxgjiu
+Stream 8 - Client ID: dzcxnwdqef
+Stream 15 - Client ID: tukvxesuhe
+Stream 20 - Client ID: fcthvjikxjul
+Tutti diversi, 4 client.

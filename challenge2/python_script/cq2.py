@@ -9,16 +9,16 @@ import sys
 # NONCONFIRMABLE GET requests, how many resources have X=Y, with X>0?
 
 def answer_cq2(capture):
-
     try:
         coap_me_ip = socket.gethostbyname("coap.me")
     except Exception as e:
-        print("Errore nella risoluzione DNS:", e)
+        print("error in DNS resolution:", e)
         return 0
     
     resource_stats = {}
     for pkt in capture:
         try:
+            # check destination is coap.me
             if 'IP' not in pkt or pkt.ip.dst != coap_me_ip:
                 continue
 
