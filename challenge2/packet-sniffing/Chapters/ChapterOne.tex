@@ -106,11 +106,41 @@ Si tratta di questi pacchetti
 Per questi pacchetti, ho notato che la source port è sempre 1883, mentre la destination port cambia.
 Infine il tcp stream cambia.
 
+Devo controllare se si sono iscritti con wildcard, seguo il tcp stream e identifico le richieste di SUBSCRIBE.
+
+6560
+Destination Port: 39551
+[Stream index: 2]
+mqtt && mqtt.msgtype == 8 && tcp.stream == 2
+Non usa wildcard
+mqtt && mqtt.msgtype == 1 && tcp.stream == 2
+Client ID: auyvhrhdudnm
+
+6562
+Destination Port: 53557
+[Stream index: 6]
+mqtt && mqtt.msgtype == 8 && tcp.stream == 6
+Non usa wildcard
+mqtt && mqtt.msgtype == 1 && tcp.stream == 6
+Client ID: pcdwkgeslfh
+
+6564
+Destination Port: 51743
+[Stream index: 10]
+mqtt && mqtt.msgtype == 8 && tcp.stream == 10
+Molte subscription: una sola che va bene per il nostro topic, con wildcard 
+1136	10.102492445	::1	::1	MQTT	108	Subscribe Request (id=6) [university/#]
+
+Destination Port: 41789
+[Stream index: 14]
+mqtt && mqtt.msgtype == 8 && tcp.stream == 14
+Non usa wildcard
+mqtt && mqtt.msgtype == 1 && tcp.stream == 14
+Client ID: mjdocmjxt
+
 RST è un reset, indica disconnessione brusca.
 Successivamente il broker, sempre porta 1883, manda messaggi tutti con last will topic e last will message in loopback, sempre a porte diverse.
 Secondo me sono dei last will messages.
-
-ATTENZIONE NON HO CONSIDERATO CHE NON DEVONO USARE WILDCARD, MA COME FACCIO?????
 
 Per quelli da 2 a 4:
 5.196.78.28 è src solamente per PUBACK, PUBREC, CONNACK.
@@ -119,8 +149,8 @@ mqtt && ip.src == 5.196.78.28 && mqtt.msgtype == 3
 non ritorna risultati
 Se non ha pubblicato nulla, non può aver mandato dei last will message.
 
-
-
+Conclusione: ci sono 4 CONNECT con last will, una di queste, quella in locale, ha dei messaggi di last will. 
+Il messaggio viene inviato dopo un reset dal broker a 4 subscriber, vedendo la loro subscription, solo 3 su 4 non hanno usato la wildcard.
 
 
 
