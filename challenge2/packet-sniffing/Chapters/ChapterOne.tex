@@ -1,19 +1,19 @@
 Domanda 1
 Confirmable put request 
-coap && coap.type == 0 && coap.code == 3
+coap \&\& coap.type == 0 \&\& coap.code == 3
 45 frames
 Response 
-coap && (coap.code >= 128)
+coap \&\& (coap.code >= 128)
 228 frames 
 Dovrei matcharli per token/message id, troppi.
 Quindi pyshark.
 
 Domanda 2
 Get request confirmable a coap.me
-coap.type == 0 && coap.code == 1 && ip.dst==134.102.218.18
+coap.type == 0 \&\& coap.code == 1 \&\& ip.dst==134.102.218.18
 39 frames
 Get non confirmable a coap.me
-coap.type == 1 && coap.code == 1 && ip.dst==134.102.218.18
+coap.type == 1 \&\& coap.code == 1 \&\& ip.dst==134.102.218.18
 31 frames
 Dovrei vedere a quale risorsa fanno riferimento e poi confrontare.
 Troppo, quindi pyshark.
@@ -23,7 +23,7 @@ dns.qry.name == "broker.hivemq.com"
 ::1 dovrebbe essere il loopback in ipv6, tipo 127.0.0.1 per ipv4
 
 Filtro wireshark:
-mqtt && mqtt.msgtype == 8 && ip.dst == 18.192.151.104 && mqtt.topic contains "#"
+mqtt \&\& mqtt.msgtype == 8 \&\& ip.dst == 18.192.151.104 \&\& mqtt.topic contains "#"
 
 Ottieni 6 pacchetti.
 Per ognuno prendi tcp stream:
@@ -35,7 +35,7 @@ N 3362 - TCP stream 3
 N 3693 - TCP stream 15 
 
 Per ogni stream prendo il client id 
-mqtt && mqtt.msgtype == 1 && tcp.stream == 3 
+mqtt \&\& mqtt.msgtype == 1 \&\& tcp.stream == 3 
 uguale per tutti gli stream, cambiando valore, ottengo client id 
 Stream 3 - Client ID: cpoepjzkhibxgjiu
 Stream 8 - Client ID: dzcxnwdqef
@@ -45,15 +45,15 @@ Tutti diversi, 4 client.
 
 Domanda 4
 Filtro wireshark:
-mqtt && mqtt.msgtype == 1 && mqtt.willtopic matches "^university"
+mqtt \&\& mqtt.msgtype == 1 \&\& mqtt.willtopic matches "^university"
 
 Oppure:
-mqtt && mqtt.msgtype == 1 && mqtt.willtopic
+mqtt \&\& mqtt.msgtype == 1 \&\& mqtt.willtopic
 Ne escono 4 e li controllo, solo uno inizia per university 
 
 Domanda 5:
 
-mqtt && mqtt.msgtype== 1 && mqtt.willmsg
+mqtt \&\& mqtt.msgtype== 1 \&\& mqtt.willmsg
 Ottengo 4 fram di tipo CONNECT che specificano un last will message e last will topic.
 
 4	0.000117188	::1	::1	MQTT	176	Connect Command
@@ -80,13 +80,13 @@ Will Message: 6572726f723a207a6a7a7772636470
 
 Per il primo:
 Messaggi pubblicati su quel topic:
-mqtt && mqtt.msgtype==3 && mqtt.topic == "university/department12/room1/temperature" 
+mqtt \&\& mqtt.msgtype==3 \&\& mqtt.topic == "university/department12/room1/temperature" 
 4 risultati
 Messaggi pubblicati su quel topic con messaggio uguale a last will message:
-mqtt && mqtt.msgtype==3 && mqtt.topic == "university/department12/room1/temperature" && mqtt.msg contains 6572726f723a20612056495020436c69656e74206a7573742064696564
+mqtt \&\& mqtt.msgtype==3 \&\& mqtt.topic == "university/department12/room1/temperature" \&\& mqtt.msg contains 6572726f723a20612056495020436c69656e74206a7573742064696564
 Stessi 4 risultati
 Però non ha retain true!
-mqtt && mqtt.msgtype==3 && mqtt.topic == "university/department12/room1/temperature" && mqtt.msg contains 6572726f723a20612056495020436c69656e74206a7573742064696564 && mqtt.retain == 1
+mqtt \&\& mqtt.msgtype==3 \&\& mqtt.topic == "university/department12/room1/temperature" \&\& mqtt.msg contains 6572726f723a20612056495020436c69656e74206a7573742064696564 \&\& mqtt.retain == 1
 Nessun risultato
 
 Devono avere il retain? Se sì, allora non sono last will, altrimenti???
@@ -111,31 +111,31 @@ Devo controllare se si sono iscritti con wildcard, seguo il tcp stream e identif
 6560
 Destination Port: 39551
 [Stream index: 2]
-mqtt && mqtt.msgtype == 8 && tcp.stream == 2
+mqtt \&\& mqtt.msgtype == 8 \&\& tcp.stream == 2
 Non usa wildcard
-mqtt && mqtt.msgtype == 1 && tcp.stream == 2
+mqtt \&\& mqtt.msgtype == 1 \&\& tcp.stream == 2
 Client ID: auyvhrhdudnm
 
 6562
 Destination Port: 53557
 [Stream index: 6]
-mqtt && mqtt.msgtype == 8 && tcp.stream == 6
+mqtt \&\& mqtt.msgtype == 8 \&\& tcp.stream == 6
 Non usa wildcard
-mqtt && mqtt.msgtype == 1 && tcp.stream == 6
+mqtt \&\& mqtt.msgtype == 1 \&\& tcp.stream == 6
 Client ID: pcdwkgeslfh
 
 6564
 Destination Port: 51743
 [Stream index: 10]
-mqtt && mqtt.msgtype == 8 && tcp.stream == 10
+mqtt \&\& mqtt.msgtype == 8 \&\& tcp.stream == 10
 Molte subscription: una sola che va bene per il nostro topic, con wildcard 
 1136	10.102492445	::1	::1	MQTT	108	Subscribe Request (id=6) [university/#]
 
 Destination Port: 41789
 [Stream index: 14]
-mqtt && mqtt.msgtype == 8 && tcp.stream == 14
+mqtt \&\& mqtt.msgtype == 8 \&\& tcp.stream == 14
 Non usa wildcard
-mqtt && mqtt.msgtype == 1 && tcp.stream == 14
+mqtt \&\& mqtt.msgtype == 1 \&\& tcp.stream == 14
 Client ID: mjdocmjxt
 
 RST è un reset, indica disconnessione brusca.
@@ -145,7 +145,7 @@ Secondo me sono dei last will messages.
 Per quelli da 2 a 4:
 5.196.78.28 è src solamente per PUBACK, PUBREC, CONNACK.
 Filtro che estrae i messaggi pubblicati:
-mqtt && ip.src == 5.196.78.28 && mqtt.msgtype == 3 
+mqtt \&\& ip.src == 5.196.78.28 \&\& mqtt.msgtype == 3 
 non ritorna risultati
 Se non ha pubblicato nulla, non può aver mandato dei last will message.
 
@@ -156,8 +156,14 @@ References:
 https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901022
 
 
+Domanda 6:
+
+utilizzando il filtro: dns.qry.name == "test.mosquitto.org" trovo l'indirizzo ip collegato al dominio richiesto che poi mi servirà per filtrare i pacchetti, l'IP è:  5.196.78.28.
+quindi filtro i pacchetti con: mqtt.msgtype == 3 and mqtt.qos == 0 and mqtt.retain == 1 and ip.dst == 5.196.78.28 e trovo tutti quelli che rispettano la richiesta: 208 pacchetti.
 
 
+Domanda 7: 
+Il protocollo MQTT-SN non è riconosciuto nativamente da Wireshark ma sappiamo da teoria che è un protocollo udp. Filtrando quindi con udp.port == 1885 non trovo nessun pacchetto e quindi non sono stati inviati pacchetti sulla porta 1885.
 
 
 
