@@ -1,0 +1,17 @@
+\subsubsection{Data}
+
+The data of the exercise is reported here.
+\begin{itemize}
+	\item $T_{sensor\_reading} = 5 \text{ minutes}$
+	\item $T_{average\_computation} = 30 \text{ minutes}$
+	\item $L_{resource} = L_{topic} = 10  \text{ Bytes}$
+	\item $L_{payload} = 8  \text{ Bytes}$
+	\item $E_{TX} = 50 \text{ nJ/bit}$
+	\item $E_{RX} = 58 \text{ nJ/bit}$
+	\item Ideal Wi-Fi network 
+	\item $E_{C} = 2.4 \text{ mJ}$
+\end{itemize}
+
+\subsubsection{EQ1}
+We start by computing the energy consumed by the two devices when they communicate using CoAP in the most efficient configuration energy-wise. The temperature sensor acts as a CoAP server, while the valve as a CoAP client.\\
+In order to save energy, we use CoAP Observation and Non-confirmable requests. The valve (client) sends a GET request with Observe to the temperature sensor (server). 
