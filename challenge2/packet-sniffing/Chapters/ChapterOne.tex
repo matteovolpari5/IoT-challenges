@@ -3,23 +3,67 @@
 How many different Confirmable PUT requests obtained an unsuccessful response from the local CoAP server?
 
 \subsubsection{Answer}
-TODO 
+The number of Confirmable PUT request that obtained an unsuccessful response from the local CoAP server is 22.
 
 \subsubsection{Explanation}
-Domanda 1
-Confirmable put request 
+We filter the Confirmable PUT requests to a local CoAP server with a filter: Confirmable requests have type 0, PUT requests have code 3.
 \begin{verbatim}
-coap && coap.type == 0 && coap.code == 3
+coap && coap.type == 0 && coap.code == 3 && ip.src == ip.dst
 \end{verbatim}
-45 frames
-Response 
+We get 26 filtered messages.
+
+We filter the unsuccessful responses from a local CoAP server based on the code, which needs to be bigger or equal than 128.
 \begin{verbatim}
-coap && (coap.code >= 128)
+coap && (coap.code >= 128) && ip.src == ip.dst
 \end{verbatim}
-228 frames 
-Dovrei matcharli per token o message id (quale????), troppi.
-In realtà posso filtrare anche ip src = ip dst.
-Quindi pyshark.
+We get 141 filtered messages.\\
+In order to answer QC1, we should follow the UDP stream for all 26 requests and check the code associated to the response, checking that all requests are different, i.e. have different token.\\
+To avoid doing this manually, we used a Python script written using PyShark library.
+
+\begin{python}
+import pyshark
+import sys
+import re
+def answer_cq1(capture):
+    requests = {}
+    responses = {}
+    for pkt in capture:
+        try:
+            # check local server 
+            if 'IP' not in pkt or pkt.ip.src != pkt.ip.dst:
+                continue
+            # check CoAP layer
+            if 'COAP' in pkt:
+                coap = pkt.coap
+                # get fields 
+                coap_type = int(coap.get_field('type')) if hasattr(coap, 'type') else None
+                coap_code = int(coap.get_field('code')) if hasattr(coap, 'code') else None
+                token = coap.get_field('token') if hasattr(coap, 'token') else None
+                if coap_type is None or coap_code is None or token is None:
+                    continue
+                if coap_type == 0 and coap_code == 3:
+                    # Confirmable PUT request 
+                    requests[token] = pkt
+                elif coap_code >= 128:
+                    # unsuccessful response  
+                    responses[token] = pkt
+        except Exception:
+            continue
+    count = sum(1 for token in requests if token in responses)
+    return count
+def main():
+    if len(sys.argv) != 2:
+        print("pcap file not provided")
+        sys.exit(1)
+    pcap_file = sys.argv[1]
+    capture = pyshark.FileCapture(pcap_file, keep_packets=False)    
+    print(answer_cq1(capture))
+    capture.close()
+if __name__ == "__main__":
+    main()
+\end{python}
+
+Running this script, we get a result of 22 requests.
 
 \section{CQ2}
 \subsubsection{Question}
@@ -27,22 +71,84 @@ How many CoAP resources in the coap.me public server received the same number of
 Assuming a resource receives X different CONFIRMABLE requests and Y different NONCONFIRMABLE GET requests, how many resources have X=Y, with X>0?
 
 \subsubsection{Answer}
-TODO 
+The number of CoAP resources in the coap.me public server that received the same number of unique Confirmable and Non Confirmable GET requests is 3.
 
 \subsubsection{Explanation}
-Domanda 2
-Get request confirmable a coap.me
+We can find the IP address of coap.me server with a Wireshark filter.
+\begin{verbatim}
+dns.qry.name == "coap.me"
+\end{verbatim}
+We can see that the IP is 134.102.218.18.\\
+
+We can find the Confirmable GET requests issued to coap.me with the following filter:
 \begin{verbatim}
 coap.type == 0 && coap.code == 1 && ip.dst==134.102.218.18
 \end{verbatim}
-39 frames
-Get non confirmable a coap.me
+While Non Confirmable GET requests to coap.me can be found with this filter:
 \begin{verbatim}
 coap.type == 1 && coap.code == 1 && ip.dst==134.102.218.18
 \end{verbatim}
-31 frames
-Dovrei vedere a quale risorsa fanno riferimento e poi confrontare.
-Troppo, quindi pyshark.
+We find 39 Confirmable request and 31 Non Confirmable ones and we would need to count the number of requests for each resource.\\
+Instead, we can use a PyShark algorithm to do the same.
+\begin{python}
+import pyshark
+import re
+import sys
+
+def answer_cq2(capture):
+    # IP found with Wireshark filter
+    coap_me_ip = "134.102.218.18"
+    resource_stats = {}
+    # find target requests and responses
+    for pkt in capture:
+        try:
+            # check destination is coap.me
+            if 'IP' not in pkt or pkt.ip.dst != coap_me_ip:
+                continue
+            # check CoAP layer
+            if 'COAP' in pkt:
+                coap = pkt.coap
+                # get fields 
+                coap_type = int(coap.get_field('type')) if hasattr(coap, 'type') else None
+                coap_code = int(coap.get_field('code')) if hasattr(coap, 'code') else None
+                token = coap.get_field('token') if hasattr(coap, 'token') else None
+                resource = coap.get_field('opt_uri_path') if hasattr(coap, 'opt_uri_path') else None                
+                if coap_type is None or coap_code is None or token is None or resource is None:
+                    continue
+                # check GET request 
+                if coap_code != 1:
+                    continue
+                if resource not in resource_stats:
+                    resource_stats[resource] = {'conf': set(), 'nonconf': set()}
+                if coap_type == 0:
+                    # Confirmable
+                    resource_stats[resource]['conf'].add(token)
+                elif coap_type == 1:
+                    # Non Confirmable
+                    resource_stats[resource]['nonconf'].add(token)
+        except Exception:
+            continue
+    # count target resources 
+    count = 0
+    for stats in resource_stats.values():
+        if len(stats['conf']) == len(stats['nonconf']) and len(stats['conf']) > 0:
+            count += 1
+    return count
+
+def main():
+    if len(sys.argv) != 2:
+        print("pcap file not provided")
+        sys.exit(1)
+    pcap_file = sys.argv[1]
+    capture = pyshark.FileCapture(pcap_file, keep_packets=False)
+    print(answer_cq2(capture))
+    capture.close()
+
+if __name__ == "__main__":
+    main()
+\end{python}
+
+Running the algorithm, we find out that 3 resources have the same number of Confirmable and Non Confirmable GET requests.
 
 \section{CQ3}
 \subsubsection{Question}
@@ -265,17 +371,6 @@ mqtt && ip.src == 5.196.78.28 && mqtt.msgtype == 3
 \end{verbatim}
 We don't find any result, which means that the broker doesn't publish any message, nor LWM.\\
 We conclude that three clients receive a LWM from a subscription without a wildcard, all of them from the first topic.
-
-
-TODO 
-Però non ha retain true!
-\begin{verbatim}
-mqtt && mqtt.msgtype==3 && mqtt.topic == "university/department12/room1/temperature" && mqtt.msg contains 
-6572726f723a20612056495020436c69656e74206a7573742064696564 && mqtt.retain == 1
-\end{verbatim}
-Nessun risultato
-Devono avere il retain? Se sì, allora non sono last will, altrimenti???
-Non penso. Il retain dovrebbe essere sul messaggio di connect, non su quello di last will!
 
 \section{CQ6}
 \subsubsection{Question}

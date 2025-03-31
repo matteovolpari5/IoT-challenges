@@ -3,17 +3,9 @@ import re
 import socket
 import sys
 
-# CQ2) How many CoAP resources in the coap.me public server received the
-# same number of unique Confirmable and Non Confirmable GET requests?
-# Assuming a resource receives X different CONFIRMABLE requests and Y different
-# NONCONFIRMABLE GET requests, how many resources have X=Y, with X>0?
-
 def answer_cq2(capture):
-    try:
-        coap_me_ip = socket.gethostbyname("coap.me")
-    except Exception as e:
-        print("error in DNS resolution:", e)
-        return 0
+    # IP found with Wireshark filter
+    coap_me_ip = "134.102.218.18"
     
     resource_stats = {}
     for pkt in capture:
@@ -27,27 +19,23 @@ def answer_cq2(capture):
                 coap = pkt.coap
                 
                 # get fields 
-                coap_code = int(coap.get_field('code')) if hasattr(coap, 'code') else None
                 coap_type = int(coap.get_field('type')) if hasattr(coap, 'type') else None
+                coap_code = int(coap.get_field('code')) if hasattr(coap, 'code') else None
                 token = coap.get_field('token') if hasattr(coap, 'token') else None
-                if not token:
-                    continue
-                resource = coap.get_field('opt_uri_path') if hasattr(coap, 'opt_uri_path') else None
-                if not resource:
+                resource = coap.get_field('opt_uri_path') if hasattr(coap, 'opt_uri_path') else None                
+                if coap_type is None or coap_code is None or token is None or resource is None:
                     continue
                 
-                name = coap.get_field('uri_host') if hasattr(coap, 'opt_name') else None
-
                 # check GET request 
                 if coap_code != 1:
                     continue
                 if resource not in resource_stats:
                     resource_stats[resource] = {'conf': set(), 'nonconf': set()}
                 if coap_type == 0:
-                    # CON
+                    # Confirmable
                     resource_stats[resource]['conf'].add(token)
                 elif coap_type == 1:
-                    # NON
+                    # Non Confirmable
                     resource_stats[resource]['nonconf'].add(token)
         except Exception:
             continue
@@ -63,11 +51,8 @@ def main():
         print("pcap file not provided")
         sys.exit(1)
     pcap_file = sys.argv[1]
-    print("loading pcap file")
     capture = pyshark.FileCapture(pcap_file, keep_packets=False)
-    
     print(answer_cq2(capture))
-    
     capture.close()
 
 

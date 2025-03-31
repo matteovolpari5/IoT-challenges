@@ -2,14 +2,12 @@ import pyshark
 import sys
 import re
 
-# CQ1) How many different Confirmable PUT requests obtained an
-# unsuccessful response from the local CoAP server?
-
 def answer_cq1(capture):
     requests = {}
     responses = {}
     for pkt in capture:
         try:
+            # check local server 
             if 'IP' not in pkt or pkt.ip.src != pkt.ip.dst:
                 continue
 
@@ -23,9 +21,12 @@ def answer_cq1(capture):
                 token = coap.get_field('token') if hasattr(coap, 'token') else None
                 if coap_type is None or coap_code is None or token is None:
                     continue
+
                 if coap_type == 0 and coap_code == 3:
+                    # Confirmable PUT request 
                     requests[token] = pkt
                 elif coap_code >= 128:
+                    # unsuccessful response  
                     responses[token] = pkt
         except Exception:
             continue
