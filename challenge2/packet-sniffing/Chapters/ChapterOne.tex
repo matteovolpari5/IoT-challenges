@@ -66,6 +66,12 @@ mqtt && mqtt.msgtype == 8 &&
 \end{verbatim}
 We find out that HiveMQ broker receives 6 messages of this type, all at the IP address 18.192.151.104.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth, height=0.85\textheight, keepaspectratio]{QC3_1.png}
+    \caption{SUBSCRIBE messages to HiveMQ broker with "\#"}
+\end{figure}
+
 Since the question asks for the number of MQTT clients who subscribe, we need to identify the clients who sent these messages. For each message, we select the TCP stream, which identifies the client.\\
 
 \begin{table}[H]
@@ -91,7 +97,7 @@ Since the question asks for the number of MQTT clients who subscribe, we need to
 Since there are 4 TCP streams, the 6 messages have been sent by 4 different client.	\\
 We can also find the Client ID of these clients by finding the CONNECT message, of type 1, they sent to the broker. For the TCP stream 8, we can use the following filter:
 \begin{verbatim}
-mqtt && mqtt.msgtype == 1 && tcp.stream == 3 
+mqtt && mqtt.msgtype == 1 && tcp.stream == 8
 \end{verbatim}
 The same filter with different TCP stream can be used for other clients.
 
@@ -126,154 +132,150 @@ MQTT clients can specify a Last Will Message in the CONNECT message. In order to
 mqtt && mqtt.msgtype == 1 && mqtt.willtopic
 \end{verbatim}
 We find four messages, but only one of them has a Last Will Topic having as first level "university".\\
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth, height=0.85\textheight, keepaspectratio]{QC4_1.png}
+    \caption{CONNECT messages specifying a Last Will Topic}
+\end{figure}
+
 We can find the result by enriching the filter and avoiding manually checking the topics, using the following filter:
 \begin{verbatim}
 mqtt && mqtt.msgtype == 1 && mqtt.willtopic matches "^university"
 \end{verbatim}
 Using this filter, we directly get the only message asked by CQ4.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth, height=0.85\textheight, keepaspectratio]{QC4_2.png}
+    \caption{CONNECT messages specifying a Last Will Topic starting with "university"}
+\end{figure}
+
 \section{CQ5}
 \subsubsection{Question}
 How many MQTT subscribers receive a last will message derived from a subscription without a wildcard?
 
 \subsubsection{Answer}
-TODO 
+The number of subscribers who receive a Last Will Message derived from a subscription without a wildcard is 3.
 
 \subsubsection{Explanation}
-
-Domanda 5:
-
+We start by identifying the possible Last Will Messages (LWM). To do so, we find all the CONNECT messages, with message type 1, that specify a LWM.
 \begin{verbatim}
 mqtt && mqtt.msgtype== 1 && mqtt.willmsg
 \end{verbatim}
-Ottengo 4 fram di tipo CONNECT che specificano un last will message e last will topic.
 
-4	0.000117188	::1	::1	MQTT	176	Connect Command
-196	2.116585177	10.0.2.15	5.196.78.28	MQTT	126	Connect Command
-352	5.034840089	10.0.2.15	5.196.78.28	MQTT	123	Connect Command
-557	7.043177949	10.0.2.15	5.196.78.28	MQTT	120	Connect Command
+We find four messages.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth, height=0.85\textheight, keepaspectratio]{QC5_1.png}
+    \caption{CONNECT messages specifying a LWM}
+\end{figure}
 
-1
-Will Topic: university/department12/room1/temperature
-Will Message Length: 29
-Will Message: 6572726f723a20612056495020436c69656e74206a7573742064696564
-2
-Will Topic: metaverse/room2/floor4
-Will Message Length: 15
-Will Message: 6572726f723a20706575697664716c
-3
-Will Topic: hospital/facility3/area3
-Will Message Length: 15
-Will Message: 6572726f723a20786c7a6171707464
-4
-Will Topic: metaverse/room2/room2
-Will Message Length: 15
-Will Message: 6572726f723a207a6a7a7772636470
+These messages specify the Last Will Messages, which we don't report in the table, and Last Will Topics.
+\begin{table}[H]
+\centering 
+\begin{tabular}{| c | c | c |}
+	\hline 
+	\rowcolor{bluepoli!40}
+	\textbf{Message number} & \textbf{Destination} & \textbf{Last Will Topic}\T\B \\
+	\hline 
+	4 & ::1 & university/department12/room1/temperature \T\B\\
+	196 & 5.196.78.28 & metaverse/room2/floor4 \T\B\\
+	352 & 5.196.78.28 & hospital/facility3/area3 \T\B\\
+	557 & 5.196.78.28 & metaverse/room2/room2 \T\B\\
+	\hline
+\end{tabular}
+\\[10pt]
+\caption{Last Will Topics}
+\end{table}
 
-Per il primo:
-Messaggi pubblicati su quel topic:
+Starting from the first Last Will Topic (LWT), we filter all PUBLISH messages with that topic and with same message as the LWM, found in the CONNECT message.
 \begin{verbatim}
-mqtt && mqtt.msgtype==3 && mqtt.topic == "university/department12/room1/temperature" 
+mqtt && mqtt.msgtype==3 && 
+mqtt.topic == "university/department12/room1/temperature" && 
+mqtt.msg contains 6572726f723a20612056495020436c69656e74206a7573742064696564
 \end{verbatim}
-4 risultati
-Messaggi pubblicati su quel topic con messaggio uguale a last will message:
+
+We find four messages:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth, height=0.85\textheight, keepaspectratio]{QC5_2.png}
+    \caption{LWM with topic "university/department12/room1/temperature"}
+\end{figure}
+
+By looking at the messages, we can see a TCP Reset message, representing an hard disconnection, followed by four Last Will Messages sent by the broker, on port 1883, to different client, on different ports and using different TCP streams.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth, height=0.85\textheight, keepaspectratio]{QC5_3.png}
+    \caption{TCP Reset and Last Will Messages}
+\end{figure}
+
+The clients who receive the LWM are grouped in the following table.
+\begin{table}[H]
+\centering 
+\begin{tabular}{| c | c | c |}
+	\hline 
+	\rowcolor{bluepoli!40}
+	\textbf{Message number} & \textbf{Subscriber port} & \textbf{TCP stream}\T\B \\
+	\hline 
+	6560 & 39551 & 2 \T\B\\
+	6562 & 53557 & 6 \T\B\\
+	6564 & 51743 & 10 \T\B\\
+	6566 & 41789 & 14 \T\B\\
+	\hline
+\end{tabular}
+\\[10pt]
+\caption{Last Will Topics}
+\end{table}
+
+In order to answer to QC5, we need to find which of these clients subscribed to the Last Will Topic without a wildcard. We can do so by filtering the SUBSCRIBE messages, with message type 8, with the correct TCP stream. For each of them we also find the CONNECT message and Client ID.
 \begin{verbatim}
-mqtt && mqtt.msgtype==3 && mqtt.topic == "university/department12/room1/temperature" && mqtt.msg contains 
+mqtt && mqtt.msgtype == 8 && mqtt.topic matches "^university" && 
+(tcp.stream == 2 || tcp.stream == 6 || tcp.stream == 10 || tcp.stream == 14)
 \end{verbatim}
-6572726f723a20612056495020436c69656e74206a7573742064696564
-Stessi 4 risultati
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth, height=0.85\textheight, keepaspectratio]{QC5_4.png}
+    \caption{TCP Reset and Last Will Messages}
+\end{figure}
+
+We can see that only three out of four clients subscribed to the Last Will Topic without a wildcard.
+
+\begin{table}[H]
+\centering 
+\begin{tabular}{| c | c | c |}
+	\hline 
+	\rowcolor{bluepoli!40}
+	\textbf{TCP stream} & \textbf{Client ID} & \textbf{Specified topic}\T\B \\
+	\hline 
+	2 & auyvhrhdudnm & university/department12/room1/temperature \T\B\\
+	6 & ntpiopsqc & university/department12/room1/temperature \T\B\\
+	10 & zmjnxudohrkaegmh & university/\# \T\B\\
+	14 & mjdocmjxt & university/department12/room1/temperature \T\B\\
+	\hline
+\end{tabular}
+\\[10pt]
+\caption{Specified topics}
+\end{table}
+
+For what concerns the other three Last Will Topics, we filter all PUBLISH messages, with message type 3, from the broker, with IP 5.196.78.28.
+\begin{verbatim}
+mqtt && ip.src == 5.196.78.28 && mqtt.msgtype == 3 
+\end{verbatim}
+We don't find any result, which means that the broker doesn't publish any message, nor LWM.\\
+We conclude that three clients receive a LWM from a subscription without a wildcard, all of them from the first topic.
+
+
+TODO 
 Però non ha retain true!
 \begin{verbatim}
 mqtt && mqtt.msgtype==3 && mqtt.topic == "university/department12/room1/temperature" && mqtt.msg contains 
 6572726f723a20612056495020436c69656e74206a7573742064696564 && mqtt.retain == 1
 \end{verbatim}
 Nessun risultato
-
 Devono avere il retain? Se sì, allora non sono last will, altrimenti???
 Non penso. Il retain dovrebbe essere sul messaggio di connect, non su quello di last will!
-
-Inoltre sono i pacchetti 6560, 6562, 6564, 6566. A 6559 c'è un reset ??.
-Si tratta di questi pacchetti 
-6559	146.691800286	::1	::1	TCP	88	38083 → 1883 [RST, ACK] Seq=9316 Ack=85 Win=65536 Len=0 TSval=2654936537 TSecr=2654934931
-6560	146.692096889	::1	::1	MQTT	162	Publish Message [university/department12/room1/temperature]
-6561	146.692172650	::1	::1	TCP	88	39551 → 1883 [ACK] Seq=77 Ack=86 Win=65536 Len=0 TSval=2654936537 TSecr=2654936537
-6562	146.692187516	::1	::1	MQTT	164	Publish Message (id=1) [university/department12/room1/temperature]
-6563	146.692189976	::1	::1	TCP	88	53557 → 1883 [ACK] Seq=94 Ack=86 Win=65536 Len=0 TSval=2654936537 TSecr=2654936537
-6564	146.692199911	::1	::1	MQTT	165	Publish Message (id=12) [university/department12/room1/temperature]
-6565	146.692202117	::1	::1	TCP	88	51743 → 1883 [ACK] Seq=573 Ack=14152 Win=64896 Len=0 TSval=2654936537 TSecr=2654936537
-6566	146.692209983	::1	::1	MQTT	164	Publish Message (id=1) [university/department12/room1/temperature]
-6560, 6562, 6564 e 6466 sono quelli con contenuto pari al last will message sul last will topic.
-Per questi pacchetti, ho notato che la source port è sempre 1883, mentre la destination port cambia.
-Infine il tcp stream cambia.
-
-Devo controllare se si sono iscritti con wildcard, seguo il tcp stream e identifico le richieste di SUBSCRIBE.
-
-6560
-Destination Port: 39551
-[Stream index: 2]
-\begin{verbatim}
-mqtt && mqtt.msgtype == 8 && tcp.stream == 2
-\end{verbatim}
-Non usa wildcard
-\begin{verbatim}
-mqtt && mqtt.msgtype == 1 && tcp.stream == 2
-\end{verbatim}
-Client ID: auyvhrhdudnm
-
-6562
-Destination Port: 53557
-[Stream index: 6]
-\begin{verbatim}
-mqtt && mqtt.msgtype == 8 && tcp.stream == 6
-\end{verbatim}
-Non usa wildcard
-\begin{verbatim}
-mqtt && mqtt.msgtype == 1 && tcp.stream == 6
-\end{verbatim}
-Client ID: pcdwkgeslfh
-
-6564
-Destination Port: 51743
-[Stream index: 10]
-\begin{verbatim}
-mqtt && mqtt.msgtype == 8 && tcp.stream == 10
-\end{verbatim}
-Molte subscription: una sola che va bene per il nostro topic, con wildcard 
-\begin{verbatim}
-1136	10.102492445	::1	::1	MQTT	108	Subscribe Request (id=6) [university/#]
-\end{verbatim}
-
-Destination Port: 41789
-[Stream index: 14]
-\begin{verbatim}
-mqtt && mqtt.msgtype == 8 && tcp.stream == 14
-\end{verbatim}
-Non usa wildcard
-\begin{verbatim}
-mqtt && mqtt.msgtype == 1 && tcp.stream == 14
-\end{verbatim}
-Client ID: mjdocmjxt
-
-RST è un reset, indica disconnessione brusca.
-Successivamente il broker, sempre porta 1883, manda messaggi tutti con last will topic e last will message in loopback, sempre a porte diverse.
-Secondo me sono dei last will messages.
-
-Per quelli da 2 a 4:
-5.196.78.28 è src solamente per PUBACK, PUBREC, CONNACK.
-Filtro che estrae i messaggi pubblicati:
-\begin{verbatim}
-mqtt && ip.src == 5.196.78.28 && mqtt.msgtype == 3 
-\end{verbatim}
-non ritorna risultati
-Se non ha pubblicato nulla, non può aver mandato dei last will message.
-
-Conclusione: ci sono 4 CONNECT con last will, una di queste, quella in locale, ha dei messaggi di last will. 
-Il messaggio viene inviato dopo un reset dal broker a 4 subscriber, vedendo la loro subscription, solo 3 su 4 non hanno usato la wildcard.
-
-References:
-\begin{verbatim}
-https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901022
-\end{verbatim}
 
 \section{CQ6}
 \subsubsection{Question}
@@ -302,7 +304,10 @@ Domanda 7:
 Il protocollo MQTT-SN non è riconosciuto nativamente da Wireshark ma sappiamo da teoria che è un protocollo udp. Filtrando quindi con udp.port == 1885 non trovo nessun pacchetto e quindi non sono stati inviati pacchetti sulla porta 1885.
 
 
-
+References:
+\begin{verbatim}
+https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901022
+\end{verbatim}
 
 
 
