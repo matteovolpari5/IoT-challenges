@@ -1,59 +1,151 @@
+\section{CQ1}
+\subsubsection{Question}
+How many different Confirmable PUT requests obtained an unsuccessful response from the local CoAP server?
+
+\subsubsection{Answer}
+TODO 
+
+\subsubsection{Explanation}
 Domanda 1
 Confirmable put request 
-coap \&\& coap.type == 0 \&\& coap.code == 3
+\begin{verbatim}
+coap && coap.type == 0 && coap.code == 3
+\end{verbatim}
 45 frames
 Response 
-coap \&\& (coap.code >= 128)
+\begin{verbatim}
+coap && (coap.code >= 128)
+\end{verbatim}
 228 frames 
-Dovrei matcharli per token/message id, troppi.
+Dovrei matcharli per token o message id (quale????), troppi.
+In realtà posso filtrare anche ip src = ip dst.
 Quindi pyshark.
 
+\section{CQ2}
+\subsubsection{Question}
+How many CoAP resources in the coap.me public server received the same number of unique Confirmable and Non Confirmable GET requests?\\
+Assuming a resource receives X different CONFIRMABLE requests and Y different NONCONFIRMABLE GET requests, how many resources have X=Y, with X>0?
+
+\subsubsection{Answer}
+TODO 
+
+\subsubsection{Explanation}
 Domanda 2
 Get request confirmable a coap.me
-coap.type == 0 \&\& coap.code == 1 \&\& ip.dst==134.102.218.18
+\begin{verbatim}
+coap.type == 0 && coap.code == 1 && ip.dst==134.102.218.18
+\end{verbatim}
 39 frames
 Get non confirmable a coap.me
-coap.type == 1 \&\& coap.code == 1 \&\& ip.dst==134.102.218.18
+\begin{verbatim}
+coap.type == 1 && coap.code == 1 && ip.dst==134.102.218.18
+\end{verbatim}
 31 frames
 Dovrei vedere a quale risorsa fanno riferimento e poi confrontare.
 Troppo, quindi pyshark.
 
-Domanda 3
+\section{CQ3}
+\subsubsection{Question}
+How many different MQTT clients subscribe to the public broker HiveMQ using multi-level wildcards?
+
+\subsubsection{Answer}
+The number of clients who subscribe to the public broker HiveMQ using multi-level wildcards is 4.
+
+\subsubsection{Explanation}
+In order to find the IP address of the HiveMQ broker, we filter the response of the DNS server using the following Wireshark filter:
+\begin{verbatim}
 dns.qry.name == "broker.hivemq.com"
-::1 dovrebbe essere il loopback in ipv6, tipo 127.0.0.1 per ipv4
+\end{verbatim}
+All DNS responses return 3 addresses: 18.192.151.104, 35.158.34.213 and 35.158.43.69.
 
-Filtro wireshark:
-mqtt \&\& mqtt.msgtype == 8 \&\& ip.dst == 18.192.151.104 \&\& mqtt.topic contains "#"
+We use a second filter to find SUBSCRIBE messages, with message type 8, sent to HiveMQ broker, to one of the IP addresses found above, with a multi-level wildcard, ending with "\#": 
+\begin{verbatim}
+mqtt && mqtt.msgtype == 8 && 
+(ip.dst == 18.192.151.104 || ip.dst == 35.158.34.213 
+|| ip.dst == 35.158.43.69) && mqtt.topic contains "#"
+\end{verbatim}
+We find out that HiveMQ broker receives 6 messages of this type, all at the IP address 18.192.151.104.
 
-Ottieni 6 pacchetti.
-Per ognuno prendi tcp stream:
-N 375 - TCP stream = 8
-N 2442 - TCP stream 15
-N 3293 - TCP stream 20
-N 3303 - TCP stream 15
-N 3362 - TCP stream 3 
-N 3693 - TCP stream 15 
+Since the question asks for the number of MQTT clients who subscribe, we need to identify the clients who sent these messages. For each message, we select the TCP stream, which identifies the client.\\
 
-Per ogni stream prendo il client id 
-mqtt \&\& mqtt.msgtype == 1 \&\& tcp.stream == 3 
-uguale per tutti gli stream, cambiando valore, ottengo client id 
-Stream 3 - Client ID: cpoepjzkhibxgjiu
-Stream 8 - Client ID: dzcxnwdqef
-Stream 15 - Client ID: tukvxesuhe
-Stream 20 - Client ID: fcthvjikxjul
-Tutti diversi, 4 client.
+\begin{table}[H]
+\centering 
+\begin{tabular}{| c | c |}
+	\hline 
+	\rowcolor{bluepoli!40}
+	\textbf{Message number} & \textbf{TCP stream}\T\B \\
+	\hline 
+	375 & 8 \T\B\\
+	2442 & 15 \T\B\\
+	3293 & 20 \T\B\\
+	3303 & 15 \T\B\\
+	3362 & 3 \T\B\\
+	3693  & 15 \T\B\\
+	\hline
+\end{tabular}
+\\[10pt]
+\caption{TCP streams}
+\label{table:tcp_streams}
+\end{table}
 
-Domanda 4
-Filtro wireshark:
-mqtt \&\& mqtt.msgtype == 1 \&\& mqtt.willtopic matches "^university"
+Since there are 4 TCP streams, the 6 messages have been sent by 4 different client.	\\
+We can also find the Client ID of these clients by finding the CONNECT message, of type 1, they sent to the broker. For the TCP stream 8, we can use the following filter:
+\begin{verbatim}
+mqtt && mqtt.msgtype == 1 && tcp.stream == 3 
+\end{verbatim}
+The same filter with different TCP stream can be used for other clients.
 
-Oppure:
-mqtt \&\& mqtt.msgtype == 1 \&\& mqtt.willtopic
-Ne escono 4 e li controllo, solo uno inizia per university 
+\begin{table}[H]
+\centering 
+\begin{tabular}{| c | c |}
+	\hline 
+	\rowcolor{bluepoli!40}
+	\textbf{TCP stream} & \textbf{Client ID}\T\B \\
+	\hline 
+	3 & cpoepjzkhibxgjiu \T\B\\
+	8 & dzcxnwdqef \T\B\\
+	15 & tukvxesuhe \T\B\\
+	20 & fcthvjikxjul \T\B\\
+	\hline
+\end{tabular}
+\\[10pt]
+\caption{Client IDs table}
+\label{table:client_ids_table}
+\end{table}
+
+\section{CQ4}
+\subsubsection{Question}
+How many different MQTT clients specify a Last Will Message to be directed to a topic having as first level "university"?
+
+\subsubsection{Answer}
+The number of clients who specify a Last Will Message to be directed to a topic having as first level "university" is 1.
+
+\subsubsection{Explanation}
+MQTT clients can specify a Last Will Message in the CONNECT message. In order to find the described messages, we filter CONNECT messages, of type 1, with a Last Will Topic:
+\begin{verbatim}
+mqtt && mqtt.msgtype == 1 && mqtt.willtopic
+\end{verbatim}
+We find four messages, but only one of them has a Last Will Topic having as first level "university".\\
+We can find the result by enriching the filter and avoiding manually checking the topics, using the following filter:
+\begin{verbatim}
+mqtt && mqtt.msgtype == 1 && mqtt.willtopic matches "^university"
+\end{verbatim}
+Using this filter, we directly get the only message asked by CQ4.
+
+\section{CQ5}
+\subsubsection{Question}
+How many MQTT subscribers receive a last will message derived from a subscription without a wildcard?
+
+\subsubsection{Answer}
+TODO 
+
+\subsubsection{Explanation}
 
 Domanda 5:
 
-mqtt \&\& mqtt.msgtype== 1 \&\& mqtt.willmsg
+\begin{verbatim}
+mqtt && mqtt.msgtype== 1 && mqtt.willmsg
+\end{verbatim}
 Ottengo 4 fram di tipo CONNECT che specificano un last will message e last will topic.
 
 4	0.000117188	::1	::1	MQTT	176	Connect Command
@@ -80,13 +172,21 @@ Will Message: 6572726f723a207a6a7a7772636470
 
 Per il primo:
 Messaggi pubblicati su quel topic:
-mqtt \&\& mqtt.msgtype==3 \&\& mqtt.topic == "university/department12/room1/temperature" 
+\begin{verbatim}
+mqtt && mqtt.msgtype==3 && mqtt.topic == "university/department12/room1/temperature" 
+\end{verbatim}
 4 risultati
 Messaggi pubblicati su quel topic con messaggio uguale a last will message:
-mqtt \&\& mqtt.msgtype==3 \&\& mqtt.topic == "university/department12/room1/temperature" \&\& mqtt.msg contains 6572726f723a20612056495020436c69656e74206a7573742064696564
+\begin{verbatim}
+mqtt && mqtt.msgtype==3 && mqtt.topic == "university/department12/room1/temperature" && mqtt.msg contains 
+\end{verbatim}
+6572726f723a20612056495020436c69656e74206a7573742064696564
 Stessi 4 risultati
 Però non ha retain true!
-mqtt \&\& mqtt.msgtype==3 \&\& mqtt.topic == "university/department12/room1/temperature" \&\& mqtt.msg contains 6572726f723a20612056495020436c69656e74206a7573742064696564 \&\& mqtt.retain == 1
+\begin{verbatim}
+mqtt && mqtt.msgtype==3 && mqtt.topic == "university/department12/room1/temperature" && mqtt.msg contains 
+6572726f723a20612056495020436c69656e74206a7573742064696564 && mqtt.retain == 1
+\end{verbatim}
 Nessun risultato
 
 Devono avere il retain? Se sì, allora non sono last will, altrimenti???
@@ -111,31 +211,47 @@ Devo controllare se si sono iscritti con wildcard, seguo il tcp stream e identif
 6560
 Destination Port: 39551
 [Stream index: 2]
-mqtt \&\& mqtt.msgtype == 8 \&\& tcp.stream == 2
+\begin{verbatim}
+mqtt && mqtt.msgtype == 8 && tcp.stream == 2
+\end{verbatim}
 Non usa wildcard
-mqtt \&\& mqtt.msgtype == 1 \&\& tcp.stream == 2
+\begin{verbatim}
+mqtt && mqtt.msgtype == 1 && tcp.stream == 2
+\end{verbatim}
 Client ID: auyvhrhdudnm
 
 6562
 Destination Port: 53557
 [Stream index: 6]
-mqtt \&\& mqtt.msgtype == 8 \&\& tcp.stream == 6
+\begin{verbatim}
+mqtt && mqtt.msgtype == 8 && tcp.stream == 6
+\end{verbatim}
 Non usa wildcard
-mqtt \&\& mqtt.msgtype == 1 \&\& tcp.stream == 6
+\begin{verbatim}
+mqtt && mqtt.msgtype == 1 && tcp.stream == 6
+\end{verbatim}
 Client ID: pcdwkgeslfh
 
 6564
 Destination Port: 51743
 [Stream index: 10]
-mqtt \&\& mqtt.msgtype == 8 \&\& tcp.stream == 10
+\begin{verbatim}
+mqtt && mqtt.msgtype == 8 && tcp.stream == 10
+\end{verbatim}
 Molte subscription: una sola che va bene per il nostro topic, con wildcard 
+\begin{verbatim}
 1136	10.102492445	::1	::1	MQTT	108	Subscribe Request (id=6) [university/#]
+\end{verbatim}
 
 Destination Port: 41789
 [Stream index: 14]
-mqtt \&\& mqtt.msgtype == 8 \&\& tcp.stream == 14
+\begin{verbatim}
+mqtt && mqtt.msgtype == 8 && tcp.stream == 14
+\end{verbatim}
 Non usa wildcard
-mqtt \&\& mqtt.msgtype == 1 \&\& tcp.stream == 14
+\begin{verbatim}
+mqtt && mqtt.msgtype == 1 && tcp.stream == 14
+\end{verbatim}
 Client ID: mjdocmjxt
 
 RST è un reset, indica disconnessione brusca.
@@ -145,7 +261,9 @@ Secondo me sono dei last will messages.
 Per quelli da 2 a 4:
 5.196.78.28 è src solamente per PUBACK, PUBREC, CONNACK.
 Filtro che estrae i messaggi pubblicati:
-mqtt \&\& ip.src == 5.196.78.28 \&\& mqtt.msgtype == 3 
+\begin{verbatim}
+mqtt && ip.src == 5.196.78.28 && mqtt.msgtype == 3 
+\end{verbatim}
 non ritorna risultati
 Se non ha pubblicato nulla, non può aver mandato dei last will message.
 
@@ -153,17 +271,48 @@ Conclusione: ci sono 4 CONNECT con last will, una di queste, quella in locale, h
 Il messaggio viene inviato dopo un reset dal broker a 4 subscriber, vedendo la loro subscription, solo 3 su 4 non hanno usato la wildcard.
 
 References:
+\begin{verbatim}
 https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901022
+\end{verbatim}
 
+\section{CQ6}
+\subsubsection{Question}
+How many MQTT publish messages directed to the public broker mosquitto are sent with the retain option and use QoS “At most once”?
+
+\subsubsection{Answer}
+TODO 
+
+\subsubsection{Explanation}
 
 Domanda 6:
 
 utilizzando il filtro: dns.qry.name == "test.mosquitto.org" trovo l'indirizzo ip collegato al dominio richiesto che poi mi servirà per filtrare i pacchetti, l'IP è:  5.196.78.28.
 quindi filtro i pacchetti con: mqtt.msgtype == 3 and mqtt.qos == 0 and mqtt.retain == 1 and ip.dst == 5.196.78.28 e trovo tutti quelli che rispettano la richiesta: 208 pacchetti.
 
+\section{CQ7}
+\subsubsection{Question}
+How many MQTT-SN messages on port 1885 are sent by the clients to a broker in the local machine?
+
+\subsubsection{Answer}
+TODO 
+
+\subsubsection{Explanation}
 
 Domanda 7: 
 Il protocollo MQTT-SN non è riconosciuto nativamente da Wireshark ma sappiamo da teoria che è un protocollo udp. Filtrando quindi con udp.port == 1885 non trovo nessun pacchetto e quindi non sono stati inviati pacchetti sulla porta 1885.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
