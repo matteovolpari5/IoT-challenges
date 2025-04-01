@@ -1,4 +1,4 @@
-\subsubsection{Data}
+\section{Data}
 
 The data of the exercise is reported here.
 \begin{itemize}
@@ -12,6 +12,77 @@ The data of the exercise is reported here.
 	\item $E_{C} = 2.4 \text{ mJ}$
 \end{itemize}
 
-\subsubsection{EQ1}
+The message sizes of the two protocols are reported in the following tables.
+
+\begin{table}[H]
+\centering 
+\begin{tabular}{| c | c |}
+	\hline 
+	\rowcolor{bluepoli!40}
+	\textbf{Message} & \textbf{Size [Byte]}\T\B \\
+	\hline 
+	GET Request & 60 \T\B\\
+	GET Response  & 55 \T\B\\
+	PUT Request & 77 \T\B\\
+	PUT Response & 58 \T\B\\
+	Empty ACK & 14 \T\B\\
+	\hline
+\end{tabular}
+\\[10pt]
+\caption{Message sizes CoAP}
+\end{table}
+
+\begin{table}[H]
+\centering 
+\begin{tabular}{| c | c |}
+	\hline 
+	\rowcolor{bluepoli!40}
+	\textbf{Message} & \textbf{Size [Byte]}\T\B \\
+	\hline 
+	Subscribe & 58 \T\B\\
+	Sub ACK & 52 \T\B\\
+	Publish & 68 \T\B\\
+	Pub Ack & 51 \T\B\\
+	Connect & 54\T\B\\
+	Connect Ack & 47 \T\B\\
+	Ping Req & 52 \T\B\\
+	Ping Resp & 48 \T\B\\
+	\hline
+\end{tabular}
+\\[10pt]
+\caption{Message sizes MQTT}
+\end{table}
+
+\section{EQ1.a Energy consumed using CoAP}
 We start by computing the energy consumed by the two devices when they communicate using CoAP in the most efficient configuration energy-wise. The temperature sensor acts as a CoAP server, while the valve as a CoAP client.\\
 In order to save energy, we use CoAP Observation and Non-confirmable requests. The valve (client) sends a GET request with Observe to the temperature sensor (server). 
+
+\section{EQ1.b Energy consumed using MQTT}
+
+\section{EQ2 Improvements}
+In this section, we propose two ways to decrease the energy consumed by the two device while using the Raspberry PI as a broker. 
+\subsection{Using MQTT-SN}
+The first improvement consists in using MQTT-SN instead of MQTT. Using MQTT-SN introduces a trade-off: 
+\begin{itemize}
+	\item Disadvantage: the publisher needs to send a REGISTER message to the broker, represented by the Raspberry PI, before being able to send PUBLISH messages.
+	\item Advantage: PUBLISH messages have a reduced size, since they have a 2 Bytes long topic, instead of the 10 Bytes long one of MQTT messages.
+\end{itemize}
+On the long run, using MQTT-SN is beneficial, since we send more messages and compensate the initial cost of the REGISTER message with the lowered cost of PUBLISH messages. We need to compute the energy consumption in our time horizon of 24 hours and see if it is long enough to consume less energy.
+
+// TODO calcoli
+
+We can see that the new energy consumption is smaller than the one computed using MQTT.
+
+// TODO potrebbe essere che inviando ogni 10 minuti, non conviene più MQTT-SN rispetto a MQTT.
+
+
+
+
+
+
+
+
+
+
+
+
