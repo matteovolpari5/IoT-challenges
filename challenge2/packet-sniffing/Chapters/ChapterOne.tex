@@ -384,10 +384,11 @@ In order to find the IP address of the public broker mosquitto, we filter the re
 \begin{verbatim}
 dns.qry.name == "test.mosquitto.org"
 \end{verbatim}
-Al DNS responses return the same IP address: 5.196.78.28.\\
+All DNS responses return the same IP address: 5.196.78.28.\\
 Now we need a second filter in order to obtain all the publish messages that satisfy the question:
 \begin{verbatim}
-mqtt.msgtype == 3 and mqtt.qos == 0 and mqtt.retain == 1 and ip.dst == 5.196.78.28
+mqtt.msgtype == 3 and mqtt.qos == 0 and mqtt.retain == 1 
+and ip.dst == 5.196.78.28
 \end{verbatim}
 We find 208 results, so we can conclude that the number of packets that satisfy all the constraints is 208.
 
@@ -400,14 +401,14 @@ The number of MQTT-SN messages on port 1885 sent by the clients to a broker in t
 
 \subsubsection{Explanation}
 Natively MQTT-SN is not recognised by Wireshark and therefore a preliminary operation is required. By going into the settings we can set 1885 as the port of MQTT-SN.
-Since MQTT-SN is a udp protocol, in order to filter all the messages using MQTT-SN we can use this Wireshark filter
+Since MQTT-SN is a UDP protocol, in order to filter all the messages using MQTT-SN we can use this Wireshark filter:
 \begin{verbatim}
 udp.dstport == 1885
 \end{verbatim}
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth, height=0.85\textheight, keepaspectratio]{QC7_1.png}
-    \caption{Udp destination port 1885}
+    \caption{UDP destination port 1885}
 \end{figure}
 \begin{figure}[H]
     \centering
