@@ -55,8 +55,18 @@ The message sizes of the two protocols are reported in the following tables.
 
 \section{EQ1.a Energy consumed using CoAP}
 We start by computing the energy consumed by the two devices when they communicate using CoAP in the most efficient configuration energy-wise. The temperature sensor acts as a CoAP Server, while the valve as a CoAP Client.\\
-In order to save energy, we use CoAP Observation and Non-confirmable requests. The valve (Client) sends a GET Request with Observe to the temperature sensor (Server). The sensor sends the requested value to the Client every 5 minutes, with a GET Response. Moreover, the valve computes the average every 30 minutes.\\
-We start by computing the number of sensor readings, $N_{sensor\_read}$, and the number of computations of the average, $N_{avg}$.
+In order to save energy, we adopt the following configurations:
+\begin{itemize}
+\item We use CoAP Non-confirmable requests, which means that requests are not followed by a ACK. 
+\item Since the Client wants to receive the same data from the Server at fixed rate, we use CoAP Observation. 
+\end{itemize}
+The valve (Client) sends a GET Request with Observe to the temperature sensor (Server). The Server is programmed to send a new value to who observes it, in our scenario the valve, every 5 minutes, with a GET Response. Finally, the valve computes the average every 30 minutes.\\
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth, height=0.5\textheight, keepaspectratio]{coap.pdf}
+    \caption{Message flow CoAP}
+\end{figure}
+We start the energy consumption calculation by computing the number of sensor readings, $N_{sensor\_read}$, and the number of computations of the average, $N_{avg}$.
 \[N_{sensor\_read} = (24\text{ h}  \cdot 60 \text{ min/h}) / 5 \text{ min} = 288\]
 \[N_{avg} = (24\text{ h}  \cdot 60 \text{ min/h}) / 30 \text{ min} = 48\]
 
@@ -66,8 +76,17 @@ We can compute the energy consumed by the two devices as:
 \[E_{CoAP\_total} = E_{CoAP\_valve} + E_{CoAP\_sensor} = 128.938 \text{ mJ}\]
 
 \section{EQ1.b Energy consumed using MQTT}
-In this section, we compute the energy consumption if the devices communicate through MQTT. In this scenario, the Raspberry Pi acts as MQTT Broker, the sensor is a Publisher and the valve is a Subscriber. In order to minimize energy consumption, messages are exchanged with QoS 0 and without the Keep Alive mechanism, i.e. with Keep Alive 0. The sensor (Publisher) connects to the Broker and starts publishing temperature values every 5 minutes. The valve (Subscriber) connects to the Broker, subscribes to the topic and starts receiving temperature values.
-
+In this section, we compute the energy consumption if the devices communicate through MQTT. In this scenario, the Raspberry Pi acts as MQTT Broker, the sensor is a Publisher and the valve is a Subscriber. In order to minimize energy consumption, we adopt the following configurations:
+\begin{itemize}
+\item Messages are exchanged with QoS 0, in "at most once" mode, i.e. no PUBACK messages are exchanged.
+\item Neither the sensor nor the valve send ping messages. The sensor uses a Keep Alive greater than 5 minutes, so that the periodic PUBLISH message will reset the timer. The valve, instead, uses a Keep Alive 0, which disables the Keep Alive mechanism; disconnections from the valve will be detected at TCP level when the broker will try to communicate the new sensor reading but won't be able to reach the valve.
+\end{itemize}
+The sensor (Publisher) connects to the Broker and starts publishing temperature values every 5 minutes. The valve (Subscriber) connects to the Broker, subscribes to the topic and starts receiving temperature values.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth, height=0.5\textheight, keepaspectratio]{mqtt.pdf}
+    \caption{Message flow MQTT}
+\end{figure}
 We can compute the energy consumed by the two devices as:
 \[E_{MQTT\_valve} = E_{TX} \cdot L_{CONNECT} + E_{RX} \cdot L_{CONNACK} + E_{TX} \cdot L_{SUBSCRIBE} +\]
 \[+ E_{RX} \cdot L_{SUBACK} + N_{sensor\_read} \cdot E_{RX} \cdot L_{PUBLISH} + N_{avg} \cdot E_{C} = 124.378 \text{ mJ}\]
@@ -89,6 +108,11 @@ Using MQTT-SN introduces a trade-off:
 	\item Advantage: PUBLISH messages have a reduced size, since they have a 2 Bytes long topic, instead of the 10 Bytes long one of MQTT messages.
 \end{itemize}
 On the long run, using MQTT-SN is beneficial, since we send more messages and compensate the initial cost of the REGISTER message with the lowered cost of PUBLISH messages. We start by computing the number of packets that the Publisher should send with MQTT-SN in order to save energy with respect to MQTT. To do so, we compute the energy needed to send the initial packages, publish a variable number of packages m and compute the average every 30 minutes both with MQTT and MQTT-SN.\\
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth, height=0.5\textheight, keepaspectratio]{mqtt_sn.pdf}
+    \caption{Message flow MQTT-SN}
+\end{figure}
 The energy consumption to send m packets with MQTT is:
 \[E_{MQTT\_valve} = E_{TX} \cdot L_{CONNECT} + E_{RX} \cdot L_{CONNACK} + E_{TX} \cdot L_{SUBSCRIBE} +\]
 \[+ E_{RX} \cdot L_{SUBACK} + m \cdot E_{RX} \cdot L_{PUBLISH} + N_{avg} \cdot E_{C} = 115.291 \text{ mJ} + m \cdot 3.1552 \cdot 10^{-5} \text{ J}\]

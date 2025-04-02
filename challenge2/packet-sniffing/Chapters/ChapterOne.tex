@@ -374,10 +374,10 @@ We conclude that three clients receive a LWM from a subscription without a wildc
 
 \section{CQ6}
 \subsubsection{Question}
-How many MQTT publish messages directed to the public broker mosquitto are sent with the retain option and use QoS “At most once”?
+How many MQTT publish messages directed to the public broker mosquitto are sent with the retain option and use QoS "At most once"?
 
 \subsubsection{Answer}
-The number of publish messages directed to the public broker mosquitto are sent with the retain option and use QoS “At most once” is 208.
+The number of publish messages directed to the public broker mosquitto are sent with the retain option and use QoS "At most once" is 208.
 
 \subsubsection{Explanation}
 In order to find the IP address of the public broker mosquitto, we filter the response of the DNS server using the following Wireshark filter:
@@ -400,8 +400,17 @@ How many MQTT-SN messages on port 1885 are sent by the clients to a broker in th
 The number of MQTT-SN messages on port 1885 sent by the clients to a broker in the local machine is 0.
 
 \subsubsection{Explanation}
-Natively MQTT-SN is not recognised by Wireshark and therefore a preliminary operation is required. By going into the settings we can set 1885 as the port of MQTT-SN.
-Since MQTT-SN is a UDP protocol, in order to filter all the messages using MQTT-SN we can use this Wireshark filter:
+Natively MQTT-SN is not recognised by Wireshark and therefore a preliminary operation is required. By going into the settings, we can set 1885 as the port of MQTT-SN.
+We can filter the messages using MQTT-SN with:
+\begin{verbatim}
+mqttsn
+\end{verbatim}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth, height=0.85\textheight, keepaspectratio]{QC7_2.png}
+    \caption{MQTT-SN messages}
+\end{figure}
+Otherwise, since MQTT-SN is a UDP protocol, in order to filter all the messages using MQTT-SN directed to port 1885, we can use this Wireshark filter:
 \begin{verbatim}
 udp.dstport == 1885
 \end{verbatim}
@@ -410,12 +419,8 @@ udp.dstport == 1885
     \includegraphics[width=\linewidth, height=0.85\textheight, keepaspectratio]{QC7_1.png}
     \caption{UDP destination port 1885}
 \end{figure}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\linewidth, height=0.85\textheight, keepaspectratio]{QC7_2.png}
-    \caption{MQTT-SN messages}
-\end{figure}
-However, both this filter and the standard ‘mqttsn’ filter do not return a single packet, so to be sure that the result is 0, it is possible to carry out a further check knowing that MQTT-SN always has topic length equal to 2:
+
+Both filters don't return any packet. It is possible to carry out a further check knowing that MQTT-SN always has topic length equal to 2:
 \begin{verbatim}
 mqtt.topic_len == 2
 \end{verbatim}
@@ -424,7 +429,7 @@ mqtt.topic_len == 2
     \includegraphics[width=\linewidth, height=0.85\textheight, keepaspectratio]{QC7_3.png}
     \caption{MQTT messages with topic length 2}
 \end{figure}
-But this filter also gives no results, so we can conclude that there are no MQTT-SN messages sent on port 1885 by the clients to a broker in the local machine.
+But this filter also gives no results. We can conclude that there are no MQTT-SN messages sent on port 1885 by the clients to a broker in the local machine.
 
 \section{References}
 In this section we provide a set of references we used.
