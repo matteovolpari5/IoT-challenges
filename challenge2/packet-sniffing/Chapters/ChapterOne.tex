@@ -377,26 +377,53 @@ We conclude that three clients receive a LWM from a subscription without a wildc
 How many MQTT publish messages directed to the public broker mosquitto are sent with the retain option and use QoS “At most once”?
 
 \subsubsection{Answer}
-TODO 
+The number of publish messages directed to the public broker mosquitto are sent with the retain option and use QoS “At most once” is 208.
 
 \subsubsection{Explanation}
-
-Domanda 6:
-
-utilizzando il filtro: dns.qry.name == "test.mosquitto.org" trovo l'indirizzo ip collegato al dominio richiesto che poi mi servirà per filtrare i pacchetti, l'IP è:  5.196.78.28.
-quindi filtro i pacchetti con: mqtt.msgtype == 3 and mqtt.qos == 0 and mqtt.retain == 1 and ip.dst == 5.196.78.28 e trovo tutti quelli che rispettano la richiesta: 208 pacchetti.
+In order to find the IP address of the public broker mosquitto, we filter the response of the DNS server using the following Wireshark filter:
+\begin{verbatim}
+dns.qry.name == "test.mosquitto.org"
+\end{verbatim}
+Al DNS responses return the same IP address: 5.196.78.28.\\
+Now we need a second filter in order to obtain all the publish messages that satisfy the question:
+\begin{verbatim}
+mqtt.msgtype == 3 and mqtt.qos == 0 and mqtt.retain == 1 and ip.dst == 5.196.78.28
+\end{verbatim}
+We find 208 results, so we can conclude that the number of packets that satisfy all the constraints is 208.
 
 \section{CQ7}
 \subsubsection{Question}
 How many MQTT-SN messages on port 1885 are sent by the clients to a broker in the local machine?
 
 \subsubsection{Answer}
-TODO 
+The number of MQTT-SN messages on port 1885 sent by the clients to a broker in the local machine is 0.
 
 \subsubsection{Explanation}
-
-Domanda 7: 
-Il protocollo MQTT-SN non è riconosciuto nativamente da Wireshark ma sappiamo da teoria che è un protocollo udp. Filtrando quindi con udp.port == 1885 non trovo nessun pacchetto e quindi non sono stati inviati pacchetti sulla porta 1885.
+Natively MQTT-SN is not recognised by Wireshark and therefore a preliminary operation is required. By going into the settings we can set 1885 as the port of MQTT-SN.
+Since MQTT-SN is a udp protocol, in order to filter all the messages using MQTT-SN we can use this Wireshark filter
+\begin{verbatim}
+udp.dstport == 1885
+\end{verbatim}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth, height=0.85\textheight, keepaspectratio]{QC7_1.png}
+    \caption{Udp destination port 1885}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth, height=0.85\textheight, keepaspectratio]{QC7_2.png}
+    \caption{MQTT-SN messages}
+\end{figure}
+However, both this filter and the standard ‘mqttsn’ filter do not return a single packet, so to be sure that the result is 0, it is possible to carry out a further check knowing that MQTT-SN always has topic length equal to 2:
+\begin{verbatim}
+mqtt.topic_len == 2
+\end{verbatim}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth, height=0.85\textheight, keepaspectratio]{QC7_3.png}
+    \caption{MQTT messages with topic length 2}
+\end{figure}
+But this filter also gives no results, so we can conclude that there are no MQTT-SN messages sent on port 1885 by the clients to a broker in the local machine.
 
 \section{References}
 In this section we provide a set of references we used.
