@@ -1,0 +1,197 @@
+[
+    {
+        "id": "594adea8ad84415a",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "817ce920ac63bd5e",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1884",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "e0d63211d6d32cd4",
+        "type": "inject",
+        "z": "594adea8ad84415a",
+        "name": "",
+        "props": [],
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 150,
+        "y": 240,
+        "wires": [
+            [
+                "46bc8f1e4b6a1fca"
+            ]
+        ]
+    },
+    {
+        "id": "78c5523772376a37",
+        "type": "mqtt out",
+        "z": "594adea8ad84415a",
+        "name": "",
+        "topic": "challenge3/id_generator",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "817ce920ac63bd5e",
+        "x": 690,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "eaf923d06272770e",
+        "type": "mqtt in",
+        "z": "594adea8ad84415a",
+        "name": "",
+        "topic": "challenge3/id_generator",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "817ce920ac63bd5e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 310,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2528ce5c7fe43bf1",
+        "type": "debug",
+        "z": "594adea8ad84415a",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 900,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "46bc8f1e4b6a1fca",
+        "type": "function",
+        "z": "594adea8ad84415a",
+        "name": "create payload ",
+        "func": "var id = Math.floor(Math.random() * 30000);\nvar timestamp = Math.floor(Date.now() / 1000)\nmsg.payload = {\n    id: id,\n    timestamp: timestamp\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 200,
+        "wires": [
+            [
+                "78c5523772376a37",
+                "24d54877dd442cca"
+            ]
+        ]
+    },
+    {
+        "id": "0834e6c30bf8386b",
+        "type": "csv",
+        "z": "594adea8ad84415a",
+        "name": "id_log.csv",
+        "spec": "rfc",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\r",
+        "temp": "No.,ID,TIMESTAMP",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 620,
+        "y": 360,
+        "wires": [
+            [
+                "2528ce5c7fe43bf1",
+                "0e2801026d547747"
+            ]
+        ]
+    },
+    {
+        "id": "0e2801026d547747",
+        "type": "file",
+        "z": "594adea8ad84415a",
+        "name": "",
+        "filename": "/Users/matteovolpari/Desktop/id_log.csv",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 880,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "24d54877dd442cca",
+        "type": "function",
+        "z": "594adea8ad84415a",
+        "name": "row number",
+        "func": "var counter = context.get(\"row_count\") || 0;\ncounter++;\ncontext.set(\"row_count\", counter);\nmsg.payload = counter + ','\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 280,
+        "wires": [
+            [
+                "0834e6c30bf8386b"
+            ]
+        ]
+    }
+]
