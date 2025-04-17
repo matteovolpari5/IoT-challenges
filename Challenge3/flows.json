@@ -11,14 +11,14 @@
         "id": "e0d63211d6d32cd4",
         "type": "inject",
         "z": "594adea8ad84415a",
-        "name": "",
+        "name": "Inject (5 sec)",
         "props": [],
         "repeat": "5",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 170,
+        "x": 120,
         "y": 200,
         "wires": [
             [
@@ -57,7 +57,7 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 230,
+        "x": 170,
         "y": 520,
         "wires": [
             [
@@ -69,8 +69,8 @@
         "id": "46bc8f1e4b6a1fca",
         "type": "function",
         "z": "594adea8ad84415a",
-        "name": "create payload ",
-        "func": "var id = Math.floor(Math.random() * 30000);\nvar timestamp = Math.floor(Date.now() / 1000)\nmsg.payload = {\n    id: id,\n    timestamp: timestamp\n};\nreturn msg;",
+        "name": "Create payload ",
+        "func": "var id = Math.floor(Math.random() * 30000);\n\nvar timestamp = Math.floor(Date.now() / 1000)\n\nmsg.payload = {\n    id: id,\n    timestamp: timestamp\n};\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -131,7 +131,7 @@
         "id": "24d54877dd442cca",
         "type": "function",
         "z": "594adea8ad84415a",
-        "name": "add row number",
+        "name": "Add row number",
         "func": "var counter = context.get(\"row_count\") || 0;\ncounter++;\ncontext.set(\"row_count\", counter);\nvar id = msg.payload[\"id\"]\nvar timestamp = msg.payload[\"timestamp\"]\nmsg.payload = {\n    \"No.\" : counter,\n    \"ID\" : id,\n    \"TIMESTAMP\": timestamp\n}\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
@@ -139,7 +139,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 600,
+        "x": 610,
         "y": 280,
         "wires": [
             [
@@ -151,20 +151,19 @@
         "id": "4ffcbe3e921f524e",
         "type": "function",
         "z": "594adea8ad84415a",
-        "name": "compute N",
-        "func": "var id = msg.payload[\"id\"]\nvar N = id % 7711\nmsg.id = id\nmsg.N = N\nreturn msg;",
+        "name": "Compute N",
+        "func": "var id = msg.payload[\"id\"]\nvar N = id % 7711\n\n// saved id and N\nmsg.id = id\nmsg.N = N\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 490,
+        "x": 430,
         "y": 520,
         "wires": [
             [
-                "8eb892909f24cdd1",
-                "fbeafe521a9489c5"
+                "8eb892909f24cdd1"
             ]
         ]
     },
@@ -180,7 +179,7 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 770,
+        "x": 730,
         "y": 520,
         "wires": [
             [
@@ -204,7 +203,7 @@
         "strings": true,
         "include_empty_strings": "",
         "include_null_values": "",
-        "x": 1050,
+        "x": 1010,
         "y": 520,
         "wires": [
             [
@@ -216,19 +215,19 @@
         "id": "9d5a98e588e04d79",
         "type": "function",
         "z": "594adea8ad84415a",
-        "name": "select message N",
-        "func": "let rows = msg.payload;\n\nlet target = rows.find(r =>\n  parseInt(r[\"No.\"], 10) === msg.N\n);\n\nmsg.payload = target || {};\nreturn msg;",
+        "name": "Select message N",
+        "func": "if (msg.N === 0) {\n  return null;\n}\n\nlet rows = msg.payload;\nlet target = rows.find(r =>\n  parseInt(r[\"No.\"], 10) === msg.N\n);\nmsg.payload = target;\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1270,
+        "x": 1230,
         "y": 520,
         "wires": [
             [
-                "44793351c8714ff4"
+                "e97a2bd7b997c41f"
             ]
         ]
     },
@@ -241,30 +240,142 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1500,
-        "y": 520,
-        "wires": []
-    },
-    {
-        "id": "fbeafe521a9489c5",
-        "type": "debug",
-        "z": "594adea8ad84415a",
-        "name": "debug 3",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
         "complete": "true",
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 680,
-        "y": 600,
+        "x": 2060,
+        "y": 760,
         "wires": []
+    },
+    {
+        "id": "e97a2bd7b997c41f",
+        "type": "function",
+        "z": "594adea8ad84415a",
+        "name": "Handle PUBLISH message",
+        "func": "if (msg.payload[\"Protocol\"] === \"MQTT\" && msg.payload[\"Info\"].includes(\"Publish Message\")) {\n    // save info in a variable\n    let info = msg.payload[\"Info\"];\n    // save messages payloads in a variable\n    let messagesPayloads = msg.payload[\"Payload\"] ?? \"\";\n\n    // extract topics\n    let topicMatches = [...info.matchAll(/Publish Message \\[([^\\]]+)\\]/g)];\n    let topics = topicMatches.map(m => m[1]);\n\n    // extract payloads\n    let jsonArray;\n    if (messagesPayloads.trim() === \"\") {\n        jsonArray = [];\n    } else {\n        jsonArray = JSON.parse(\"[\" + messagesPayloads + \"]\");\n    }\n\n    // create messages \n    var currTimestamp = Math.floor(Date.now() / 1000)\n    let messages = topics.map((topic, index) => {\n        return {\n            topic: topic, \n            payload: {\n                timestamp: currTimestamp,\n                id: msg.id,\n                topic: topic,\n                payload: jsonArray[index] ?? {}\n            }\n        };\n    });\n    \n    console.log(msg.payload[\"No.\"])\n    //console.log(messages);\n\n    return [messages];\n}\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1520,
+        "y": 600,
+        "wires": [
+            [
+                "88cc2ef1a409d493"
+            ]
+        ]
+    },
+    {
+        "id": "88cc2ef1a409d493",
+        "type": "delay",
+        "z": "594adea8ad84415a",
+        "name": "Message Rate Limiter",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "4",
+        "nbRateUnits": "1",
+        "rateUnits": "minute",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1820,
+        "y": 600,
+        "wires": [
+            [
+                "0afc508775a06d57",
+                "44793351c8714ff4",
+                "e41849ca2226101f"
+            ]
+        ]
+    },
+    {
+        "id": "0afc508775a06d57",
+        "type": "mqtt out",
+        "z": "594adea8ad84415a",
+        "name": "",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "817ce920ac63bd5e",
+        "x": 2050,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "e41849ca2226101f",
+        "type": "function",
+        "z": "594adea8ad84415a",
+        "name": "Filter temperature Fahrenheit",
+        "func": "if (msg.payload.payload.type === \"temperature\" && msg.payload.payload.unit === \"F\") {\n    let minTemp = msg.payload.payload.range[0];    \n    let maxTemp = msg.payload.payload.range[1];\n    let avgTemp = (minTemp + maxTemp)/2;\n    \n    msg.topic = \"TempF\";\n    msg.payload = avgTemp;\n    return msg;\n}\nreturn null\n\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2120,
+        "y": 540,
+        "wires": [
+            [
+                "3961b5c177be6539"
+            ]
+        ]
+    },
+    {
+        "id": "3961b5c177be6539",
+        "type": "ui_chart",
+        "z": "594adea8ad84415a",
+        "name": "Average temperature (F) chart",
+        "group": "f283b49f624c2d97",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "Average temperature (F)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 2450,
+        "y": 540,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "817ce920ac63bd5e",
@@ -296,5 +407,24 @@
         "willMsg": {},
         "userProps": "",
         "sessionExpiry": ""
+    },
+    {
+        "id": "f283b49f624c2d97",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "56facb5b656f85a7",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "56facb5b656f85a7",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
     }
 ]
