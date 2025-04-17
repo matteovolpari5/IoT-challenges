@@ -8,37 +8,6 @@
         "env": []
     },
     {
-        "id": "817ce920ac63bd5e",
-        "type": "mqtt-broker",
-        "name": "",
-        "broker": "localhost",
-        "port": "1884",
-        "clientid": "",
-        "autoConnect": true,
-        "usetls": false,
-        "protocolVersion": 4,
-        "keepalive": 60,
-        "cleansession": true,
-        "autoUnsubscribe": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthRetain": "false",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closeQos": "0",
-        "closeRetain": "false",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willRetain": "false",
-        "willPayload": "",
-        "willMsg": {},
-        "userProps": "",
-        "sessionExpiry": ""
-    },
-    {
         "id": "e0d63211d6d32cd4",
         "type": "inject",
         "z": "594adea8ad84415a",
@@ -49,8 +18,8 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 150,
-        "y": 240,
+        "x": 170,
+        "y": 200,
         "wires": [
             [
                 "46bc8f1e4b6a1fca"
@@ -71,7 +40,7 @@
         "correl": "",
         "expiry": "",
         "broker": "817ce920ac63bd5e",
-        "x": 690,
+        "x": 630,
         "y": 120,
         "wires": []
     },
@@ -82,34 +51,19 @@
         "name": "",
         "topic": "challenge3/id_generator",
         "qos": "2",
-        "datatype": "auto-detect",
+        "datatype": "json",
         "broker": "817ce920ac63bd5e",
         "nl": false,
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 310,
+        "x": 230,
         "y": 520,
         "wires": [
-            []
+            [
+                "4ffcbe3e921f524e"
+            ]
         ]
-    },
-    {
-        "id": "2528ce5c7fe43bf1",
-        "type": "debug",
-        "z": "594adea8ad84415a",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 900,
-        "y": 420,
-        "wires": []
     },
     {
         "id": "46bc8f1e4b6a1fca",
@@ -139,20 +93,19 @@
         "name": "id_log.csv",
         "spec": "rfc",
         "sep": ",",
-        "hdrin": "",
-        "hdrout": "none",
+        "hdrin": false,
+        "hdrout": "once",
         "multi": "one",
         "ret": "\\r",
         "temp": "No.,ID,TIMESTAMP",
         "skip": "0",
-        "strings": true,
+        "strings": false,
         "include_empty_strings": "",
         "include_null_values": "",
-        "x": 620,
-        "y": 360,
+        "x": 820,
+        "y": 280,
         "wires": [
             [
-                "2528ce5c7fe43bf1",
                 "0e2801026d547747"
             ]
         ]
@@ -162,14 +115,14 @@
         "type": "file",
         "z": "594adea8ad84415a",
         "name": "",
-        "filename": "/Users/matteovolpari/Desktop/id_log.csv",
+        "filename": "/Users/kevin/Desktop/id_log.csv",
         "filenameType": "str",
         "appendNewline": true,
         "createDir": true,
         "overwriteFile": "false",
         "encoding": "none",
-        "x": 880,
-        "y": 240,
+        "x": 1090,
+        "y": 280,
         "wires": [
             []
         ]
@@ -178,20 +131,170 @@
         "id": "24d54877dd442cca",
         "type": "function",
         "z": "594adea8ad84415a",
-        "name": "row number",
-        "func": "var counter = context.get(\"row_count\") || 0;\ncounter++;\ncontext.set(\"row_count\", counter);\nmsg.payload = counter + ','\nreturn msg;",
+        "name": "add row number",
+        "func": "var counter = context.get(\"row_count\") || 0;\ncounter++;\ncontext.set(\"row_count\", counter);\nvar id = msg.payload[\"id\"]\nvar timestamp = msg.payload[\"timestamp\"]\nmsg.payload = {\n    \"No.\" : counter,\n    \"ID\" : id,\n    \"TIMESTAMP\": timestamp\n}\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 450,
+        "x": 600,
         "y": 280,
         "wires": [
             [
                 "0834e6c30bf8386b"
             ]
         ]
+    },
+    {
+        "id": "4ffcbe3e921f524e",
+        "type": "function",
+        "z": "594adea8ad84415a",
+        "name": "compute N",
+        "func": "var id = msg.payload[\"id\"]\nvar N = id % 7711\nmsg.id = id\nmsg.N = N\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 520,
+        "wires": [
+            [
+                "8eb892909f24cdd1",
+                "fbeafe521a9489c5"
+            ]
+        ]
+    },
+    {
+        "id": "8eb892909f24cdd1",
+        "type": "file in",
+        "z": "594adea8ad84415a",
+        "name": "",
+        "filename": "/Users/kevin/Desktop/challenge3.csv",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 770,
+        "y": 520,
+        "wires": [
+            [
+                "84bceed2d1d0efbd"
+            ]
+        ]
+    },
+    {
+        "id": "84bceed2d1d0efbd",
+        "type": "csv",
+        "z": "594adea8ad84415a",
+        "name": "",
+        "spec": "rfc",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "mult",
+        "ret": "\\r",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 1050,
+        "y": 520,
+        "wires": [
+            [
+                "9d5a98e588e04d79"
+            ]
+        ]
+    },
+    {
+        "id": "9d5a98e588e04d79",
+        "type": "function",
+        "z": "594adea8ad84415a",
+        "name": "select message N",
+        "func": "let rows = msg.payload;\n\nlet target = rows.find(r =>\n  parseInt(r[\"No.\"], 10) === msg.N\n);\n\nmsg.payload = target || {};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1270,
+        "y": 520,
+        "wires": [
+            [
+                "44793351c8714ff4"
+            ]
+        ]
+    },
+    {
+        "id": "44793351c8714ff4",
+        "type": "debug",
+        "z": "594adea8ad84415a",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1500,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "fbeafe521a9489c5",
+        "type": "debug",
+        "z": "594adea8ad84415a",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "817ce920ac63bd5e",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1884",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
     }
 ]
