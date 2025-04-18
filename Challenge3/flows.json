@@ -1,6 +1,6 @@
 [
     {
-        "id": "594adea8ad84415a",
+        "id": "d698e5d60b39ab74",
         "type": "tab",
         "label": "Flow 1",
         "disabled": false,
@@ -8,9 +8,9 @@
         "env": []
     },
     {
-        "id": "e0d63211d6d32cd4",
+        "id": "0f672e7d9f3a5e04",
         "type": "inject",
-        "z": "594adea8ad84415a",
+        "z": "d698e5d60b39ab74",
         "name": "Inject (5 sec)",
         "props": [],
         "repeat": "5",
@@ -18,18 +18,18 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 120,
-        "y": 200,
+        "x": 360,
+        "y": 560,
         "wires": [
             [
-                "46bc8f1e4b6a1fca"
+                "a6e211f186563c30"
             ]
         ]
     },
     {
-        "id": "78c5523772376a37",
+        "id": "6007daf4c88332b6",
         "type": "mqtt out",
-        "z": "594adea8ad84415a",
+        "z": "d698e5d60b39ab74",
         "name": "",
         "topic": "challenge3/id_generator",
         "qos": "",
@@ -40,14 +40,14 @@
         "correl": "",
         "expiry": "",
         "broker": "817ce920ac63bd5e",
-        "x": 630,
-        "y": 120,
+        "x": 870,
+        "y": 480,
         "wires": []
     },
     {
-        "id": "eaf923d06272770e",
+        "id": "86aa5ec53599d9b6",
         "type": "mqtt in",
-        "z": "594adea8ad84415a",
+        "z": "d698e5d60b39ab74",
         "name": "",
         "topic": "challenge3/id_generator",
         "qos": "2",
@@ -57,39 +57,39 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 170,
-        "y": 520,
+        "x": 370,
+        "y": 1220,
         "wires": [
             [
-                "4ffcbe3e921f524e"
+                "ed8185f21e2f8fcb"
             ]
         ]
     },
     {
-        "id": "46bc8f1e4b6a1fca",
+        "id": "a6e211f186563c30",
         "type": "function",
-        "z": "594adea8ad84415a",
+        "z": "d698e5d60b39ab74",
         "name": "Create payload ",
-        "func": "var id = Math.floor(Math.random() * 30000);\n\nvar timestamp = Math.floor(Date.now() / 1000)\n\nmsg.payload = {\n    id: id,\n    timestamp: timestamp\n};\n\nreturn msg;",
+        "func": "let initializationCompleted = flow.get(\"initializationCompleted\") || false;\nif (!initializationCompleted) {\n    return null;    \n}\n\n//var id = Math.floor(Math.random() * 30000);\nvar id = 3800;\nvar timestamp = Math.floor(Date.now() / 1000);\nmsg.payload = {\n    id: id,\n    timestamp: timestamp\n};\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 360,
-        "y": 200,
+        "x": 600,
+        "y": 560,
         "wires": [
             [
-                "78c5523772376a37",
-                "24d54877dd442cca"
+                "6007daf4c88332b6",
+                "9e852255ca85152a"
             ]
         ]
     },
     {
-        "id": "0834e6c30bf8386b",
+        "id": "32a8808babb658b6",
         "type": "csv",
-        "z": "594adea8ad84415a",
+        "z": "d698e5d60b39ab74",
         "name": "id_log.csv",
         "spec": "rfc",
         "sep": ",",
@@ -102,18 +102,18 @@
         "strings": false,
         "include_empty_strings": "",
         "include_null_values": "",
-        "x": 820,
-        "y": 280,
+        "x": 1080,
+        "y": 640,
         "wires": [
             [
-                "0e2801026d547747"
+                "35d5a5cf09a6b0a4"
             ]
         ]
     },
     {
-        "id": "0e2801026d547747",
+        "id": "35d5a5cf09a6b0a4",
         "type": "file",
-        "z": "594adea8ad84415a",
+        "z": "d698e5d60b39ab74",
         "name": "",
         "filename": "/Users/kevin/Desktop/id_log.csv",
         "filenameType": "str",
@@ -121,120 +121,78 @@
         "createDir": true,
         "overwriteFile": "false",
         "encoding": "none",
-        "x": 1090,
-        "y": 280,
+        "x": 1350,
+        "y": 640,
         "wires": [
             []
         ]
     },
     {
-        "id": "24d54877dd442cca",
+        "id": "9e852255ca85152a",
         "type": "function",
-        "z": "594adea8ad84415a",
+        "z": "d698e5d60b39ab74",
         "name": "Add row number",
-        "func": "var counter = context.get(\"row_count\") || 0;\ncounter++;\ncontext.set(\"row_count\", counter);\nvar id = msg.payload[\"id\"]\nvar timestamp = msg.payload[\"timestamp\"]\nmsg.payload = {\n    \"No.\" : counter,\n    \"ID\" : id,\n    \"TIMESTAMP\": timestamp\n}\nreturn msg;",
+        "func": "var counter = context.get(\"row_count_id_log\") || 0;\ncounter++;\ncontext.set(\"row_count_id_log\", counter);\nvar id = msg.payload[\"id\"];\nvar timestamp = msg.payload[\"timestamp\"];\nmsg.payload = {\n    \"No.\" : counter,\n    \"ID\" : id,\n    \"TIMESTAMP\": timestamp\n}\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 610,
-        "y": 280,
+        "x": 850,
+        "y": 640,
         "wires": [
             [
-                "0834e6c30bf8386b"
+                "32a8808babb658b6"
             ]
         ]
     },
     {
-        "id": "4ffcbe3e921f524e",
+        "id": "ed8185f21e2f8fcb",
         "type": "function",
-        "z": "594adea8ad84415a",
+        "z": "d698e5d60b39ab74",
         "name": "Compute N",
-        "func": "var id = msg.payload[\"id\"]\nvar N = id % 7711\n\n// saved id and N\nmsg.id = id\nmsg.N = N\n\nreturn msg;",
+        "func": "var processedMessages = context.get(\"processedMessages\") || 0;\nprocessedMessages ++;\ncontext.set(\"processedMessages\", processedMessages);\nif (processedMessages > 80) {\n    return null;\n}\n\nvar id = msg.payload[\"id\"];\nvar N = id % 7711;\n\nconsole.log(N);\n\n// saved id and N\nmsg.id = id;\nmsg.N = N;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 430,
-        "y": 520,
+        "x": 630,
+        "y": 1220,
         "wires": [
             [
-                "8eb892909f24cdd1"
+                "defb071afe5f1d7a"
             ]
         ]
     },
     {
-        "id": "8eb892909f24cdd1",
-        "type": "file in",
-        "z": "594adea8ad84415a",
-        "name": "",
-        "filename": "/Users/kevin/Desktop/challenge3.csv",
-        "filenameType": "str",
-        "format": "utf8",
-        "chunk": false,
-        "sendError": false,
-        "encoding": "none",
-        "allProps": false,
-        "x": 730,
-        "y": 520,
-        "wires": [
-            [
-                "84bceed2d1d0efbd"
-            ]
-        ]
-    },
-    {
-        "id": "84bceed2d1d0efbd",
-        "type": "csv",
-        "z": "594adea8ad84415a",
-        "name": "",
-        "spec": "rfc",
-        "sep": ",",
-        "hdrin": true,
-        "hdrout": "none",
-        "multi": "mult",
-        "ret": "\\r",
-        "temp": "",
-        "skip": "0",
-        "strings": true,
-        "include_empty_strings": "",
-        "include_null_values": "",
-        "x": 1010,
-        "y": 520,
-        "wires": [
-            [
-                "9d5a98e588e04d79"
-            ]
-        ]
-    },
-    {
-        "id": "9d5a98e588e04d79",
+        "id": "defb071afe5f1d7a",
         "type": "function",
-        "z": "594adea8ad84415a",
+        "z": "d698e5d60b39ab74",
         "name": "Select message N",
-        "func": "if (msg.N === 0) {\n  return null;\n}\n\nlet rows = msg.payload;\nlet target = rows.find(r =>\n  parseInt(r[\"No.\"], 10) === msg.N\n);\nmsg.payload = target;\nreturn msg;",
+        "func": "if (msg.N === 0) {\n  return null;\n}\n\nlet rows = flow.get(\"csv_challenge3\");\n\nif (!rows) {\n  console.log(\"NULL ROWS \")\n  return null;\n}\n\nlet target = rows.find(r =>\n  parseInt(r[\"No.\"], 10) === msg.N\n);\nmsg.payload = target;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1230,
-        "y": 520,
+        "x": 870,
+        "y": 1220,
         "wires": [
             [
-                "e97a2bd7b997c41f"
+                "5bffb1fbf3138e36",
+                "3a90a5b00a37c0f5",
+                "2822063c4fab9320"
             ]
         ]
     },
     {
-        "id": "44793351c8714ff4",
+        "id": "f8fc9fcf1e62eeb0",
         "type": "debug",
-        "z": "594adea8ad84415a",
+        "z": "d698e5d60b39ab74",
         "name": "debug 2",
         "active": true,
         "tosidebar": true,
@@ -244,34 +202,14 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2060,
-        "y": 760,
+        "x": 1720,
+        "y": 860,
         "wires": []
     },
     {
-        "id": "e97a2bd7b997c41f",
-        "type": "function",
-        "z": "594adea8ad84415a",
-        "name": "Handle PUBLISH message",
-        "func": "if (msg.payload[\"Protocol\"] === \"MQTT\" && msg.payload[\"Info\"].includes(\"Publish Message\")) {\n    // save info in a variable\n    let info = msg.payload[\"Info\"];\n    // save messages payloads in a variable\n    let messagesPayloads = msg.payload[\"Payload\"] ?? \"\";\n\n    // extract topics\n    let topicMatches = [...info.matchAll(/Publish Message \\[([^\\]]+)\\]/g)];\n    let topics = topicMatches.map(m => m[1]);\n\n    // extract payloads\n    let jsonArray;\n    if (messagesPayloads.trim() === \"\") {\n        jsonArray = [];\n    } else {\n        jsonArray = JSON.parse(\"[\" + messagesPayloads + \"]\");\n    }\n\n    // create messages \n    var currTimestamp = Math.floor(Date.now() / 1000)\n    let messages = topics.map((topic, index) => {\n        return {\n            topic: topic, \n            payload: {\n                timestamp: currTimestamp,\n                id: msg.id,\n                topic: topic,\n                payload: jsonArray[index] ?? {}\n            }\n        };\n    });\n    \n    console.log(msg.payload[\"No.\"])\n    //console.log(messages);\n\n    return [messages];\n}\nreturn null;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1520,
-        "y": 600,
-        "wires": [
-            [
-                "88cc2ef1a409d493"
-            ]
-        ]
-    },
-    {
-        "id": "88cc2ef1a409d493",
+        "id": "88ea3272b01c2812",
         "type": "delay",
-        "z": "594adea8ad84415a",
+        "z": "d698e5d60b39ab74",
         "name": "Message Rate Limiter",
         "pauseType": "rate",
         "timeout": "5",
@@ -285,20 +223,21 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1820,
-        "y": 600,
+        "x": 1480,
+        "y": 1020,
         "wires": [
             [
-                "0afc508775a06d57",
-                "44793351c8714ff4",
-                "e41849ca2226101f"
+                "f8fc9fcf1e62eeb0",
+                "9f25494cfc7bf850",
+                "7f3d2440eeaadd7e",
+                "050c078614b62e20"
             ]
         ]
     },
     {
-        "id": "0afc508775a06d57",
+        "id": "7f3d2440eeaadd7e",
         "type": "mqtt out",
-        "z": "594adea8ad84415a",
+        "z": "d698e5d60b39ab74",
         "name": "",
         "topic": "",
         "qos": "",
@@ -309,14 +248,14 @@
         "correl": "",
         "expiry": "",
         "broker": "817ce920ac63bd5e",
-        "x": 2050,
-        "y": 660,
+        "x": 1710,
+        "y": 1100,
         "wires": []
     },
     {
-        "id": "e41849ca2226101f",
+        "id": "9f25494cfc7bf850",
         "type": "function",
-        "z": "594adea8ad84415a",
+        "z": "d698e5d60b39ab74",
         "name": "Filter temperature Fahrenheit",
         "func": "if (msg.payload.payload.type === \"temperature\" && msg.payload.payload.unit === \"F\") {\n    let minTemp = msg.payload.payload.range[0];    \n    let maxTemp = msg.payload.payload.range[1];\n    let avgTemp = (minTemp + maxTemp)/2;\n    \n    msg.topic = \"TempF\";\n    msg.payload = avgTemp;\n    return msg;\n}\nreturn null\n\n\n",
         "outputs": 1,
@@ -325,20 +264,20 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2120,
-        "y": 540,
+        "x": 1780,
+        "y": 940,
         "wires": [
             [
-                "3961b5c177be6539"
+                "d04a56efb577f576"
             ]
         ]
     },
     {
-        "id": "3961b5c177be6539",
+        "id": "d04a56efb577f576",
         "type": "ui_chart",
-        "z": "594adea8ad84415a",
+        "z": "d698e5d60b39ab74",
         "name": "Average temperature (F) chart",
-        "group": "f283b49f624c2d97",
+        "group": "dbeb544f78cf351e",
         "order": 0,
         "width": 0,
         "height": 0,
@@ -371,10 +310,453 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 2450,
-        "y": 540,
+        "x": 2110,
+        "y": 940,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "7a36931242cff9b1",
+        "type": "csv",
+        "z": "d698e5d60b39ab74",
+        "name": "filtered_pubs.csv",
+        "spec": "rfc",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "once",
+        "multi": "one",
+        "ret": "\\r",
+        "temp": "No.,LONG,LAT,MEAN_VALUE,TYPE,UNIT,DESCRIPTION",
+        "skip": "0",
+        "strings": false,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 1990,
+        "y": 1020,
+        "wires": [
+            [
+                "46e92dee9b4efee3"
+            ]
+        ]
+    },
+    {
+        "id": "050c078614b62e20",
+        "type": "function",
+        "z": "d698e5d60b39ab74",
+        "name": "csv constructor",
+        "func": "if (msg.payload.payload.type === \"temperature\" && msg.payload.payload.unit === \"F\") {\n    var counter = context.get(\"row_count_filtered_pubs\") || 0;\n    counter++;\n    context.set(\"row_count_filtered_pubs\", counter);\n\n    let data = msg.payload.payload;\n    let meanValue = (data.range[0] + data.range[1]) / 2;\n    let long = data.long;\n    let lat = data.lat;\n    let type = data.type;\n    let unit = data.unit;\n    let desc = data.description;\n    msg.payload = {\n        \"No.\" : counter,\n        \"LONG\": long,\n        \"LAT\": lat,\n        \"MEAN_VALUE\": meanValue,\n        \"TYPE\": type,\n        \"UNIT\": unit,\n        \"DESCRIPTION\": desc\n    }\n    return msg;\n}\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1740,
+        "y": 1020,
+        "wires": [
+            [
+                "7a36931242cff9b1"
+            ]
+        ]
+    },
+    {
+        "id": "46e92dee9b4efee3",
+        "type": "file",
+        "z": "d698e5d60b39ab74",
+        "name": "",
+        "filename": "/Users/kevin/Desktop/filtered_pubs.csv",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 2320,
+        "y": 1020,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5bffb1fbf3138e36",
+        "type": "function",
+        "z": "d698e5d60b39ab74",
+        "name": "Handle MQTT ACK",
+        "func": "if (msg.payload[\"Protocol\"] === \"MQTT\" && msg.payload[\"Info\"].includes(\"Ack\")) {\n    var counter = context.get(\"row_count_ack_log\") || 0;\n    counter++;\n    context.set(\"row_count_ack_log\", counter);\n\n    var currTimestamp = Math.floor(Date.now() / 1000);\n    let idMatch = msg.id;\n    var type = \"\";\n    if (msg.payload[\"Info\"].includes(\"Connect Ack\")) {\n        type = \"Connect Ack\";\n    } else if (msg.payload[\"Info\"].includes(\"Publish Ack\")){\n        type = \"Publish Ack\";\n    } else if (msg.payload[\"Info\"].includes(\"Subscribe Ack\")) {\n        type = \"Subscribe Ack\";\n    }\n    //console.log(msg.payload);\n    msg.payload = {\n        \"No.\": counter,\n        \"TIMESTAMP\": currTimestamp,\n        \"SUB_ID\": idMatch,\n        \"MSG_TYPE\": type\n    }\n    return msg;\n}\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 1220,
+        "wires": [
+            [
+                "e367aea138c9e2f8",
+                "48e16ceeb4002ba6"
+            ]
+        ]
+    },
+    {
+        "id": "e367aea138c9e2f8",
+        "type": "csv",
+        "z": "d698e5d60b39ab74",
+        "name": "ack_log.csv",
+        "spec": "rfc",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "once",
+        "multi": "one",
+        "ret": "\\r",
+        "temp": "No.,TIMESTAMP,SUB_ID,MSG_TYPE",
+        "skip": "0",
+        "strings": false,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 1370,
+        "y": 1180,
+        "wires": [
+            [
+                "496097f540450729"
+            ]
+        ]
+    },
+    {
+        "id": "496097f540450729",
+        "type": "file",
+        "z": "d698e5d60b39ab74",
+        "name": "",
+        "filename": "/Users/kevin/Desktop/ack_log.csv",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 1660,
+        "y": 1180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3a90a5b00a37c0f5",
+        "type": "debug",
+        "z": "d698e5d60b39ab74",
+        "name": "debug 1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1140,
+        "y": 1380,
+        "wires": []
+    },
+    {
+        "id": "48e16ceeb4002ba6",
+        "type": "function",
+        "z": "d698e5d60b39ab74",
+        "name": "Prepare HTTP GET",
+        "func": "var API_KEY=\"ZDZ3WHERCF259OFD\"\nvar globalCounter = msg.payload[\"No.\"]\n\nmsg.method = \"GET\";\nmsg.url = \"https://api.thingspeak.com/update?api_key=\"+API_KEY+\"&field1=\"+globalCounter\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1390,
+        "y": 1260,
+        "wires": [
+            [
+                "9bbe0366f324909f"
+            ]
+        ]
+    },
+    {
+        "id": "9bbe0366f324909f",
+        "type": "http request",
+        "z": "d698e5d60b39ab74",
+        "name": "",
+        "method": "use",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1630,
+        "y": 1260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "95e3b869baadc79a",
+        "type": "function",
+        "z": "d698e5d60b39ab74",
+        "name": "Prepare DELETE",
+        "func": "// Code added here will be run once\n// whenever the node is started.\nvar channelID = 2924504;\nvar USER_API_KEY = \"F96QKIB7FK3F5KVG\"\n\nmsg.method = \"DELETE\";\n//msg.headers['Host'] = 'api.thingskpeak.com'\nmsg.payload = \"api_key=\" + encodeURIComponent(\"F96QKIB7FK3F5KVG\");\nmsg.headers = msg.headers || {};\nmsg.headers['Content-Type'] = 'application/x-www-form-urlencoded';\nmsg.url = \"https://api.thingspeak.com/channels/\" + channelID + \"/feeds.json\";\n//msg.payload = \"api_key=\" + USER_API_KEY;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 160,
+        "wires": [
+            [
+                "269c68e398dfd81a"
+            ]
+        ]
+    },
+    {
+        "id": "269c68e398dfd81a",
+        "type": "http request",
+        "z": "d698e5d60b39ab74",
+        "name": "",
+        "method": "use",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 790,
+        "y": 160,
+        "wires": [
+            [
+                "4d5127fc47d89bbd"
+            ]
+        ]
+    },
+    {
+        "id": "2e53ec48bbfb169e",
+        "type": "inject",
+        "z": "d698e5d60b39ab74",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 330,
+        "y": 220,
+        "wires": [
+            [
+                "95e3b869baadc79a",
+                "7d2cda2d334259cc",
+                "5eb9ce326ba164ec",
+                "891d1281303e07bb",
+                "d2714649b4dc0782"
+            ]
+        ]
+    },
+    {
+        "id": "7d2cda2d334259cc",
+        "type": "file in",
+        "z": "d698e5d60b39ab74",
+        "name": "",
+        "filename": "/Users/kevin/Desktop/challenge3.csv",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 610,
+        "y": 100,
+        "wires": [
+            [
+                "747191972e844230"
+            ]
+        ]
+    },
+    {
+        "id": "747191972e844230",
+        "type": "csv",
+        "z": "d698e5d60b39ab74",
+        "name": "",
+        "spec": "rfc",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "mult",
+        "ret": "\\r",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 890,
+        "y": 100,
+        "wires": [
+            [
+                "d203e522a9ee6171"
+            ]
+        ]
+    },
+    {
+        "id": "5eb9ce326ba164ec",
+        "type": "file",
+        "z": "d698e5d60b39ab74",
+        "name": "",
+        "filename": "/Users/kevin/Desktop/id_log.csv",
+        "filenameType": "str",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 590,
+        "y": 220,
+        "wires": [
+            [
+                "4d5127fc47d89bbd"
+            ]
+        ]
+    },
+    {
+        "id": "891d1281303e07bb",
+        "type": "file",
+        "z": "d698e5d60b39ab74",
+        "name": "",
+        "filename": "/Users/kevin/Desktop/filtered_pubs.csv",
+        "filenameType": "str",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 620,
+        "y": 280,
+        "wires": [
+            [
+                "4d5127fc47d89bbd"
+            ]
+        ]
+    },
+    {
+        "id": "d2714649b4dc0782",
+        "type": "file",
+        "z": "d698e5d60b39ab74",
+        "name": "",
+        "filename": "/Users/kevin/Desktop/ack_log.csv",
+        "filenameType": "str",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 600,
+        "y": 340,
+        "wires": [
+            [
+                "4d5127fc47d89bbd"
+            ]
+        ]
+    },
+    {
+        "id": "4d5127fc47d89bbd",
+        "type": "join",
+        "z": "d698e5d60b39ab74",
+        "name": "Initialization completed",
+        "mode": "custom",
+        "build": "string",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "useparts": false,
+        "accumulate": false,
+        "timeout": "",
+        "count": "5",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1350,
+        "y": 220,
+        "wires": [
+            [
+                "aebb5f3fad33d372"
+            ]
+        ]
+    },
+    {
+        "id": "d203e522a9ee6171",
+        "type": "function",
+        "z": "d698e5d60b39ab74",
+        "name": "Save CSV",
+        "func": "flow.set(\"csv_challenge3\", msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1080,
+        "y": 100,
+        "wires": [
+            [
+                "4d5127fc47d89bbd"
+            ]
+        ]
+    },
+    {
+        "id": "aebb5f3fad33d372",
+        "type": "function",
+        "z": "d698e5d60b39ab74",
+        "name": "Set initialization completed",
+        "func": "flow.set(\"initializationCompleted\", true);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1660,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2822063c4fab9320",
+        "type": "function",
+        "z": "d698e5d60b39ab74",
+        "name": "Handle PUBLISH message",
+        "func": "if (msg.payload[\"Protocol\"] === \"MQTT\" && msg.payload[\"Info\"].includes(\"Publish Message\")) {\n    // save info in a variable\n    let info = msg.payload[\"Info\"];\n    // save messages payloads in a variable\n    let messagesPayloads = msg.payload[\"Payload\"] ?? \"\";\n\n    // extract topics\n    let topicMatches = [...info.matchAll(/Publish Message \\[([^\\]]+)\\]/g)];\n    let topics = topicMatches.map(m => m[1]);\n\n    // extract payloads\n    let jsonArray;\n    if (messagesPayloads.trim() === \"\") {\n        jsonArray = [];\n    } else {\n        jsonArray = JSON.parse(\"[\" + messagesPayloads + \"]\");\n    }\n\n    // create messages \n    var currTimestamp = Math.floor(Date.now() / 1000);\n    let messages = topics.map((topic, index) => {\n        return {\n            topic: topic, \n            payload: {\n                timestamp: currTimestamp.toString(),\n                id: msg.id.toString(),\n                topic: topic,\n                payload: jsonArray[index] ?? {}\n            }\n        };\n    });\n    \n    //console.log(msg.payload[\"No.\"])\n    //console.log(messages);\n\n    return [messages];\n}\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1180,
+        "y": 1100,
+        "wires": [
+            [
+                "88ea3272b01c2812"
+            ]
         ]
     },
     {
@@ -409,10 +791,10 @@
         "sessionExpiry": ""
     },
     {
-        "id": "f283b49f624c2d97",
+        "id": "dbeb544f78cf351e",
         "type": "ui_group",
         "name": "Default",
-        "tab": "56facb5b656f85a7",
+        "tab": "4b65753f2616bdcc",
         "order": 1,
         "disp": true,
         "width": 6,
@@ -420,7 +802,7 @@
         "className": ""
     },
     {
-        "id": "56facb5b656f85a7",
+        "id": "4b65753f2616bdcc",
         "type": "ui_tab",
         "name": "Home",
         "icon": "dashboard",
