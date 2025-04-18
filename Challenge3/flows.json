@@ -70,7 +70,7 @@
         "type": "function",
         "z": "d698e5d60b39ab74",
         "name": "Create payload ",
-        "func": "let initializationCompleted = flow.get(\"initializationCompleted\") || false;\nif (!initializationCompleted) {\n    return null;    \n}\n\n//var id = Math.floor(Math.random() * 30000);\nvar id = 3800;\nvar timestamp = Math.floor(Date.now() / 1000);\nmsg.payload = {\n    id: id,\n    timestamp: timestamp\n};\n\nreturn msg;",
+        "func": "let initializationCompleted = flow.get(\"initializationCompleted\") || false;\nif (!initializationCompleted) {\n    return null;    \n}\n\nvar id = Math.floor(Math.random() * 30000);\nvar timestamp = Math.floor(Date.now() / 1000);\nmsg.payload = {\n    id: id,\n    timestamp: timestamp\n};\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
