@@ -1,3 +1,70 @@
+
+\section{MQTT Publisher branch}
+\label{sec:publisher_branch}
+In the first branch of the flow, on intervals of five seconds, an MQTT publisher publishes a message onto the topic "challenge3/id\_generator". In this section we will see in a detailed way the workflow of this part.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth, height=0.5\textheight, keepaspectratio]{mqtt_publisher_branch.png}
+    \caption{MQTT Publisher branch of the flow}
+\end{figure}
+
+\subsection{Inject (5 sec)}
+This is the first node and the entry point for the whole system. It starts the process on a deploy and injects a new message every 5 seconds.
+
+\subsection{Create payload}
+This is a function node and its purpose is to generate the payload of messages that will be forwarded to the MQTT publisher. \\
+The payload is composed by two fields:
+\begin{itemize}
+\item ID: this field is the Id of the message and is a random integer in the range of 0-30000.
+\item TIMESTAMP: this field represents the exact time the message was created.
+The code of the function node is reported here.
+\begin{minted}{javascript}
+let initializationCompleted = flow.get("initializationCompleted") || false;
+if (!initializationCompleted) {
+    return null;    
+}
+
+var id = Math.floor(Math.random() * 30000);
+
+var timestamp = Math.floor(Date.now() / 1000);
+msg.payload = {
+    id: id,
+    timestamp: timestamp
+};
+
+return msg;
+\end{minted}
+\end{itemize}
+
+
+\subsection{challenge3/id\_generator}
+This is the MQTT node that publishes the messages to the local MQTT broker running on port 1884. Messages are published to the topic "challenge3/id\_generator", in this way the subscriber used in the second part of the flow could receive these messages.
+
+\subsection{Add row number}
+This is a function node and its goal is to add a row number to the message received from the node "Create payload".\\
+This action is performed through the help of a context variable "row_count_id_log" that keeps the count of the processed messages.
+Then the row number is added to the message's payload and the message is forwarded.
+
+\begin{minted}{javascript}
+var counter = context.get("row_count_id_log") || 0;
+counter++;
+context.set("row_count_id_log", counter);
+var id = msg.payload["id"];
+var timestamp = msg.payload["timestamp"];
+msg.payload = {
+    "No." : counter,
+    "ID" : id,
+    "TIMESTAMP": timestamp
+}
+return msg;
+\end{minted}
+\subsection{id\_log.csv}
+This node is a csv node and is used to convert the JSON object contained in the payload into a CSV file.
+At the beginning it sends the header of the CSV that is composed by these fields: No., TIMESTAMP, SUB\_ID, MSG\_TYPE, then it sends all the rows to the node with the task of writing them.
+
+\subsection{Write id\_log.csv}
+
+
 \section{MQTT Subscriber branch}
 \label{sec:subscriber_branch}
 
