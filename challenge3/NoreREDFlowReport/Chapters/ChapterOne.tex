@@ -1,0 +1,90 @@
+\section{MQTT Subscriber branch}
+\label{sec:subscriber_branch}
+
+In the second branch of the flow, there is an MQTT subscriber that subscribes to the topic "challenge3/id\_generator" and processes messages received from the MQTT broker. In this section, we will describe all nodes that are in this part of the flow.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth, height=0.5\textheight, keepaspectratio]{mqtt_subscriber_branch.png}
+    \caption{MQTT Subscriber branch of the flow}
+\end{figure}
+
+\subsection{challenge3/id\_generator}
+The first node is an mqtt in node, that is subscribed to the topic "challenge3/id\_generator" to the local MQTT broker on port 1884. This node receives messages sent to the local broker by the published in the first branch of the flow and processes them with the following nodes.
+
+\subsection{Compute N}
+This node is a function node that performs two main tasks:
+\begin{itemize}
+\item It increases by 1 the value of a context variable, called processed\_messages, that counts the number of messages processed up to a certain moment. The function node also checks if the value is greater than 80, in which case, the node discards the message.
+\item The second task is performed only if the message needs to be processed: the node computes the value of N as N = id \% 7711, which will be needed to select the correct MQTT message from the CSV.
+\end{itemize}
+
+\subsection{Select message N}
+This node uses the value of N previously computed and extracts the correct row from the CSV file "challenge3.csv". If N is 0, the messages is discarded, since entries start from N=1, otherwise a row will be extracted. The function node reads the CSV from the flow variable csv\_challenge3 and then filters the row with field "No." equal to N. The extracted message will be managed by the following two functions nodes, but at most one of them will actually use it to send a new message.
+
+\subsection{Handle PUBLISH message}
+This node is a function node, it receives a message corresponding to the selected message from the CSV file “challenge3.csv”, checks if it is a PUBLISH message and, if it is, prepares the new MQTT messages to publish. In order to prepare the messages to be published, we need to extract topics, extract payloads and map them together. 
+\begin{itemize}
+\item The topics are contained in the “Info” field of the message and we can extract them with a regex, since they are in the form “Publish Message [topic]”. 
+\item The payloads, instead, are contained in the “Payload” field of the message. They are contained in curly braces and are similar to a JSON array, but without square brackets. 
+We extract them by adding the missing square brackets and parsing them as a JSON array.  
+There are some messages in which the payload is malformed and cannot be parsed as previously explained. We analyzed all PUBLISH messages with a Python script and found out that there are 3 messages with malformed payload and all of them have a certain number of well-formed messages, formed by a last message malformed message, which is truncated.
+SCRIPT e RISULTATO 
+Since we don’t want to waste the correct information contained in the “Payload” field, we use a regex to extract the payloads one at a time from opening curly brace to the corresponding closing one and we parse the text contained between curly braces as a JSON object. We discard the last, malformed, payload.
+\item Finally, we need to combine topics and payloads, we do that by using the map operation. If the number of topics is greater than the number of payloads, we assign an empty payload to the topics without a payload. Beyond topic and payload, the produced messages will have the current timestamp and the id, which was saved in the message from the Compute n function node.
+The produced MQTT message will have the following form:
+\begin{verbatim}
+‘{
+    "timestamp":"CURRENT_TIMESTAMP",
+    "id":"SUB_ID",
+    "topic":"MQTT_PUBLISH_TOPIC",
+    "payload":"MQTT_PUBLISH_PAYLOAD"
+}’
+\end{verbatim}
+In order to have the timestamp and id quoted, we convert them to strings inside the function node. 
+\end{itemize}
+
+\subsection{Message Rate Limiter}
+Among all extracted messages, we need to publish up to 4 messages per minute. We do that thanks to a delay node, that is set to work with action “Rate Limit” and limit the rate to 4 messages per minute, queueing intermediate messages.  
+
+\subsection{Publish from CSV}
+This node is a mqtt out node that publishes messages that manage to go through the Message Rate Limiter. They are published to the local broker, on a dynamic topic, that was extracted from the CSV file and is saved in the message itself.
+
+TERMINALE CON MESSAGGI RICEVUTI
+
+\subsection{Prepare Average temperature Fahrenheit}
+This node is a function node that receives messages that went through the rate limiter and were published. The function checks if the value contained in the payload of the message is a temperature in Fahrenheit and, if it is, computes the average temperature starting from the range contained the in the payload. The prepared message will be used to plot the average temperature in Fahrenheit.
+
+\subsection{Average temperature (F) chart}
+This node is a chart node and is used to plot in Node-Red the average temperature in Fahrenheit of the published messages.
+
+CHART 
+
+\subsection{Prepare filtered\_pubs.csv}
+This function node takes all PUBLISH messages that were published and filters the same ones as the other function node, i.e. all the ones containing a temperature in Fahrenheit. The function increases by one the counter for the number of rows in the CSV file filtered\_pubs.csv, contained in the context variable row\_count\_filtered\_pubs. Moreover, the function produces the new row of the CSV using the data contained in the payload of the message and the value of the row counter. The payload must be a JSON object with fields matching the ones of the CSV, in order to work seamlessly with the csv node.
+
+\subsection{filtered\_pubs.csv}
+This node is a csv node and is used in the “Object to CSV” way to save the JSON object contained in the payload to a row of the CSV. At first, the node produces the header: No.,LONG, LAT, MEAN\_VALUE, TYPE, UNIT, DESCRIPTION. Then it produces the following lines based on the JSON object it receives, which has the same fields as the CSV.
+
+\subsection{Write filtered\_pubs.csv}
+This node is a write file node as is used to write the actual CSV file filtered\_pubs.csv, which is saved to a location on the disk specified in the path inside the node.
+
+\subsection{Handle ACK message}
+This node is a function node that is used to handle ACK messages retrieved from the challenge3.csv file. The function checks if the message is an MQTT ACK message, looking at the “Info” field: if it contains the word “Ack”, it is an ACK message. The function increases a row counter for the CSV file ack\_log.csv, contained the context variable row\_count\_ack\_log and prepares the JSON object to be written in the CSV. The produced messages will have in the payload all fields of the CSV file ack\_log.csv: the incremental row counter in “No.”, the current timestamp, the id of the original message and the message type, which the function finds in the “Info” field, together with the “Ack” keyword.
+
+\subsection{ack\_log.csv}
+This node is a csv node and is used in the “Object to CSV” way to save the JSON object contained in the payload to a row of the CSV ack\_log.csv. The csv node produces a header No., TIMESTAMP, SUB\_ID, MSG\_TYPE and all the rows of the CSV, matching the fields of the CSV with the ones of the message payload.
+
+\subsection{Write ack\_log.csv}
+This node is a write file node as is used to write the actual CSV file ack\_log.csv, which is saved to a location on the disk specified in the path inside the node.
+
+\subsection{Prepare HTTP GET}
+This node is a function node that prepares the HTTP message to send to the ThingSpeak channel. It sets the method to GET and the URL to the one exposed by the API, passing the API KEY and the value of the global ack counter, contained in the message payload and computed in the Handle ACK message function node.
+
+\subsection{HTTP Request ThingSpeak}
+This node is an http request node that sends the HTTP request, using the method and URL set in the message.
+
+ThingSpeak setup + chart
+
+
+
