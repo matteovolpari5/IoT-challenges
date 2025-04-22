@@ -1,0 +1,15 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k+kd}{var}\PYG{+w}{ }\PYG{n+nx}{processedMessages}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{context}\PYG{p}{.}\PYG{n+nx}{get}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}processed\PYGZus{}messages\PYGZdq{}}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{l+m+mf}{0}\PYG{p}{;}
+\PYG{n+nx}{processedMessages}\PYG{+w}{ }\PYG{o}{++}\PYG{p}{;}
+\PYG{n+nx}{context}\PYG{p}{.}\PYG{n+nx}{set}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}processed\PYGZus{}messages\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{processedMessages}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nx}{processedMessages}\PYG{+w}{ }\PYG{o}{\PYGZgt{}}\PYG{+w}{ }\PYG{l+m+mf}{80}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{k+kc}{null}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\PYG{k+kd}{var}\PYG{+w}{ }\PYG{n+nx}{id}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}id\PYGZdq{}}\PYG{p}{]}\PYG{p}{;}
+\PYG{k+kd}{var}\PYG{+w}{ }\PYG{n+nx}{N}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{id}\PYG{+w}{ }\PYG{o}{\PYGZpc{}}\PYG{+w}{ }\PYG{l+m+mf}{7711}\PYG{p}{;}
+\PYG{n+nx}{console}\PYG{p}{.}\PYG{n+nx}{log}\PYG{p}{(}\PYG{n+nx}{N}\PYG{p}{)}\PYG{p}{;}
+\PYG{c+c1}{// save id and N}
+\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{id}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{id}\PYG{p}{;}
+\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{N}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{N}\PYG{p}{;}
+\PYG{k}{return}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{;}
+\end{MintedVerbatim}

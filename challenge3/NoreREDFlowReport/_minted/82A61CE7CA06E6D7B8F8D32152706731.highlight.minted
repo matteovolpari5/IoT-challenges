@@ -1,0 +1,26 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}Protocol\PYGZdq{}}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{===}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}MQTT\PYGZdq{}}
+\PYG{+w}{	}\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}Info\PYGZdq{}}\PYG{p}{]}\PYG{p}{.}\PYG{n+nx}{includes}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Ack\PYGZdq{}}\PYG{p}{)}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k+kd}{var}\PYG{+w}{ }\PYG{n+nx}{counter}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{context}\PYG{p}{.}\PYG{n+nx}{get}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}row\PYGZus{}count\PYGZus{}ack\PYGZus{}log\PYGZdq{}}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{l+m+mf}{0}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n+nx}{counter}\PYG{o}{++}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n+nx}{context}\PYG{p}{.}\PYG{n+nx}{set}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}row\PYGZus{}count\PYGZus{}ack\PYGZus{}log\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{counter}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k+kd}{var}\PYG{+w}{ }\PYG{n+nx}{currTimestamp}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nb}{Math}\PYG{p}{.}\PYG{n+nx}{floor}\PYG{p}{(}\PYG{n+nb}{Date}\PYG{p}{.}\PYG{n+nx}{now}\PYG{p}{(}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{l+m+mf}{1000}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k+kd}{let}\PYG{+w}{ }\PYG{n+nx}{idMatch}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{id}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k+kd}{var}\PYG{+w}{ }\PYG{n+nx}{type}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}Info\PYGZdq{}}\PYG{p}{]}\PYG{p}{.}\PYG{n+nx}{includes}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Connect Ack\PYGZdq{}}\PYG{p}{)}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n+nx}{type}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Connect Ack\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{k}{else}\PYG{+w}{ }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}Info\PYGZdq{}}\PYG{p}{]}\PYG{p}{.}\PYG{n+nx}{includes}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Publish Ack\PYGZdq{}}\PYG{p}{)}\PYG{p}{)}\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n+nx}{type}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Publish Ack\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{k}{else}\PYG{+w}{ }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}Info\PYGZdq{}}\PYG{p}{]}\PYG{p}{.}\PYG{n+nx}{includes}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Subscribe Ack\PYGZdq{}}\PYG{p}{)}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n+nx}{type}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}Subscribe Ack\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{l+s+s2}{\PYGZdq{}No.\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{n+nx}{counter}\PYG{p}{,}
+\PYG{+w}{        }\PYG{l+s+s2}{\PYGZdq{}TIMESTAMP\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{n+nx}{currTimestamp}\PYG{p}{,}
+\PYG{+w}{        }\PYG{l+s+s2}{\PYGZdq{}SUB\PYGZus{}ID\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{n+nx}{idMatch}\PYG{p}{,}
+\PYG{+w}{        }\PYG{l+s+s2}{\PYGZdq{}MSG\PYGZus{}TYPE\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{n+nx}{type}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\PYG{k}{return}\PYG{+w}{ }\PYG{k+kc}{null}\PYG{p}{;}
+\end{MintedVerbatim}

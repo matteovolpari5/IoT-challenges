@@ -1,0 +1,9 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k+kd}{var}\PYG{+w}{ }\PYG{n+nx}{API\PYGZus{}KEY}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}SECRET\PYGZus{}API\PYGZus{}KEY\PYGZdq{}}
+\PYG{k+kd}{var}\PYG{+w}{ }\PYG{n+nx}{globalCounter}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}No.\PYGZdq{}}\PYG{p}{]}
+\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{method}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}GET\PYGZdq{}}\PYG{p}{;}
+\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{url}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}https://api.thingspeak.com/update?api\PYGZus{}key=\PYGZdq{}}\PYG{o}{+}
+\PYG{+w}{	}\PYG{n+nx}{API\PYGZus{}KEY}\PYG{o}{+}\PYG{l+s+s2}{\PYGZdq{}\PYGZam{}field1=\PYGZdq{}}\PYG{o}{+}\PYG{n+nx}{globalCounter}
+
+\PYG{k}{return}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{;}
+\end{MintedVerbatim}
