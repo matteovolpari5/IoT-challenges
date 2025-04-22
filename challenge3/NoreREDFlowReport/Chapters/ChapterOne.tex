@@ -1,4 +1,3 @@
-
 \section{MQTT Publisher branch}
 \label{sec:publisher_branch}
 In the first branch of the flow, on intervals of five seconds, an MQTT publisher publishes a message onto the topic "challenge3/id\_generator". In this section we will see in a detailed way the workflow of this part.
@@ -23,26 +22,22 @@ let initializationCompleted = flow.get("initializationCompleted") || false;
 if (!initializationCompleted) {
     return null;    
 }
-
 var id = Math.floor(Math.random() * 30000);
-
 var timestamp = Math.floor(Date.now() / 1000);
 msg.payload = {
     id: id,
     timestamp: timestamp
 };
-
 return msg;
 \end{minted}
 \end{itemize}
-
 
 \subsection{challenge3/id\_generator}
 This is the MQTT node that publishes the messages to the local MQTT broker running on port 1884. Messages are published to the topic "challenge3/id\_generator", in this way the subscriber used in the second part of the flow could receive these messages.
 
 \subsection{Add row number}
 This is a function node and its goal is to add a row number to the message received from the node "Create payload".\\
-This action is performed through the help of a context variable "row_count_id_log" that keeps the count of the processed messages.
+This action is performed through the help of a context variable \verb|row_count_id_log| that keeps the count of the processed messages.
 Then the row number is added to the message's payload and the message is forwarded.
 
 \begin{minted}{javascript}
@@ -58,6 +53,7 @@ msg.payload = {
 }
 return msg;
 \end{minted}
+
 \subsection{id\_log.csv}
 This node is a csv node and is used to convert the JSON object contained in the payload into a CSV file.
 At the beginning it sends the header of the CSV that is composed by these fields: No., TIMESTAMP, SUB\_ID, MSG\_TYPE, then it sends all the rows to the node with the task of writing them.
