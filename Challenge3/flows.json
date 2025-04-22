@@ -58,7 +58,7 @@
         "rh": 0,
         "inputs": 0,
         "x": 370,
-        "y": 1220,
+        "y": 1080,
         "wires": [
             [
                 "7990aae6477654ee"
@@ -152,7 +152,7 @@
         "type": "function",
         "z": "035241d1b9fb5a89",
         "name": "Compute N",
-        "func": "var processedMessages = context.get(\"processedMessages\") || 0;\nprocessedMessages ++;\ncontext.set(\"processedMessages\", processedMessages);\nif (processedMessages > 80) {\n    return null;\n}\n\nvar id = msg.payload[\"id\"];\nvar N = id % 7711;\n\nconsole.log(N);\n\n// saved id and N\nmsg.id = id;\nmsg.N = N;\n\nreturn msg;",
+        "func": "var processedMessages = context.get(\"processed_messages\") || 0;\nprocessedMessages ++;\ncontext.set(\"processed_messages\", processedMessages);\nif (processedMessages > 80) {\n    return null;\n}\n\nvar id = msg.payload[\"id\"];\nvar N = id % 7711;\n\nconsole.log(N);\n\n// saved id and N\nmsg.id = id;\nmsg.N = N;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -160,7 +160,7 @@
         "finalize": "",
         "libs": [],
         "x": 630,
-        "y": 1220,
+        "y": 1080,
         "wires": [
             [
                 "52f8936b01740366"
@@ -180,7 +180,7 @@
         "finalize": "",
         "libs": [],
         "x": 870,
-        "y": 1220,
+        "y": 1080,
         "wires": [
             [
                 "dc718c72d724b48c",
@@ -207,7 +207,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 1480,
-        "y": 1020,
+        "y": 880,
         "wires": [
             [
                 "d4f386ad3227bd16",
@@ -231,7 +231,7 @@
         "expiry": "",
         "broker": "817ce920ac63bd5e",
         "x": 1750,
-        "y": 1100,
+        "y": 960,
         "wires": []
     },
     {
@@ -247,7 +247,7 @@
         "finalize": "",
         "libs": [],
         "x": 1820,
-        "y": 940,
+        "y": 800,
         "wires": [
             [
                 "d7f29e4ef2da26ed"
@@ -293,7 +293,7 @@
         "useDifferentColor": false,
         "className": "",
         "x": 2190,
-        "y": 940,
+        "y": 800,
         "wires": [
             []
         ]
@@ -315,7 +315,7 @@
         "include_empty_strings": "",
         "include_null_values": "",
         "x": 2050,
-        "y": 1020,
+        "y": 880,
         "wires": [
             [
                 "6fe960a44b8a2c44"
@@ -335,7 +335,7 @@
         "finalize": "",
         "libs": [],
         "x": 1770,
-        "y": 1020,
+        "y": 880,
         "wires": [
             [
                 "6276e59e689c6858"
@@ -354,7 +354,7 @@
         "overwriteFile": "false",
         "encoding": "none",
         "x": 2320,
-        "y": 1020,
+        "y": 880,
         "wires": [
             []
         ]
@@ -372,7 +372,7 @@
         "finalize": "",
         "libs": [],
         "x": 1160,
-        "y": 1220,
+        "y": 1080,
         "wires": [
             [
                 "f4785fd02c0ae735",
@@ -397,7 +397,7 @@
         "include_empty_strings": "",
         "include_null_values": "",
         "x": 1390,
-        "y": 1180,
+        "y": 1040,
         "wires": [
             [
                 "d0c756b7f345f329"
@@ -416,7 +416,7 @@
         "overwriteFile": "false",
         "encoding": "none",
         "x": 1630,
-        "y": 1180,
+        "y": 1040,
         "wires": [
             []
         ]
@@ -435,7 +435,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1120,
-        "y": 1340,
+        "y": 1200,
         "wires": []
     },
     {
@@ -451,7 +451,7 @@
         "finalize": "",
         "libs": [],
         "x": 1410,
-        "y": 1260,
+        "y": 1120,
         "wires": [
             [
                 "2736504041b4efa5"
@@ -462,7 +462,7 @@
         "id": "2736504041b4efa5",
         "type": "http request",
         "z": "035241d1b9fb5a89",
-        "name": "",
+        "name": "HTTP Request ThingSpeak",
         "method": "use",
         "ret": "txt",
         "paytoqs": "ignore",
@@ -474,8 +474,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 1650,
-        "y": 1260,
+        "x": 1700,
+        "y": 1120,
         "wires": [
             []
         ]
@@ -734,7 +734,7 @@
         "finalize": "",
         "libs": [],
         "x": 1180,
-        "y": 1100,
+        "y": 960,
         "wires": [
             [
                 "575fa37914f03bea"
