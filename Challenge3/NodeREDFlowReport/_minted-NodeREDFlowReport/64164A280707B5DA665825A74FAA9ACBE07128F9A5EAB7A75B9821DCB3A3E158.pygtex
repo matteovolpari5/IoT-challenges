@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kd}{let}\PYG{+w}{ }\PYG{n+nx}{initializationCompleted}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{flow}\PYG{p}{.}\PYG{n+nx}{get}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}initializationCompleted\PYGZdq{}}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{k+kc}{false}\PYG{p}{;}
+\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n+nx}{initializationCompleted}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{k+kc}{null}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\PYG{k+kd}{var}\PYG{+w}{ }\PYG{n+nx}{id}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nb}{Math}\PYG{p}{.}\PYG{n+nx}{floor}\PYG{p}{(}\PYG{n+nb}{Math}\PYG{p}{.}\PYG{n+nx}{random}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{l+m+mf}{30000}\PYG{p}{);}
+\PYG{k+kd}{var}\PYG{+w}{ }\PYG{n+nx}{timestamp}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nb}{Math}\PYG{p}{.}\PYG{n+nx}{floor}\PYG{p}{(}\PYG{n+nb}{Date}\PYG{p}{.}\PYG{n+nx}{now}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{l+m+mf}{1000}\PYG{p}{);}
+\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n+nx}{id}\PYG{o}{:}\PYG{+w}{ }\PYG{n+nx}{id}\PYG{p}{,}
+\PYG{+w}{    }\PYG{n+nx}{timestamp}\PYG{o}{:}\PYG{+w}{ }\PYG{n+nx}{timestamp}
+\PYG{p}{\PYGZcb{};}
+\PYG{k}{return}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{;}
+\end{Verbatim}

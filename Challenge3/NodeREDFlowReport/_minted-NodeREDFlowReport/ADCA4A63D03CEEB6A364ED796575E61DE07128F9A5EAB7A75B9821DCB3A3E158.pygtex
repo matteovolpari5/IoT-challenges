@@ -1,0 +1,12 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{.}\PYG{n+nx}{type}\PYG{+w}{ }\PYG{o}{===}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}temperature\PYGZdq{}}
+\PYG{+w}{	}\PYG{o}{\PYGZam{}\PYGZam{}}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{.}\PYG{n+nx}{unit}\PYG{+w}{ }\PYG{o}{===}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}F\PYGZdq{}}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k+kd}{let}\PYG{+w}{ }\PYG{n+nx}{minTemp}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{.}\PYG{n+nx}{range}\PYG{p}{[}\PYG{l+m+mf}{0}\PYG{p}{];}
+\PYG{+w}{    }\PYG{k+kd}{let}\PYG{+w}{ }\PYG{n+nx}{maxTemp}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{.}\PYG{n+nx}{range}\PYG{p}{[}\PYG{l+m+mf}{1}\PYG{p}{];}
+\PYG{+w}{    }\PYG{k+kd}{let}\PYG{+w}{ }\PYG{n+nx}{avgTemp}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nx}{minTemp}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n+nx}{maxTemp}\PYG{p}{)}\PYG{o}{/}\PYG{l+m+mf}{2}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{topic}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}TempF\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{avgTemp}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\PYG{k}{return}\PYG{+w}{ }\PYG{k+kc}{null}
+\end{Verbatim}

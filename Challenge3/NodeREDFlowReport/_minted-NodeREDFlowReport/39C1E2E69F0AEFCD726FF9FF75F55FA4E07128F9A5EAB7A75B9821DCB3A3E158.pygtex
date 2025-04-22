@@ -1,0 +1,13 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kd}{var}\PYG{+w}{ }\PYG{n+nx}{counter}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{context}\PYG{p}{.}\PYG{n+nx}{get}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}row\PYGZus{}count\PYGZus{}id\PYGZus{}log\PYGZdq{}}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{l+m+mf}{0}\PYG{p}{;}
+\PYG{n+nx}{counter}\PYG{o}{++}\PYG{p}{;}
+\PYG{n+nx}{context}\PYG{p}{.}\PYG{n+nx}{set}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}row\PYGZus{}count\PYGZus{}id\PYGZus{}log\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{counter}\PYG{p}{);}
+\PYG{k+kd}{var}\PYG{+w}{ }\PYG{n+nx}{id}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}id\PYGZdq{}}\PYG{p}{];}
+\PYG{k+kd}{var}\PYG{+w}{ }\PYG{n+nx}{timestamp}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}timestamp\PYGZdq{}}\PYG{p}{];}
+\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{l+s+s2}{\PYGZdq{}No.\PYGZdq{}}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n+nx}{counter}\PYG{p}{,}
+\PYG{+w}{    }\PYG{l+s+s2}{\PYGZdq{}ID\PYGZdq{}}\PYG{+w}{ }\PYG{o}{:}\PYG{+w}{ }\PYG{n+nx}{id}\PYG{p}{,}
+\PYG{+w}{    }\PYG{l+s+s2}{\PYGZdq{}TIMESTAMP\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{n+nx}{timestamp}
+\PYG{p}{\PYGZcb{}}
+\PYG{k}{return}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{;}
+\end{Verbatim}

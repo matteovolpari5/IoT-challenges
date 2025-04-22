@@ -1,0 +1,50 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}Protocol\PYGZdq{}}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{===}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}MQTT\PYGZdq{}}\PYG{+w}{ }\PYG{o}{\PYGZam{}\PYGZam{}}
+\PYG{+w}{	}\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}Info\PYGZdq{}}\PYG{p}{].}\PYG{n+nx}{includes}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Publish Message\PYGZdq{}}\PYG{p}{))}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{// save info in a variable}
+\PYG{+w}{    }\PYG{k+kd}{let}\PYG{+w}{ }\PYG{n+nx}{info}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}Info\PYGZdq{}}\PYG{p}{];}
+\PYG{+w}{    }\PYG{c+c1}{// save messages payloads in a variable}
+\PYG{+w}{    }\PYG{k+kd}{let}\PYG{+w}{ }\PYG{n+nx}{messagesPayloads}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}Payload\PYGZdq{}}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{??}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}}\PYG{p}{;}
+\PYG{+w}{    }\PYG{c+c1}{// extract topics}
+\PYG{+w}{    }\PYG{k+kd}{let}\PYG{+w}{ }\PYG{n+nx}{topicMatches}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{[...}\PYG{n+nx}{info}\PYG{p}{.}\PYG{n+nx}{matchAll}\PYG{p}{(}\PYG{l+s+sr}{/Publish Message \PYGZbs{}[([\PYGZca{}\PYGZbs{}]]+)\PYGZbs{}]/g}\PYG{p}{)];}
+\PYG{+w}{    }\PYG{k+kd}{let}\PYG{+w}{ }\PYG{n+nx}{topics}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{topicMatches}\PYG{p}{.}\PYG{n+nx}{map}\PYG{p}{(}\PYG{n+nx}{m}\PYG{+w}{ }\PYG{p}{=\PYGZgt{}}\PYG{+w}{ }\PYG{n+nx}{m}\PYG{p}{[}\PYG{l+m+mf}{1}\PYG{p}{]);}
+\PYG{+w}{    }\PYG{c+c1}{// extract payloads}
+\PYG{+w}{    }\PYG{k+kd}{let}\PYG{+w}{ }\PYG{n+nx}{jsonArray}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nx}{messagesPayloads}\PYG{p}{.}\PYG{n+nx}{trim}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{===}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{n+nx}{jsonArray}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{[];}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{k}{else}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k}{try}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n+nx}{jsonArray}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nb}{JSON}\PYG{p}{.}\PYG{n+nx}{parse}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}[\PYGZdq{}}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n+nx}{messagesPayloads}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}]\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{k}{catch}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nx}{e}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{c+c1}{// extract well formed messages}
+
+\PYG{+w}{            }\PYG{k+kd}{const}\PYG{+w}{ }\PYG{n+nx}{objs}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{[];}
+\PYG{+w}{            }\PYG{k+kd}{const}\PYG{+w}{ }\PYG{n+nx}{objRegex}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+sr}{/\PYGZbs{}\PYGZob{}[\PYGZca{}\PYGZcb{}]*\PYGZbs{}\PYGZcb{}/g}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k+kd}{let}\PYG{+w}{ }\PYG{n+nx}{m}\PYG{p}{;}
+\PYG{+w}{            }\PYG{k}{while}\PYG{+w}{ }\PYG{p}{((}\PYG{n+nx}{m}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{objRegex}\PYG{p}{.}\PYG{n+nx}{exec}\PYG{p}{(}\PYG{n+nx}{messagesPayloads}\PYG{p}{))}\PYG{+w}{ }\PYG{o}{!==}\PYG{+w}{ }\PYG{k+kc}{null}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{k}{try}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n+nx}{objs}\PYG{p}{.}\PYG{n+nx}{push}\PYG{p}{(}\PYG{n+nb}{JSON}\PYG{p}{.}\PYG{n+nx}{parse}\PYG{p}{(}\PYG{n+nx}{m}\PYG{p}{));}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{k}{catch}\PYG{+w}{ }\PYG{p}{(}\PYG{n+nx}{\PYGZus{}}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                    }\PYG{c+c1}{// skip malformed object}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{n+nx}{jsonArray}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{objs}\PYG{p}{;}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{c+c1}{// create messages}
+\PYG{+w}{    }\PYG{k+kd}{var}\PYG{+w}{ }\PYG{n+nx}{currTimestamp}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nb}{Math}\PYG{p}{.}\PYG{n+nx}{floor}\PYG{p}{(}\PYG{n+nb}{Date}\PYG{p}{.}\PYG{n+nx}{now}\PYG{p}{()}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{l+m+mf}{1000}\PYG{p}{);}
+\PYG{+w}{    }\PYG{k+kd}{let}\PYG{+w}{ }\PYG{n+nx}{messages}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{topics}\PYG{p}{.}\PYG{n+nx}{map}\PYG{p}{((}\PYG{n+nx}{topic}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nx}{index}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{=\PYGZgt{}}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n+nx}{topic}\PYG{o}{:}\PYG{+w}{ }\PYG{n+nx}{topic}\PYG{p}{,}
+\PYG{+w}{            }\PYG{n+nx}{payload}\PYG{o}{:}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n+nx}{timestamp}\PYG{o}{:}\PYG{+w}{ }\PYG{n+nx}{currTimestamp}\PYG{p}{.}\PYG{n+nx}{toString}\PYG{p}{(),}
+\PYG{+w}{                }\PYG{n+nx}{id}\PYG{o}{:}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{id}\PYG{p}{.}\PYG{n+nx}{toString}\PYG{p}{(),}
+\PYG{+w}{                }\PYG{n+nx}{topic}\PYG{o}{:}\PYG{+w}{ }\PYG{n+nx}{topic}\PYG{p}{,}
+\PYG{+w}{                }\PYG{n+nx}{payload}\PYG{o}{:}\PYG{+w}{ }\PYG{n+nx}{jsonArray}\PYG{p}{[}\PYG{n+nx}{index}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{??}\PYG{+w}{ }\PYG{p}{\PYGZob{}\PYGZcb{}}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{};}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{});}
+\PYG{+w}{    }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{[}\PYG{n+nx}{messages}\PYG{p}{];}
+\PYG{p}{\PYGZcb{}}
+\PYG{k}{return}\PYG{+w}{ }\PYG{k+kc}{null}\PYG{p}{;}
+\end{Verbatim}
