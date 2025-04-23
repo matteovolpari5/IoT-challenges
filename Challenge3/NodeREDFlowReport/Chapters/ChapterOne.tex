@@ -251,8 +251,8 @@ if (msg.payload["Protocol"] === "MQTT" &&
 return null;
 \end{minted}
 
-\subsection{Message Rate Limiter}
-Among all extracted messages, we need to publish up to 4 messages per minute. We do that thanks to a delay node, that is set to work with action "Rate Limit" and limit the rate to 4 messages per minute, queueing intermediate messages.  
+\subsection{Message Rate Limiter MQTT}
+Among all extracted messages, we need to publish up to 4 messages per minute. We do that thanks to a delay node, that is set to work with action "Rate Limit" and limits the rate to 4 messages per minute, queueing intermediate messages.  
 
 \subsection{Publish from CSV}
 This node is a mqtt out node that publishes messages that manage to go through the Message Rate Limiter. They are published to the local broker, on a dynamic topic, that was extracted from the CSV file and is saved in the message itself.\\
@@ -378,6 +378,9 @@ msg.url = "https://api.thingspeak.com/update?api_key="+
 
 return msg;
 \end{minted}
+
+\subsection{Message Rate Limiter ThingSpeak}
+This node is a a delay node, that is set to work with action "Rate Limit" and limits the rate to 1 messages every 20 seconds, queueing intermediate messages. We introduced this node to cope with the free plan limit of ThingSpeak that imposes a limit of 1 message every 15 seconds; by sending one message every 20 seconds and queueing messages, we don't loose any message.
 
 \subsection{HTTP Request ThingSpeak}
 This node is an http request node that sends the HTTP request to ThingSpeak, using the method and URL set in the message. The link of the public ThingSpeak channel is \url{https://thingspeak.mathworks.com/channels/2924504/}.\\
