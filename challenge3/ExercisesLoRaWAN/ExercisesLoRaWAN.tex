@@ -80,6 +80,14 @@
 \usepackage{xcolor}
 \usepackage{pythonhighlight}
 
+\usepackage{fancyvrb}
+\usepackage{fvextra}
+\DefineVerbatimEnvironment{BreakableVerbatim}{Verbatim}{
+  breaklines=true,
+  breakanywhere=true,
+  breaksymbol={},
+  breakindent=0pt
+}
 % Input of configuration file. Do not change config.tex file unless you really know what you are doing. 
 \input{Configuration_Files/config}
 
