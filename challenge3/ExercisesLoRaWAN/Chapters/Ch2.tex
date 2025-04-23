@@ -1,0 +1,42 @@
+Hardware:
+•	Arduino MKR WAN 1310
+Already includes a LPWAN module called Murata CMWX1ZZABZ
+Need to add an external antenna, the Arduino documentation suggests Dipole Pentaband Waterproof Antenna (https://store.arduino.cc/products/dipole-pentaband-waterproof-antenna).
+•	DHT22 sensor: connected by a digital pin to the Arduino
+•	LoRaWAN Gateway: we can search if we have a neraby gateway from The Things Network at https://www.thethingsnetwork.org/map. If that’s not the case, we will need to implement our own gatway. 
+You can buy a LoRa Gateway online for indoor or outdoor usage, based on your needs, e.g. indoor (Mikrotik wAP LR8) outdoor (TEKTELIC KONA MACRO OUTDOOR GATEWAY).
+Otherwise, you can build your own gateway, e.g. by using a Raspberry Pi 4, a  LoRa concentrator board, such as a RAK2245 Pi Hat, and an antenna.
+•	Network Sever The Things Network
+•	ThingSpeak
+Describe…
+
+Networking:
+Arduino and DHT22 are phisically connected.
+Arduino communicates with the Gateway through LoRaWAN.
+Gateway to TTN 
+The Gateway can communicate with The Things Network with the gateway connector protocol, that uses as network protocol gRPC or MQTT.
+TTN communicates the data to ThingSpeak through the built in integration, using the HTTP API exposed by ThingSpeak.
+
+Software:
+•	Codice Arduino 
+•	Console TTN
+•	Creazione channel 
+
+Arduino code description 
+We include libraries to use LoRaWAN to communicate readings values and to use DHT22 sensor. We define the digital PIN to which the DHT22 sensor is connected and the DHTTYPE, representing the sensor model.
+The code is formed by two functions: setup and loop. In setup, we initialize both the DHT22 and the LoRa communication, setting the Carrier Frequency to 868 MHz. Moreover, we join the network server thanks to the joinOTAA function. In the loop function, instead, we perform sensor readings for temperature and humidity, encode these values and send them over LoRaWAN netwok. Finally, we insert a delay of 1 minute to wait for the next reading and message.
+	 
+Console TTN + ThingSpeak Channel
+- Dalla console andare su create Application e scelgo un ID univoco e un nome per l’applicazione e aggiungo una descrizione. Dopodiché schiaccio su create application.
+- vai su API keys e aggiungi una API Key, scelgo un nome e una data di scadenza, dopodiché la aggiungo.
+- Vado su End Devices e faccio register end device.
+seleziono brand e modello dell’end device, selezionando hardware version e firmware version.
+Seleziono il frequency plan raccomandato.
+Scelgo arbitrariamente JoinEUI, e generato DevEUI.
+- copio su Arduino le chiavi e i codici che ho generato su TTN.
+- vado su Payload formatter → nella sezione upLink seleziono come formatter type: Custom JavaScript formatter e incollo funzione CHATGPT.
+- downLink non lo tocchiamo perché il flusso non prevede messaggi dal network sensor → end device.
+- creare un nuovo channel su ThingSpeak con 2 fields: Humidity, Temperature
+- annoto read e write API keys dal canale ThingSpeak
+- dall’application TTN vado su webhook e aggiungo ThingSpeak inserendo ChannelID e API Key copiati precedentemente da ThingSpeak.
+
