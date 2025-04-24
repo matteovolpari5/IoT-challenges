@@ -1,11 +1,41 @@
+\section{Introduction}
+In this document there is the explanation of the entire Node-Red flow that aims to fulfil the requirements of Challenge 3.
+The flow is divided in 3 main sections: initial setup, MQTT publisher and MQTT subscriber.
+This document will explain how it works by analysing the individual nodes of the three sections mentioned above.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth, height=0.5\textheight, keepaspectratio]{initial_setup_branch.png}
+    \caption{Complete Node-Red flow}
+\end{figure}
+
 \section{Initial setup branch}
+In this branch, all operations considered preliminary to system start-up are carried out, such as loading the \textit{challenge3.csv} file and cleaning the other CSV files that the system will have to write during execution.
 \label{sec:initial_setup_branch}
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth, height=0.5\textheight, keepaspectratio]{initial_setup_branch.png}
     \caption{initial setup branch}
 \end{figure}
+\subsection{Inject}
+When the system is deployed, this node starts this branch of the flow, which allows all preliminary operations to be carried out before starting the tasks of the other two branches of the flow.
+\subsection{Read challenge3.csv }
 
+\subsection{csv}
+
+\subsection{Save CSV}
+
+\subsection{Prepare DELETE}
+
+\subsection{http request}
+
+\subsection{Clear CSV files}
+The three \textit{Clear <file\_name>.csv} nodes are used to clean up the three different CSV files that the system then has to write during execution. To clean up these files, an overwrite must be performed for each file.
+
+\subsection{Initialization completed 5}
+Questo nodo join permette di fermare il flow fin quando tutti e five i rami entranti non hanno terminato la loro esecuzione. Una volta che tutti e five i rami hanno terminato questo nodo fa andare avanti l'esecuzione passando a \textit{Set initialization completed}.
+
+\subsection{Set initialization completed}
 
 \section{MQTT Publisher branch}
 \label{sec:publisher_branch}
