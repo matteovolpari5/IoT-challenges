@@ -1,27 +1,31 @@
-\section{Hardware}
+The aim of this chapter is to present a system that meets the requirements imposed by EQ2.
+The entire Node-Red flow is shown here with high-level blocks that will be described in the following sections.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth, height=0.5\textheight, keepaspectratio]{node_red_flow.png}
+    \caption{Node Red flow}
+\end{figure}
 
-Hardware:
-•	Arduino MKR WAN 1310
-Already includes a LPWAN module called Murata CMWX1ZZABZ
-Need to add an external antenna, the Arduino documentation suggests Dipole Pentaband Waterproof Antenna (https://store.arduino.cc/products/dipole-pentaband-waterproof-antenna).
-•	DHT22 sensor: connected by a digital pin to the Arduino
-•	LoRaWAN Gateway: we can search if we have a neraby gateway from The Things Network at https://www.thethingsnetwork.org/map. If that’s not the case, we will need to implement our own gatway. 
+\section{Hardware}
+In this section we present the hardware components needed to build and operate the system. 
+\begin{itemize}
+\item \textbf{Arduino MKR WAN 1310:} Already includes a LPWAN module called Murata CMWX1ZZABZ
+\item \textbf{External antenna:} the Arduino documentation suggests Dipole Pentaband Waterproof Antenna ({\color{blue}\underline{\href{https://store.arduino.cc/products/dipole-pentaband-waterproof-antenna}{link to Arduino store}}}).
+\item \textbf{DHT22 sensor:} connected by a digital pin to the Arduino
+\item \textbf{LoRaWAN Gateway:} we can search if we have a nearby gateway from The Things Network at {\color{blue}\underline{\url{https://www.thethingsnetwork.org/map}}}. If that’s not the case, we will need to implement our own gateway. 
 You can buy a LoRa Gateway online for indoor or outdoor usage, based on your needs, e.g. indoor (Mikrotik wAP LR8) outdoor (TEKTELIC KONA MACRO OUTDOOR GATEWAY).
 Otherwise, you can build your own gateway, e.g. by using a Raspberry Pi 4, a  LoRa concentrator board, such as a RAK2245 Pi Hat, and an antenna.
-•	Network Sever The Things Network
-•	ThingSpeak
+\item \textbf{Network Sever The Things Network:}
+\item \textbf{ThingSpeak:}
+\end{itemize}
 Describe…
-
-Arduino and DHT22 are phisically connected.
-Arduino communicates with the Gateway through LoRaWAN.
-Gateway to TTN 
-The Gateway can communicate with The Things Network with the gateway connector protocol, that uses as network protocol gRPC or MQTT.
-TTN communicates the data to ThingSpeak through the built in integration, using the HTTP API exposed by ThingSpeak.
-
-Software:
-•	Codice Arduino 
-•	Console TTN
-•	Creazione channel 
+\\
+Arduino and DHT22 are phisically connected.\\
+Arduino communicates with the Gateway through LoRaWAN.\\
+Gateway to TTN \\
+The Gateway can communicate with The Things Network with the gateway connector protocol, that uses as network protocol gRPC or MQTT.\\
+TTN communicates the data to ThingSpeak through the built in integration, using the HTTP API exposed by ThingSpeak.\\
+\\
 
 \section{Software}
 \label{sec:software}
