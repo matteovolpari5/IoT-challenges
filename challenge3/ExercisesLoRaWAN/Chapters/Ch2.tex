@@ -9,24 +9,45 @@ The entire Node-Red flow is shown here with high-level blocks that will be descr
 \section{Hardware}
 In this section we present the hardware components needed to build and operate the system. 
 \begin{itemize}
-\item \textbf{Arduino MKR WAN 1310:} Already includes a LPWAN module called Murata CMWX1ZZABZ
-\item \textbf{External antenna:} the Arduino documentation suggests Dipole Pentaband Waterproof Antenna ({\color{blue}\underline{\href{https://store.arduino.cc/products/dipole-pentaband-waterproof-antenna}{link to Arduino store}}}).
-\item \textbf{DHT22 sensor:} connected by a digital pin to the Arduino
-\item \textbf{LoRaWAN Gateway:} we can search if we have a nearby gateway from The Things Network at {\color{blue}\underline{\url{https://www.thethingsnetwork.org/map}}}. If that’s not the case, we will need to implement our own gateway. 
-You can buy a LoRa Gateway online for indoor or outdoor usage, based on your needs, e.g. indoor (Mikrotik wAP LR8) outdoor (TEKTELIC KONA MACRO OUTDOOR GATEWAY).
-Otherwise, you can build your own gateway, e.g. by using a Raspberry Pi 4, a  LoRa concentrator board, such as a RAK2245 Pi Hat, and an antenna.
-\item \textbf{Network Sever The Things Network:}
-\item \textbf{ThingSpeak:}
+\item \textbf{Arduino MKR WAN 1310:} this board already includes a LPWAN module called Murata CMWX1ZZABZ.
+\item \textbf{External antenna:} the Arduino documentation suggests the following antenna: \textit{Dipole Pentaband Waterproof Antenna} ({\color{blue}\underline{\href{https://store.arduino.cc/products/dipole-pentaband-waterproof-antenna}{Arduino store}}}).
+\item \textbf{DHT22 sensor:} this is the humidity and temperature sensor that will be connected via a digital pin to the Arduino board.
+\item \textbf{LoRaWAN Gateway:} for the LoraWAN gateway there are many equivalent options:
+\begin{itemize}
+\item Use a public gateway: we can search if we have a nearby gateway from the The Things Network at {\color{blue}\underline{\url{https://www.thethingsnetwork.org/map}}}.
+\item Buy a gateway from those available online: you can search the best LoRa Gateway online for indoor or outdoor usage, based on your needs, e.g. indoor (\textit{Mikrotik wAP
+LR8}) outdoor (\textit{TEKTELIC KONA MACRO OUTDOOR GATEWAY}).
+\item Build the gateway: you can build your own gateway, by using a computer, e.g. a \textit{Raspberry Pi 4}, a LoRa concentrator board, such as a \textit{RAK2245 Pi Hat}, and an antenna.
 \end{itemize}
-Describe…
-\\
-Arduino and DHT22 are phisically connected.\\
-Arduino communicates with the Gateway through LoRaWAN.\\
-Gateway to TTN \\
+\item \textbf{Network Sever The Things Network:} To use a The Things Network server, simply register at {\color{blue}\underline{\href{https://console.cloud.thethings.network/}{The Things Network}}} and add an application that will run in the cloud on The Things Industries infrastructure.
+\item \textbf{ThingSpeak:} To create a ThingSpeak channel, you need to log in with your account at {\color{blue}\underline{\href{https://thingspeak.mathworks.com/}{ThingSpeak}}} and generate a new public channel.
+\end{itemize}
+\subsection{Connections}
+Here is described how the different components are interconnected.\\
+Arduino and DHT22 are physically connected via a digital pin present on the Arduino board.\\
+Arduino then communicates with the Gateway through a LoRaWAN connection.\\
 The Gateway can communicate with The Things Network with the gateway connector protocol, that uses as network protocol gRPC or MQTT.\\
 TTN communicates the data to ThingSpeak through the built in integration, using the HTTP API exposed by ThingSpeak.\\
-\\
 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\linewidth, height=0.5\textheight, keepaspectratio]{arduino_mkr_wan_1310.jpg}
+    \caption{Arduino MKR WAN 1310}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\linewidth, height=0.5\textheight, keepaspectratio]{dht22_sensor.jpg}
+    \caption{DHT22 sensor}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\linewidth, height=0.5\textheight, keepaspectratio]{arduino_antenna.png}
+    \caption{Dipole Pentaband Waterproof Antenna}
+\end{figure}
+\pagebreak
 \section{Software}
 \label{sec:software}
 In this section we present the software components used to allow the system to work. Since we don't own some hardware components, we were not able to test the whole system, but we tested individual components, as will be explained in the following sections.
