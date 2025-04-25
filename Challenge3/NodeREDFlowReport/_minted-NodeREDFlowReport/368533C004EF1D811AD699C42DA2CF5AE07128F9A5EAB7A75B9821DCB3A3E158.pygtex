@@ -1,0 +1,16 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// Code added here will be run once}
+\PYG{c+c1}{// whenever the node is started.}
+\PYG{k+kd}{var}\PYG{+w}{ }\PYG{n+nx}{channelID}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+m+mf}{2924504}\PYG{p}{;}
+\PYG{k+kd}{var}\PYG{+w}{ }\PYG{n+nx}{USER\PYGZus{}API\PYGZus{}KEY}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}F96QKIB7FK3F5KVG\PYGZdq{}}
+
+\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{method}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}DELETE\PYGZdq{}}\PYG{p}{;}
+\PYG{c+c1}{//msg.headers[\PYGZsq{}Host\PYGZsq{}] = \PYGZsq{}api.thingskpeak.com\PYGZsq{}}
+\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{payload}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}api\PYGZus{}key=\PYGZdq{}}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n+nb}{encodeURIComponent}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}F96QKIB7FK3F5KVG\PYGZdq{}}\PYG{p}{);}
+\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{headers}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{headers}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{p}{\PYGZob{}\PYGZcb{};}
+\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{headers}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}Content\PYGZhy{}Type\PYGZsq{}}\PYG{p}{]}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s1}{\PYGZsq{}application/x\PYGZhy{}www\PYGZhy{}form\PYGZhy{}urlencoded\PYGZsq{}}\PYG{p}{;}
+\PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{url}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}https://api.thingspeak.com/channels/\PYGZdq{}}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n+nx}{channelID}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+s+s2}{\PYGZdq{}/feeds.json\PYGZdq{}}\PYG{p}{;}
+\PYG{c+c1}{//msg.payload = \PYGZdq{}api\PYGZus{}key=\PYGZdq{} + USER\PYGZus{}API\PYGZus{}KEY;}
+
+\PYG{k}{return}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{;}
+\end{Verbatim}

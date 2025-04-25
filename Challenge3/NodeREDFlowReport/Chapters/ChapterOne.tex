@@ -1,12 +1,12 @@
 \section{Introduction}
-In this document there is the explanation of the entire Node-Red flow that aims to fulfil the requirements of Challenge 3.
+In this document there is the explanation of the entire Node-RED flow that aims to fulfil the requirements of Challenge 3.
 The flow is divided in 3 main sections: initial setup, MQTT publisher and MQTT subscriber.
 This document will explain how it works by analysing the individual nodes of the three sections mentioned above.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth, height=0.5\textheight, keepaspectratio]{complete_flow.png}
-    \caption{Complete Node-Red flow}
+    \caption{Complete Node-RED flow}
 \end{figure}
 
 \section{Initial setup branch}
@@ -19,23 +19,61 @@ In this branch, all operations considered preliminary to system start-up are car
 \end{figure}
 \subsection{Inject}
 When the system is deployed, this node starts this branch of the flow, which allows all preliminary operations to be carried out before starting the tasks of the other two branches of the flow.
+
 \subsection{Read challenge3.csv }
+This is a read file node and its task is to read the file specified at the path that has been inserted into the node.\\
+This file is the \textit{Challenge3.csv} which will be used by the MQTT Subscriber branch to process the messages it receives.
 
 \subsection{csv}
+This node is a csv node and is used in the "CSV to Object" way in order to convert the CSV file read in the previous node to an object that will be saved into a textit{flow} variable in the next node.
 
 \subsection{Save CSV}
+This is a function node and its goal is to save the content of the CSV file read before into a textit{flow} variable.
+The code of the function node is reported below:
+\begin{minted}{javascript}
+flow.set("csv_challenge3", msg.payload);
+return msg;
+\end{minted}
 
 \subsection{Prepare DELETE}
+This function node has the task of preparing the HTTP DELETE request to be sent to the ThingSpeak channel.
+In this way, when the flow starts, the channel is cleaned of any old data.\\
+The code of the function node is shown below:
+\begin{minted}{javascript}
+// Code added here will be run once
+// whenever the node is started.
+var channelID = 2924504;
+var USER_API_KEY = "F96QKIB7FK3F5KVG"
+
+msg.method = "DELETE";
+//msg.headers['Host'] = 'api.thingskpeak.com'
+msg.payload = "api_key=" + encodeURIComponent("F96QKIB7FK3F5KVG");
+msg.headers = msg.headers || {};
+msg.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+msg.url = "https://api.thingspeak.com/channels/" + channelID + "/feeds.json";
+//msg.payload = "api_key=" + USER_API_KEY;
+
+return msg;
+\end{minted}
 
 \subsection{http request}
+This node send the HTTP request using the HTTP method set in the previous node.
 
 \subsection{Clear CSV files}
 The three \textit{Clear <file\_name>.csv} nodes are used to clean up the three different CSV files that the system then has to write during execution. To clean up these files, an overwrite must be performed for each file.
 
 \subsection{Initialization completed 5}
-Questo nodo join permette di fermare il flow fin quando tutti e five i rami entranti non hanno terminato la loro esecuzione. Una volta che tutti e five i rami hanno terminato questo nodo fa andare avanti l'esecuzione passando a \textit{Set initialization completed}.
+This join node allows the flow to stop until all five incoming branches have completed their execution. Once all five branches have finished, this node keeps execution going by passing to \textit{Set initialization completed}.
 
 \subsection{Set initialization completed}
+This is a function node whose task is to set the flow variable InitialisationCompleted to true.
+This allows the MQTT Publisher branch, which checks the value of this variable, to start and begin sending messages.\\
+The code of the function is reported below:
+\begin{minted}{javascript}
+flow.set("initializationCompleted", true);
+return msg;
+\end{minted}
+
 
 \section{MQTT Publisher branch}
 \label{sec:publisher_branch}
@@ -51,6 +89,7 @@ This is the first node and the entry point for the whole system. It starts the p
 
 \subsection{Create payload}
 This is a function node and its purpose is to generate the payload of messages that will be forwarded to the MQTT publisher. \\
+If the flow variable \textit{initializationCompleted}, set by the initial setup branch, is true the function can go ahead and complete its task, otherwise it 
 The payload is composed by two fields:
 \begin{itemize}
 \item ID: this field is the Id of the message and is a random integer in the range of 0-30000.
@@ -112,7 +151,7 @@ In the second branch of the flow, there is an MQTT subscriber that subscribes to
 \end{figure}
 
 \subsection{challenge3/id\_generator}
-The first node is an mqtt in node, that is subscribed to the topic "challenge3/id\_generator" to the local MQTT broker on port 1884. This node receives messages sent to the local broker by the publisher in the first branch of the flow and processes them with the following nodes.
+The first node is an MQTT in node, that is subscribed to the topic "challenge3/id\_generator" to the local MQTT broker on port 1884. This node receives messages sent to the local broker by the publisher in the first branch of the flow and processes them with the following nodes.
 
 \subsection{Compute N}
 This node is a function node that performs two main tasks:
