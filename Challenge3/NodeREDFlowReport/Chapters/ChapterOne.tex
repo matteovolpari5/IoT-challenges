@@ -10,25 +10,25 @@ This document will explain how it works by analysing the individual nodes of the
 \end{figure}
 
 \section{Initial setup branch}
-In this branch, all operations considered preliminary to system start-up are carried out, such as loading the \textit{challenge3.csv} file and cleaning the other CSV files that the system will have to write during execution.
+In this branch, all operations considered preliminary to system start-up are carried out, such as loading the challenge3.csv file and cleaning the other CSV files that the system will have to write during execution.
 \label{sec:initial_setup_branch}
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth, height=0.5\textheight, keepaspectratio]{initial_setup_branch.png}
-    \caption{initial setup branch}
+    \caption{Initial setup branch}
 \end{figure}
 \subsection{Inject}
 When the system is deployed, this node starts this branch of the flow, which allows all preliminary operations to be carried out before starting the tasks of the other two branches of the flow.
 
 \subsection{Read challenge3.csv }
 This is a read file node and its task is to read the file specified at the path that has been inserted into the node.\\
-This file is the \textit{Challenge3.csv} which will be used by the MQTT Subscriber branch to process the messages it receives.
+This file is challenge3.csv which will be used by the MQTT Subscriber branch to process the messages it receives.
 
 \subsection{csv}
-This node is a csv node and is used in the "CSV to Object" way in order to convert the CSV file read in the previous node to an object that will be saved into a textit{flow} variable in the next node.
+This node is a csv node and is used in the "CSV to Object" way in order to convert the CSV file read in the previous node to an object that will be saved into a flow variable in the next node.
 
 \subsection{Save CSV}
-This is a function node and its goal is to save the content of the CSV file read before into a textit{flow} variable.
+This is a function node and its goal is to save the content of the CSV file read before into a flow variable.
 The code of the function node is reported below:
 \begin{minted}{javascript}
 flow.set("csv_challenge3", msg.payload);
@@ -40,18 +40,14 @@ This function node has the task of preparing the HTTP DELETE request to be sent 
 In this way, when the flow starts, the channel is cleaned of any old data.\\
 The code of the function node is shown below:
 \begin{minted}{javascript}
-// Code added here will be run once
-// whenever the node is started.
 var channelID = 2924504;
 var USER_API_KEY = "F96QKIB7FK3F5KVG"
 
 msg.method = "DELETE";
-//msg.headers['Host'] = 'api.thingskpeak.com'
 msg.payload = "api_key=" + encodeURIComponent("F96QKIB7FK3F5KVG");
 msg.headers = msg.headers || {};
 msg.headers['Content-Type'] = 'application/x-www-form-urlencoded';
 msg.url = "https://api.thingspeak.com/channels/" + channelID + "/feeds.json";
-//msg.payload = "api_key=" + USER_API_KEY;
 
 return msg;
 \end{minted}
@@ -60,10 +56,10 @@ return msg;
 This node send the HTTP request using the HTTP method set in the previous node.
 
 \subsection{Clear CSV files}
-The three \textit{Clear <file\_name>.csv} nodes are used to clean up the three different CSV files that the system then has to write during execution. To clean up these files, an overwrite must be performed for each file.
+The three Clear <file\_name>.csv nodes are used to clean up the three different CSV files that the system then has to write during execution. To clean up these files, an overwrite must be performed for each file.
 
 \subsection{Initialization completed 5}
-This join node allows the flow to stop until all five incoming branches have completed their execution. Once all five branches have finished, this node keeps execution going by passing to \textit{Set initialization completed}.
+This join node allows the flow to stop until all five incoming branches have completed their execution. Once all five branches have finished, this node keeps execution going by passing to Set initialization completed.
 
 \subsection{Set initialization completed}
 This is a function node whose task is to set the flow variable InitialisationCompleted to true.
@@ -89,7 +85,7 @@ This is the first node and the entry point for the whole system. It starts the p
 
 \subsection{Create payload}
 This is a function node and its purpose is to generate the payload of messages that will be forwarded to the MQTT publisher. \\
-If the flow variable \textit{initializationCompleted}, set by the initial setup branch, is true the function can go ahead and complete its task, otherwise it 
+If the flow variable \verb|initializationCompleted|, set by the initial setup branch, is true the function can go ahead and complete its task, otherwise it 
 The payload is composed by two fields:
 \begin{itemize}
 \item ID: this field is the Id of the message and is a random integer in the range of 0-30000.

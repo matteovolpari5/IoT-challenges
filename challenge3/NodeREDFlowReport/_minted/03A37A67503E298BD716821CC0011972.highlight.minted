@@ -1,0 +1,4 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{n+nx}{flow}\PYG{p}{.}\PYG{n+nx}{set}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}initializationCompleted\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kc}{true}\PYG{p}{)}\PYG{p}{;}
+\PYG{k}{return}\PYG{+w}{ }\PYG{n+nx}{msg}\PYG{p}{;}
+\end{MintedVerbatim}

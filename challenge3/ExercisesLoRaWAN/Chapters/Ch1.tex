@@ -41,7 +41,7 @@ By applying the natural logarithm, we get:
 t \leq \frac{-ln(0.7)}{2 N \lambda} = \frac{-ln(0.7)}{2 \cdot 50 \cdot \frac{1}{60 \cdot 10^3 \text{ ms}}} = 214.005 \text{ ms}
 \end{equation}
 
-We now use the API \url{https://www.thethingsnetwork.org/airtime-calculator} to find the highest SF that guarantees an airtime smaller than the value we found. We use payload size of 96 Bytes, as computed before, region EU868 and bandwidth 125 kHz. The API says that the maximum payload size for EU868 with SF from 10 to 12 is 51 Bytes; this means that we can evaluate SF values starting from 9 and lowering the SF until we find an airtime smaller than 214.005 ms.
+We now use the API offered by The Things Network at {\color{blue}\url{https://www.thethingsnetwork.org/airtime-calculator}} to find the highest SF that guarantees an airtime smaller than the value we found. We use payload size of 96 Bytes, as computed before, region EU868 and bandwidth 125 kHz. The API says that the maximum payload size for EU868 with SF from 10 to 12 is 51 Bytes; this means that we can evaluate SF values starting from 9 and lowering the SF until we find an airtime smaller than 214.005 ms.
 The values of airtime corresponding to the SF are report in the following table.
 
 \begin{table}[H]

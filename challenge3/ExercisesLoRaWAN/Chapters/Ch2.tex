@@ -10,17 +10,17 @@ The entire Node-Red flow is shown here with high-level blocks that will be descr
 In this section we present the hardware components needed to build and operate the system. 
 \begin{itemize}
 \item \textbf{Arduino MKR WAN 1310:} this board already includes a LPWAN module called Murata CMWX1ZZABZ.
-\item \textbf{External antenna:} the Arduino documentation suggests the following antenna: \textit{Dipole Pentaband Waterproof Antenna} ({\color{blue}\underline{\href{https://store.arduino.cc/products/dipole-pentaband-waterproof-antenna}{Arduino store}}}).
+\item \textbf{External antenna:} the Arduino documentation suggests the following antenna: Dipole Pentaband Waterproof Antenna ({\color{blue}\href{https://store.arduino.cc/products/dipole-pentaband-waterproof-antenna}{Arduino store}}).
 \item \textbf{DHT22 sensor:} this is the humidity and temperature sensor that will be connected via a digital pin to the Arduino board.
 \item \textbf{LoRaWAN Gateway:} for the LoraWAN gateway there are many equivalent options:
 \begin{itemize}
-\item Use a public gateway: we can search if we have a nearby gateway from the The Things Network at {\color{blue}\underline{\url{https://www.thethingsnetwork.org/map}}}.
-\item Buy a gateway from those available online: you can search the best LoRa Gateway online for indoor or outdoor usage, based on your needs, e.g. indoor (\textit{Mikrotik wAP
-LR8}) outdoor (\textit{TEKTELIC KONA MACRO OUTDOOR GATEWAY}).
-\item Build the gateway: you can build your own gateway, by using a computer, e.g. a \textit{Raspberry Pi 4}, a LoRa concentrator board, such as a \textit{RAK2245 Pi Hat}, and an antenna.
+\item Use a public gateway: we can search if we have a nearby gateway from the The Things Network at {\color{blue}\url{https://www.thethingsnetwork.org/map}}.
+\item Buy a gateway from those available online: you can search the best LoRa Gateway online for indoor or outdoor usage, based on your needs, such as Mikrotik wAP
+LR8 for indoor usage and TEKTELIC KONA MACRO OUTDOOR GATEWAY for outdoor.
+\item Build the gateway: you can build your own gateway, by using a computer, e.g. a Raspberry Pi 4, a LoRa concentrator board, such as a RAK2245 Pi Hat, and an antenna.
 \end{itemize}
-\item \textbf{Network Sever The Things Network:} To use a The Things Network server, simply register at {\color{blue}\underline{\href{https://console.cloud.thethings.network/}{The Things Network}}} and add an application that will run in the cloud on The Things Industries infrastructure.
-\item \textbf{ThingSpeak:} To create a ThingSpeak channel, you need to log in with your account at {\color{blue}\underline{\href{https://thingspeak.mathworks.com/}{ThingSpeak}}} and generate a new public channel.
+\item \textbf{Network Sever The Things Network:} To use a The Things Network server, simply register at {\color{blue}\href{https://console.cloud.thethings.network/}{The Things Network}} and add an application that will run in the cloud on The Things Industries infrastructure.
+\item \textbf{ThingSpeak:} To create a ThingSpeak channel, you need to log in with your account at {\color{blue}\href{https://thingspeak.mathworks.com/}{ThingSpeak}} and generate a new public channel.
 \end{itemize}
 \subsection{Connections}
 Here is described how the different components are interconnected.\\
@@ -164,7 +164,7 @@ We configured the uplink payload formatter to decode the data coming from the Ar
 \end{figure}
 
 \subsubsection{Create ThingSpeak Channel}
-We created the ThingSpeak Channel that receives the temperature and humidity values from TTN. We assigned a name and a description to the channel and we create the two desired fields. Finally we made it publicly available at \url{https://thingspeak.mathworks.com/channels/2931560}.
+We created the ThingSpeak Channel that receives the temperature and humidity values from TTN. We assigned a name and a description to the channel and we create the two desired fields. Finally we made it publicly available at {\color{blue}\url{https://thingspeak.mathworks.com/channels/2931560}}.
 
 \begin{figure}[H]
     \centering

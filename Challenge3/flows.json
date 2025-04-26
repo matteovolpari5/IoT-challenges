@@ -1,6 +1,6 @@
 [
     {
-        "id": "c4e499c687c3541c",
+        "id": "3756830b78186303",
         "type": "tab",
         "label": "Flow 1",
         "disabled": false,
@@ -8,9 +8,9 @@
         "env": []
     },
     {
-        "id": "fc3bc22a86e8889a",
+        "id": "66dc5df5eeaf126c",
         "type": "inject",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Inject (5 sec)",
         "props": [],
         "repeat": "5",
@@ -22,14 +22,14 @@
         "y": 560,
         "wires": [
             [
-                "58540cdd33e68de1"
+                "9247088530e18f50"
             ]
         ]
     },
     {
-        "id": "4d958ced8a5517dc",
+        "id": "3f334632c10dc8a0",
         "type": "mqtt out",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "",
         "topic": "challenge3/id_generator",
         "qos": "",
@@ -45,9 +45,9 @@
         "wires": []
     },
     {
-        "id": "935ec9fde54a96bf",
+        "id": "340c4742d628f286",
         "type": "mqtt in",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "",
         "topic": "challenge3/id_generator",
         "qos": "2",
@@ -61,14 +61,14 @@
         "y": 1080,
         "wires": [
             [
-                "cc43981f598c0e1c"
+                "0342935a1c99d99d"
             ]
         ]
     },
     {
-        "id": "58540cdd33e68de1",
+        "id": "9247088530e18f50",
         "type": "function",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Create payload ",
         "func": "let initializationCompleted = flow.get(\"initializationCompleted\") || false;\nif (!initializationCompleted) {\n    return null;    \n}\n\nvar id = Math.floor(Math.random() * 30000);\n\nvar timestamp = Math.floor(Date.now() / 1000);\nmsg.payload = {\n    id: id,\n    timestamp: timestamp\n};\n\nreturn msg;",
         "outputs": 1,
@@ -81,15 +81,15 @@
         "y": 560,
         "wires": [
             [
-                "4d958ced8a5517dc",
-                "6f3f3458191f7482"
+                "3f334632c10dc8a0",
+                "ce16f8eaeec5cb43"
             ]
         ]
     },
     {
-        "id": "6f28d9aa40795e5b",
+        "id": "f0d8de5e992893df",
         "type": "csv",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "id_log.csv",
         "spec": "rfc",
         "sep": ",",
@@ -106,14 +106,14 @@
         "y": 640,
         "wires": [
             [
-                "624582f967d75c32"
+                "3255d3f3c2e7740d"
             ]
         ]
     },
     {
-        "id": "624582f967d75c32",
+        "id": "3255d3f3c2e7740d",
         "type": "file",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Write id_log.csv",
         "filename": "/Users/kevin/Desktop/id_log.csv",
         "filenameType": "str",
@@ -128,9 +128,9 @@
         ]
     },
     {
-        "id": "6f3f3458191f7482",
+        "id": "ce16f8eaeec5cb43",
         "type": "function",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Add row number",
         "func": "var counter = context.get(\"row_count_id_log\") || 0;\ncounter++;\ncontext.set(\"row_count_id_log\", counter);\nvar id = msg.payload[\"id\"];\nvar timestamp = msg.payload[\"timestamp\"];\nmsg.payload = {\n    \"No.\" : counter,\n    \"ID\" : id,\n    \"TIMESTAMP\": timestamp\n}\nreturn msg;",
         "outputs": 1,
@@ -143,14 +143,14 @@
         "y": 640,
         "wires": [
             [
-                "6f28d9aa40795e5b"
+                "f0d8de5e992893df"
             ]
         ]
     },
     {
-        "id": "cc43981f598c0e1c",
+        "id": "0342935a1c99d99d",
         "type": "function",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Compute N",
         "func": "var processedMessages = context.get(\"processed_messages\") || 0;\nprocessedMessages ++;\ncontext.set(\"processed_messages\", processedMessages);\nif (processedMessages > 80) {\n    return null;\n}\n\nvar id = msg.payload[\"id\"];\nvar N = id % 7711;\n\nconsole.log(N);\n\n// saved id and N\nmsg.id = id;\nmsg.N = N;\n\nreturn msg;",
         "outputs": 1,
@@ -163,14 +163,14 @@
         "y": 1080,
         "wires": [
             [
-                "ca8a89228e1da813"
+                "f6b4fbb425037be9"
             ]
         ]
     },
     {
-        "id": "ca8a89228e1da813",
+        "id": "f6b4fbb425037be9",
         "type": "function",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Select message N",
         "func": "if (msg.N === 0) {\n  return null;\n}\n\nlet rows = flow.get(\"csv_challenge3\");\n\nif (!rows) {\n  console.log(\"NULL ROWS \")\n  return null;\n}\n\nlet target = rows.find(r =>\n  parseInt(r[\"No.\"], 10) === msg.N\n);\nmsg.payload = target;\n\nreturn msg;",
         "outputs": 1,
@@ -183,16 +183,16 @@
         "y": 1080,
         "wires": [
             [
-                "67af0666853e2b45",
-                "9548ba6939fbb527",
-                "d4226289f07056cc"
+                "7b777d632ac98412",
+                "d838a822e9464ca4",
+                "700ca40ca81003af"
             ]
         ]
     },
     {
-        "id": "0b625833a567027b",
+        "id": "98784cb81b7ef052",
         "type": "delay",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Message Rate Limiter MQTT",
         "pauseType": "rate",
         "timeout": "5",
@@ -210,16 +210,16 @@
         "y": 880,
         "wires": [
             [
-                "29ae22e8d1be2fb1",
-                "3f1083b85b166525",
-                "0a211c0a4f0af544"
+                "4ae423592b25a061",
+                "f74ecb82d025e14c",
+                "d4a95f5a4f691dc3"
             ]
         ]
     },
     {
-        "id": "3f1083b85b166525",
+        "id": "f74ecb82d025e14c",
         "type": "mqtt out",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Publish from CSV ",
         "topic": "",
         "qos": "",
@@ -235,9 +235,9 @@
         "wires": []
     },
     {
-        "id": "29ae22e8d1be2fb1",
+        "id": "4ae423592b25a061",
         "type": "function",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Prepare Average temperature Fahrenheit",
         "func": "if (msg.payload.payload.type === \"temperature\" && msg.payload.payload.unit === \"F\") {\n    let minTemp = msg.payload.payload.range[0];    \n    let maxTemp = msg.payload.payload.range[1];\n    let avgTemp = (minTemp + maxTemp)/2;\n    \n    msg.topic = \"TempF\";\n    msg.payload = avgTemp;\n    return msg;\n}\nreturn null\n\n\n",
         "outputs": 1,
@@ -250,14 +250,14 @@
         "y": 800,
         "wires": [
             [
-                "32857a975e7589c9"
+                "b99e9616454db3ca"
             ]
         ]
     },
     {
-        "id": "32857a975e7589c9",
+        "id": "b99e9616454db3ca",
         "type": "ui_chart",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Average temperature (F) chart",
         "group": "dbeb544f78cf351e",
         "order": 0,
@@ -299,9 +299,9 @@
         ]
     },
     {
-        "id": "38e993757923cc07",
+        "id": "fe4048a169b6f37a",
         "type": "csv",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "filtered_pubs.csv",
         "spec": "rfc",
         "sep": ",",
@@ -318,14 +318,14 @@
         "y": 880,
         "wires": [
             [
-                "405b1b75f0819def"
+                "2acc64363167028e"
             ]
         ]
     },
     {
-        "id": "0a211c0a4f0af544",
+        "id": "d4a95f5a4f691dc3",
         "type": "function",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Prepare filtered_pubs.csv",
         "func": "if (msg.payload.payload.type === \"temperature\" && msg.payload.payload.unit === \"F\") {\n    var counter = context.get(\"row_count_filtered_pubs\") || 0;\n    counter++;\n    context.set(\"row_count_filtered_pubs\", counter);\n\n    let data = msg.payload.payload;\n    let meanValue = (data.range[0] + data.range[1]) / 2;\n    let long = data.long;\n    let lat = data.lat;\n    let type = data.type;\n    let unit = data.unit;\n    let desc = data.description;\n    msg.payload = {\n        \"No.\" : counter,\n        \"LONG\": long,\n        \"LAT\": lat,\n        \"MEAN_VALUE\": meanValue,\n        \"TYPE\": type,\n        \"UNIT\": unit,\n        \"DESCRIPTION\": desc\n    }\n    return msg;\n}\nreturn null;",
         "outputs": 1,
@@ -338,14 +338,14 @@
         "y": 880,
         "wires": [
             [
-                "38e993757923cc07"
+                "fe4048a169b6f37a"
             ]
         ]
     },
     {
-        "id": "405b1b75f0819def",
+        "id": "2acc64363167028e",
         "type": "file",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Write filtered_pubs.csv",
         "filename": "/Users/kevin/Desktop/filtered_pubs.csv",
         "filenameType": "str",
@@ -360,9 +360,9 @@
         ]
     },
     {
-        "id": "67af0666853e2b45",
+        "id": "7b777d632ac98412",
         "type": "function",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Handle ACK message",
         "func": "if (msg.payload[\"Protocol\"] === \"MQTT\" && msg.payload[\"Info\"].includes(\"Ack\")) {\n    var counter = context.get(\"row_count_ack_log\") || 0;\n    counter++;\n    context.set(\"row_count_ack_log\", counter);\n\n    var currTimestamp = Math.floor(Date.now() / 1000);\n    let idMatch = msg.id;\n    var type = \"\";\n    if (msg.payload[\"Info\"].includes(\"Connect Ack\")) {\n        type = \"Connect Ack\";\n    } else if (msg.payload[\"Info\"].includes(\"Publish Ack\")){\n        type = \"Publish Ack\";\n    } else if (msg.payload[\"Info\"].includes(\"Subscribe Ack\")) {\n        type = \"Subscribe Ack\";\n    }\n    //console.log(msg.payload);\n    msg.payload = {\n        \"No.\": counter,\n        \"TIMESTAMP\": currTimestamp,\n        \"SUB_ID\": idMatch,\n        \"MSG_TYPE\": type\n    }\n    return msg;\n}\nreturn null;",
         "outputs": 1,
@@ -375,15 +375,15 @@
         "y": 1080,
         "wires": [
             [
-                "a04ab5b5c8b0cc2f",
-                "60b048332baf71aa"
+                "c4cf368fbead4e9f",
+                "87a29cda997da0c0"
             ]
         ]
     },
     {
-        "id": "a04ab5b5c8b0cc2f",
+        "id": "c4cf368fbead4e9f",
         "type": "csv",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "ack_log.csv",
         "spec": "rfc",
         "sep": ",",
@@ -400,14 +400,14 @@
         "y": 1040,
         "wires": [
             [
-                "672b81719937ee02"
+                "4e553a49d48225eb"
             ]
         ]
     },
     {
-        "id": "672b81719937ee02",
+        "id": "4e553a49d48225eb",
         "type": "file",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Write ack_log.csv",
         "filename": "/Users/kevin/Desktop/ack_log.csv",
         "filenameType": "str",
@@ -422,9 +422,9 @@
         ]
     },
     {
-        "id": "9548ba6939fbb527",
+        "id": "d838a822e9464ca4",
         "type": "debug",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "debug 1",
         "active": false,
         "tosidebar": true,
@@ -439,9 +439,9 @@
         "wires": []
     },
     {
-        "id": "60b048332baf71aa",
+        "id": "87a29cda997da0c0",
         "type": "function",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Prepare HTTP GET",
         "func": "var API_KEY=\"ZDZ3WHERCF259OFD\"\nvar globalCounter = msg.payload[\"No.\"]\n\nmsg.method = \"GET\";\nmsg.url = \"https://api.thingspeak.com/update?api_key=\"+API_KEY+\"&field1=\"+globalCounter\n\nreturn msg;",
         "outputs": 1,
@@ -454,14 +454,14 @@
         "y": 1120,
         "wires": [
             [
-                "cd62f51a942d82be"
+                "488005188de604ff"
             ]
         ]
     },
     {
-        "id": "63ce78730d6ac0af",
+        "id": "fd12d6cbee4da5cc",
         "type": "http request",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "HTTP Request ThingSpeak",
         "method": "use",
         "ret": "txt",
@@ -481,11 +481,11 @@
         ]
     },
     {
-        "id": "ec0131085cb988eb",
+        "id": "f1a7c7b0a02ab6e5",
         "type": "function",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Prepare DELETE",
-        "func": "// Code added here will be run once\n// whenever the node is started.\nvar channelID = 2924504;\nvar USER_API_KEY = \"F96QKIB7FK3F5KVG\"\n\nmsg.method = \"DELETE\";\n//msg.headers['Host'] = 'api.thingskpeak.com'\nmsg.payload = \"api_key=\" + encodeURIComponent(\"F96QKIB7FK3F5KVG\");\nmsg.headers = msg.headers || {};\nmsg.headers['Content-Type'] = 'application/x-www-form-urlencoded';\nmsg.url = \"https://api.thingspeak.com/channels/\" + channelID + \"/feeds.json\";\n//msg.payload = \"api_key=\" + USER_API_KEY;\n\nreturn msg;",
+        "func": "var channelID = 2924504;\nvar USER_API_KEY = \"F96QKIB7FK3F5KVG\"\n\nmsg.method = \"DELETE\";\n//msg.headers['Host'] = 'api.thingskpeak.com'\nmsg.payload = \"api_key=\" + encodeURIComponent(\"F96QKIB7FK3F5KVG\");\nmsg.headers = msg.headers || {};\nmsg.headers['Content-Type'] = 'application/x-www-form-urlencoded';\nmsg.url = \"https://api.thingspeak.com/channels/\" + channelID + \"/feeds.json\";\n//msg.payload = \"api_key=\" + USER_API_KEY;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -496,14 +496,14 @@
         "y": 160,
         "wires": [
             [
-                "9ad4086c2b33027f"
+                "db796ccabd35deb2"
             ]
         ]
     },
     {
-        "id": "9ad4086c2b33027f",
+        "id": "db796ccabd35deb2",
         "type": "http request",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "",
         "method": "use",
         "ret": "txt",
@@ -520,14 +520,14 @@
         "y": 160,
         "wires": [
             [
-                "f2db15f0ccee657f"
+                "d3f2d2f829eb167c"
             ]
         ]
     },
     {
-        "id": "9e5898bfbd31e857",
+        "id": "d9f4e870f3ba660c",
         "type": "inject",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "",
         "props": [
             {
@@ -545,18 +545,18 @@
         "y": 220,
         "wires": [
             [
-                "ec0131085cb988eb",
-                "338aec1cfa48d54d",
-                "a22ae021d13fc4ba",
-                "632edc1991357ce8",
-                "13a5ecd3c7f202b4"
+                "f1a7c7b0a02ab6e5",
+                "443abcb578231993",
+                "97440b8d08da721d",
+                "525ead5c94249663",
+                "eb57d670408b9182"
             ]
         ]
     },
     {
-        "id": "338aec1cfa48d54d",
+        "id": "443abcb578231993",
         "type": "file in",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Read challenge3.csv",
         "filename": "/Users/kevin/Desktop/challenge3.csv",
         "filenameType": "str",
@@ -569,14 +569,14 @@
         "y": 100,
         "wires": [
             [
-                "71c85bef7d1b208e"
+                "d889246c148bd6a7"
             ]
         ]
     },
     {
-        "id": "71c85bef7d1b208e",
+        "id": "d889246c148bd6a7",
         "type": "csv",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "",
         "spec": "rfc",
         "sep": ",",
@@ -593,14 +593,14 @@
         "y": 100,
         "wires": [
             [
-                "bffe50e143fa37f4"
+                "8018800e551866fd"
             ]
         ]
     },
     {
-        "id": "a22ae021d13fc4ba",
+        "id": "97440b8d08da721d",
         "type": "file",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Clear id_log.csv",
         "filename": "/Users/kevin/Desktop/id_log.csv",
         "filenameType": "str",
@@ -612,14 +612,14 @@
         "y": 220,
         "wires": [
             [
-                "f2db15f0ccee657f"
+                "d3f2d2f829eb167c"
             ]
         ]
     },
     {
-        "id": "632edc1991357ce8",
+        "id": "525ead5c94249663",
         "type": "file",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Clear filtered_pubs.csv",
         "filename": "/Users/kevin/Desktop/filtered_pubs.csv",
         "filenameType": "str",
@@ -631,14 +631,14 @@
         "y": 280,
         "wires": [
             [
-                "f2db15f0ccee657f"
+                "d3f2d2f829eb167c"
             ]
         ]
     },
     {
-        "id": "13a5ecd3c7f202b4",
+        "id": "eb57d670408b9182",
         "type": "file",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Clear ack_log.csv",
         "filename": "/Users/kevin/Desktop/ack_log.csv",
         "filenameType": "str",
@@ -650,14 +650,14 @@
         "y": 340,
         "wires": [
             [
-                "f2db15f0ccee657f"
+                "d3f2d2f829eb167c"
             ]
         ]
     },
     {
-        "id": "f2db15f0ccee657f",
+        "id": "d3f2d2f829eb167c",
         "type": "join",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Initialization completed",
         "mode": "custom",
         "build": "string",
@@ -679,14 +679,14 @@
         "y": 220,
         "wires": [
             [
-                "5792a0ef681d611a"
+                "84abf518c79413aa"
             ]
         ]
     },
     {
-        "id": "bffe50e143fa37f4",
+        "id": "8018800e551866fd",
         "type": "function",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Save CSV",
         "func": "flow.set(\"csv_challenge3\", msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -699,14 +699,14 @@
         "y": 100,
         "wires": [
             [
-                "f2db15f0ccee657f"
+                "d3f2d2f829eb167c"
             ]
         ]
     },
     {
-        "id": "5792a0ef681d611a",
+        "id": "84abf518c79413aa",
         "type": "function",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Set initialization completed",
         "func": "flow.set(\"initializationCompleted\", true);\nreturn msg;",
         "outputs": 1,
@@ -722,9 +722,9 @@
         ]
     },
     {
-        "id": "d4226289f07056cc",
+        "id": "700ca40ca81003af",
         "type": "function",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Handle PUBLISH message",
         "func": "if (msg.payload[\"Protocol\"] === \"MQTT\" && msg.payload[\"Info\"].includes(\"Publish Message\")) {\n    // save info in a variable\n    let info = msg.payload[\"Info\"];\n    // save messages payloads in a variable\n    let messagesPayloads = msg.payload[\"Payload\"] ?? \"\";\n\n    // extract topics\n    let topicMatches = [...info.matchAll(/Publish Message \\[([^\\]]+)\\]/g)];\n    let topics = topicMatches.map(m => m[1]);\n\n    // extract payloads\n    let jsonArray;\n    if (messagesPayloads.trim() === \"\") {\n        jsonArray = [];\n    } else {\n        try {\n            jsonArray = JSON.parse(\"[\" + messagesPayloads + \"]\");\n        } catch (e) {\n            // extract well formed messages\n\n            const objs = [];\n            const objRegex = /\\{[^}]*\\}/g;\n            let m;\n            while ((m = objRegex.exec(messagesPayloads)) !== null) {\n                try {\n                objs.push(JSON.parse(m));\n                } catch (_) {\n                    // skip malformed object\n                }\n            }\n            jsonArray = objs;\n        }\n    }\n\n    // create messages \n    var currTimestamp = Math.floor(Date.now() / 1000);\n    let messages = topics.map((topic, index) => {\n        return {\n            topic: topic, \n            payload: {\n                timestamp: currTimestamp.toString(),\n                id: msg.id.toString(),\n                topic: topic,\n                payload: jsonArray[index] ?? {}\n            }\n        };\n    });\n    \n    return [messages];\n}\nreturn null;",
         "outputs": 1,
@@ -737,14 +737,14 @@
         "y": 960,
         "wires": [
             [
-                "0b625833a567027b"
+                "98784cb81b7ef052"
             ]
         ]
     },
     {
-        "id": "cd62f51a942d82be",
+        "id": "488005188de604ff",
         "type": "delay",
-        "z": "c4e499c687c3541c",
+        "z": "3756830b78186303",
         "name": "Message Rate Limiter ThingSpeak",
         "pauseType": "rate",
         "timeout": "20",
@@ -762,7 +762,7 @@
         "y": 1120,
         "wires": [
             [
-                "63ce78730d6ac0af"
+                "fd12d6cbee4da5cc"
             ]
         ]
     },
