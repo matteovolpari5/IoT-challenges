@@ -1,0 +1,40 @@
+\section{Data}
+\begin{itemize}
+\item $\lambda$ = 0.15 persons/frame
+\item Beacon-enabled mode
+\item CFP only
+\item 1 packet fits 1 slot
+\item 1 PAN coordinator
+\item 3 camera nodes
+\item R = 250 kbps
+\item L = 128 Byte
+\end{itemize}
+
+\section{Exercise 2.1}
+We can compute the Probability Mass Function of the output rate using the Poisson distribution.
+
+\begin{equation}
+P(N = k) = \frac{e^{-\lambda} \lambda^k}{k!} = \frac{e^{-0.15} 0.15^k}{k!}
+\end{equation}
+
+We can compute the PMF of the output rate by setting the right value of k in the Poisson distribution formula, where N is the observed number of people in the frame.
+
+\begin{equation}
+P(r = r_0) = P(N = 0) = \frac{e^{-0.15} 0.15^0}{0!} = e^{-0.15} = 0.8607
+\end{equation}
+
+\begin{equation}
+P(r = r_1) = P(N = 1) = \frac{e^{-0.15} 0.15^1}{1!} = 0.15 e^{-0.15} = 0.129
+\end{equation}
+
+\begin{equation}
+\begin{split}
+	P(r = r_2) = P(N > 1) = 1 - P(N = 0) - P(N = 1) = \\
+	= 1- 0.8607 - 0.1291 = 0.0102
+\end{split}
+\end{equation}
+
+
+\section{Exercise 2.2}
+
+\section{Exercise 2.3}
