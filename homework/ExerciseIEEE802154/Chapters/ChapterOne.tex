@@ -45,36 +45,46 @@ R = \frac{L}{T_{s}}
 T_{s} = \frac{L}{R} = \frac{128 \cdot 8\text{ bit}}{250\text{ kbit/s}} = 4.096\text{ ms}
 \end{equation}
 
+We compute the equivalent bit rate, $r$,  by considering the smallest quantity of data that the modes can transmit. 
+
+\begin{equation}
+r = \frac{1 \text{ kByte}}{10 \text{ s}} = 100 \text{ Byte/s} = 800 \text{ bit/s}
+\end{equation}
+
 We can compute the number of slots needed by the camera nodes, considering the worst case, in which they need to send 6 KByte.
 
 \begin{equation}
-N_{node} = \frac{6 \text{ kByte}}{128 \text {Byte}} = 46.875
+r_{max} = \frac{6 \text{ kByte}}{10 \text{ s}} = 600 \text{ Byte/s}
 \end{equation}
 
-In order to compute $N_{CFP}$, we need to consider the ceiling of $N_{node}$, which is the same for the three camera nodes, since they work in the same way and transmit the same packets.
+\begin{equation}
+N_{1} = N_{2} = N_{3} = \frac{r_{max}}{r} = 600 \text{ Byte/s} / 100 \text{ Byte/s} = 6
+\end{equation}
 
 \begin{equation}
-N_{CFP} = 3 \cdot \lceil 46.875 \rceil = 3 \cdot 47 = 141
+N_{CFP} = N_1 + N_2 + N_3 = 18
 \end{equation}
 
 Since the system doesn't use the CAP, but only the CFP, the active part is formed by the beacon, which uses one slot, and $N_{CFP}$ slots for the camera nodes.
 
 \begin{equation}
-T_{ACTIVE} = (N_{CFP} + 1) \cdot T_S = 581.632 \text{ ms}
+T_{ACTIVE} = (N_{CFP} + 1) \cdot T_S = 77.824 \text{ ms}
 \end{equation}
 
-From the pseudocode, we observe that camera nodes use a timer of 10 seconds before processing a new frame. For this reason, nodes will use a beacon interval of 10 seconds. We can compute the inactive time and the duty cycle accordingly.
+We can compute the $BI$ starting from $r$ and $L$ as follows, and use it to compute $T_{INACTIVE}$.
 
 \begin{equation}
-BI = 10\text{ s}
-\end{equation}
-
-\begin{equation}
-T_{INACTIVE} = BI - T_{ACTIVE} = 10\text{ s} - 581.632 \text{ ms} = 9.418368\text{ s}
+BI = \frac{L}{r} = \frac{128 \text{ Byte}}{100 \text{ Byte/s}} = 1.28 \text{ s}
 \end{equation}
 
 \begin{equation}
-\eta = \frac{T_{ACTIVE}}{BI} = 0.0581632 = 5.81632\text{ \%}
+T_{INACTIVE} = BI - T_{ACTIVE} = 1.28\text{ s} - 77.824 \text{ ms} = 1.202\text{ s}
+\end{equation}
+
+Finally, we compute the duty cycle.
+
+\begin{equation}
+\eta = \frac{T_{ACTIVE}}{BI} = 0.0608 = 6.08\text{ \%}
 \end{equation}
 
 \section{Exercise 2.3}
@@ -85,13 +95,13 @@ We need to compute the maximum $N_{CFP}$ to have $\eta \leq 10 \%$. We express $
 \end{equation}
 
 \begin{equation}
-N_{CFP} \leq \frac{BI}{10 \cdot T_S} - 1 = 243.140625
+N_{CFP} \leq \frac{BI}{10 \cdot T_S} - 1 = 30.25
 \end{equation}
 
 Finally, we compute the number of additional cameras, $N_{additional}$, considering that every camera node uses 47 slots and we have 3 camera nodes.
 
 \begin{equation}
-N_{additional} = \lfloor \frac{243.140625}{47} - 3 \rfloor = 2 
+N_{additional} = \lfloor \frac{30.25}{6} - 3 \rfloor = 2 
 \end{equation}
 
 
