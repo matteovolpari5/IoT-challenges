@@ -57,15 +57,7 @@
 \newcommand{\hsp}{\hspace{0pt}}
 
 \makeatletter
-% Renewcommand: cleardoublepage including the background pic
-\renewcommand*\cleardoublepage{%
-  \clearpage\if@twoside\ifodd\c@page\else
-  \null
-  \AddToShipoutPicture*{\BackgroundPic}
-  \thispagestyle{empty}%
-  \newpage
-  \if@twocolumn\hbox{}\newpage\fi\fi\fi}
-\makeatother
+\let\cleardoublepage\clearpage
 
 %For correctly numbering algorithms
 \numberwithin{algorithm}{chapter}

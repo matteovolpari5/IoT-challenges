@@ -1,6 +1,6 @@
 \section{Exercise 3.1}
 \subsection{Request}
-Find the overall collision resolution efficiency $\eta$ in the different cases in which the initial frame size is set to r1=1,2,3,4,5,6.
+Find the overall collision resolution efficiency $\eta$ in the different cases in which the initial frame size is set to $r1$ = 1, 2, 3, 4, 5, 6.
 \subsection{Data}
 \begin{itemize}
 \item $r_1$ = 1, 2, 3, 4, 5, 6
@@ -8,16 +8,19 @@ Find the overall collision resolution efficiency $\eta$ in the different cases i
 \item $L_3$ = 51/8
 \end{itemize}
 \subsection{Solution}
-To compute the $\eta$ in the different cases we can use the formula:
+To compute $\eta$ in the different cases we can use the formula:
 
 \begin{equation}
 \eta = \frac{N} {L_N}
 \end{equation}
 
-So we need to calculate first $L_4$ in all the six cases required by the exercise. We can do it using the reported formula:
+So we need to calculate first $L_4^*$ in all the six cases required by the exercise. We can do it using the reported formula, which will be recursive only for $r1 = 4$:
 
 \begin{equation}
-L_4^* = r_1 + P(S=0) \cdot L_4 + P(S=1) \cdot L_3 + P(S=2) \cdot L_2 + P(S=3) \cdot L_1
+\begin{split}
+L_4^* &= r1 + \sum_{i=0}^{3} P(S=i) \cdot L_{4-i} = \\
+& = r_1 + P(S=0) \cdot L_4 + P(S=1) \cdot L_3 + P(S=2) \cdot L_2 + P(S=3) \cdot L_1
+\end{split}
 \end{equation}
 
 \subsubsection{Probabilities}
@@ -115,7 +118,7 @@ Now we can calculate the value of $L_4$:
 L_4 & = 4 + \sum_{i=0}^{3} P(S=i) \cdot L_{4-i} = \\
 & = 4 + P(S=0) \cdot L_4 + P(S=1) \cdot L_3 +  P(S=2) \cdot L_2 +  P(S=3) \cdot L_1 = \\
 & = 4 + \frac{5}{32} \cdot L_4 + \frac{3}{16} \cdot L_3 + \frac{9}{16} \cdot L_2 + 0 \\ \\
-L_4 & = \frac{4 + \frac{3}{16} \cdot L_3 + \frac{9}{16} \cdot L_2}{1 - \frac{5}{32}} = \frac{953}{108}
+L_4 & = \frac{4 + \frac{3}{16} \cdot L_3 + \frac{9}{16} \cdot L_2}{1 - \frac{5}{32}} = \frac{4 + \frac{3}{16} \cdot \frac{51}{8} + \frac{9}{16} \cdot 4}{1 - \frac{5}{32}} = \frac{953}{108}
 \end{split}
 \end{equation}
 
