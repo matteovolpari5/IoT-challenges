@@ -1,0 +1,28 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\PYG{c+cp}{\PYGZsh{}define FORKLIFT\PYGZus{}ID \PYGZdq{}1\PYGZdq{} }\PYG{c+c1}{//unique FORKLIFT\PYGZus{}ID}
+\PYG{c+cp}{\PYGZsh{}define ACC\PYGZus{}THRESHOLD 49.05 }\PYG{c+c1}{//5 * 9.81 m/s\PYGZca{}2, 5g}
+\PYG{c+cp}{\PYGZsh{}define GPS\PYGZus{}HDOP\PYGZus{}THRESHOLD 2.5 }\PYG{c+c1}{//gps precision threshold}
+\PYG{c+cp}{\PYGZsh{}define WHEEL\PYGZus{}RADIUS 0.2  }\PYG{c+c1}{// wheel radius in meters}
+\PYG{c+cp}{\PYGZsh{}define STATUS\PYGZus{}INTERVAL 5000 }\PYG{c+c1}{//delay of 5s between two status measurments}
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{Position}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{n}{lat}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k+kt}{double}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k+kt}{bool}\PYG{+w}{ }\PYG{n}{valid}\PYG{p}{;}
+\PYG{p}{\PYGZcb{};}
+\PYG{k}{struct}\PYG{+w}{ }\PYG{n+nc}{Ble\PYGZus{}packet}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{String}\PYG{+w}{ }\PYG{n}{beaconID}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{rssi}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{//RSSI value}
+\PYG{+w}{    }\PYG{n}{Coord}\PYG{+w}{ }\PYG{n}{beacon\PYGZus{}position}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{//local position of the beacon}
+\PYG{p}{\PYGZcb{};}
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{setup}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{setup\PYGZus{}gps}\PYG{p}{();}
+\PYG{+w}{    }\PYG{n}{setup\PYGZus{}accelerometer}\PYG{p}{();}
+\PYG{+w}{    }\PYG{n}{setup\PYGZus{}gyroscope}\PYG{p}{();}
+\PYG{+w}{    }\PYG{n}{setup\PYGZus{}ble\PYGZus{}scan}\PYG{p}{();}
+\PYG{+w}{    }\PYG{n}{last\PYGZus{}status\PYGZus{}time}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{now}\PYG{p}{();}
+\PYG{+w}{    }\PYG{n}{nbiot\PYGZus{}connect}\PYG{p}{()}
+\PYG{+w}{    }\PYG{n}{setup\PYGZus{}mqtt\PYGZus{}client}\PYG{p}{();}
+\PYG{p}{\PYGZcb{}}
+
+\end{Verbatim}
