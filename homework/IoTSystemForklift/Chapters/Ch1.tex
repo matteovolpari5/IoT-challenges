@@ -8,12 +8,12 @@ In this section, we show a graphical diagram representing the architecture of ou
 \end{figure}
 
 \section{Hardware and sensors}
-Every forklift is equipped with an ESP32-C3 board, which natively supports BLE, and a SIMCom SIM7080G module enabling NB-IoT connectivity. Moreover, every forklift has a set of sensors which are used for different purposes:
+Every forklift is equipped with an ESP32-C3 board, which natively supports BLE, and a SIMCom SIM7080G module enabling NB-IoT connectivity, with the suggested antenna MF25D from Huizhou Speed Wireless Technology. Moreover, every forklift has a set of sensors which are used for different purposes:
 \begin{itemize}
 \item \textbf{Bosch BMI160 Accelerometer and Gyroscope}\\
 Every forklift is equipped with two compact and low power sensors. One sensor is placed on a forklift’s wheel and is used as a gyroscope to measures the speed of the vehicle. The second sensor is placed on a non-moving part of the forklift and is used to measure its acceleration to perform impact detection; the sensor is set so that, when it measures a very high acceleration value (bigger than a threshold), the sensor wakes the ESP32-C3 with an interrupt.
 \item \textbf{u-blox NEO-M9N GNSS module}\\
-Every forklift also features a GPS module, used to track its position in the outdoor yard of the warehouse, providing an accuracy of about 1.5 meters.
+Every forklift also features a GPS module, used to track its position in the outdoor yard of the warehouse, providing an accuracy of about 1.5 meters. We also introduce an external antenna, like the suggested u-blox ANN-MB6.
 \end{itemize}
 
 Additional hardware is installed in the warehouse to localize forklifts:
@@ -23,7 +23,13 @@ In the internal area of the warehouse, we place nine ESP32-C3 boards, forming a 
 \item \textbf{MICROCHIP LAN8720A Ethernet module}\\
 ESP32-C3 boards used as BLE beacons are connected to the power supply and to the wired Internet of the warehouse, through an Ethernet module.
 \end{itemize}
-We assume that the internal area of the warehouse already features power supply and a stable wired Internet connection, which is used by the company.
+Finally, all ESP32-C3 boards are equipped with an external BLE antenna, such as the Taoglas FXP74.07.0100A model.\\
+We assume that the internal area of the warehouse already features power supply and a stable wired Internet connection, which is used by the company.\\
+Power consumption in the system is not an issue:
+\begin{itemize}
+\item BLE beacons are directly connected to the power supply, since their position is fixed and they also need wired connection to the Internet. The connection to the power supply can happen through the Ethernet port, with PoE technology.
+\item ESP32 boards on forklifts are connected to the battery of the forklift, with a minimal impact on it, since the power consumption of the board is much lower than the one of the vehicle. To provide power to the board, we need a Step-Down converter to step down the voltage of the forklift to 3.3V, such as the MP1584, from Monolithic Power Systems.
+\end{itemize}
 
 \section{Communication protocols}
 The system uses different communication protocols for indoor and outdoor areas of the warehouse, since they different in size by a large factor: the internal area is 500 $m^2$, while the external one is 1 $km^2$, i.e. 1 million $m^2$.\\
