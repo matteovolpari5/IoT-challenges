@@ -67,13 +67,16 @@ Every time the MQTT broker receives a message, a Python function in AWS Lambda p
 
 \pagebreak
 \section{Forklift Pseudocode}
+\subsection{Setup}
 \begin{minted}{cpp}
-
 #define FORKLIFT_ID "1" //unique FORKLIFT_ID 
 #define ACC_THRESHOLD 49.05 //5 * 9.81 m/s^2, 5g
 #define GPS_HDOP_THRESHOLD 2.5 //gps precision threshold 
 #define WHEEL_RADIUS 0.2  // wheel radius in meters
-#define STATUS_INTERVAL 5000 //delay of 5s between two status measurments
+//5 seconds between 2 publish messages (4.5s of deep sleep + 500ms of measurments)
+#define STATUS_INTERVAL 4500 //4.5 seconds of deep sleep
+bool wake_reason_interrupt = false; //true if it is awakened by the accelerometer
+bool is_outside = true; //true if the forklift is in the outside part
 struct Position {
     double lat;
     double long;
@@ -85,64 +88,67 @@ struct Ble_packet {
     Coord beacon_position; //local position of the beacon
 };
 void setup() {
+    if wakeup_reason_interrupt() {
+        wake_reason_interrupt = true;
+    } else {
+        wake_reason_interrupt = false;
+    } 
     setup_gps();
-    setup_accelerometer();
+    setup_accelerometer_interrupt();
     setup_gyroscope();
     setup_ble_scan();
-    last_status_time = now();
-    nbiot_connect()
+    nbiot_connect();
     setup_mqtt_client();
+    //enable wake up from interrupt
+    enable_wakeup(pin=ACC_INT_PIN, mode=RISE);
 }
-
 \end{minted}
 \pagebreak
+\subsection{Loop}
 \begin{minted}{cpp}
-
 void loop() {
     current_time = now();
-    // impact detection measurment
-    accel = read_accelerometer(vehicle)
-    acc_magnitude = sqrt(accel.x² + accel.y² + (accel.z - 9.81)²)
-    if (acc_magnitude > ACC_THRESHOLD) {
-        // an impact has been detected
-        position = get_position()
+    if wake_reason_interrupt {
+        //impact detected
+        position = get_position();
         impact_message = {
-                "messageID": generate_uuid(),
-                "forkliftID": forkliftID,
-                "timestamp": current_time,
-                "position": { "lat": position.lat, "lng": position.lng }
+            "messageID": generate_uuid(),
+            "forkliftID": FORKLIFT_ID,
+            "timestamp": current_time,
+            "position": {
+                "lat": position.lat,
+                "lng": position.lng
             }
-        publish_message("warehouse/" + FORKLIFT_ID + "/impact", impact_message)
-    }
-
-    //perform status measurments each 5 seconds
-    if (current_time - last_status_time >= STATUS_INTERVAL) { 
+        }
+        publish_message("warehouse/" + FORKLIFT_ID + "/impact", impact_message);
+    } else {
         //status measurments
-        last_status_time = current_time
-        position = get_position()
-        gyro = read_gyroscope(wheel)
+        position = get_position();
+        gyro = read_gyroscope(wheel);
         //compute speed
-        speed = gyro.z * wheel_radius
+        speed = gyro.z * wheel_radius;
         status_message = {
-                "messageID": generate_uuid(),
-                "forkliftID": forkliftID,
+               "messageID": generate_uuid(),
+                "forkliftID": FORKLIFT_ID,
                 "timestamp": current_time,
                 "speed": speed,
                 "position": { "lat": position.lat, "lng": position.lng }
-            }
-        publish_message("warehouse/" + FORKLIFT_ID + "/status", status_message)
+                }
+        publish_message("warehouse/" + FORKLIFT_ID + "/status", status_message);
         }
-    delay(500); //loop with ODR of 2Hz
+    enable_timer_wakeup(STATUS_INTERVAL);
+    deep_sleep();
 }
 \end{minted}
-
+\pagebreak
+\subsection{Auxiliary Functions}
+\subsubsection{Publish Message}
 \begin{minted}{cpp}
 void publish_message(String topic, Message message) {
     //check how the message should be sent
     payload = serialize_to_json(message);
-    position = get_gps_position();
-    if (!position.valid || position.hdop <= GPS_HDOP_THRESHOLD) {
-        //forklift is inside => message published to BLE beacon
+    if (!is_outside) {
+        //forklift is inside, message published to BLE beacon
         String ble_payload = build_json_payload(topic, payload);
         //send message to all ble beacons
         ble_advertise(ble_payload);
@@ -151,12 +157,18 @@ void publish_message(String topic, Message message) {
         mqtt_publish(topic, payload)
     }
 }
+\end{minted}
+This function publishes a message either via NB-IoT (if outside with good GPS signal) or via BLE advertising (if indoors). 
+This is done by serializing the message as JSON and selecting the appropriate transmission method.
+\subsubsection{Get Position}
+\begin{minted}{cpp}
 Position get_position() {
     position = get_gps_position();
     if (!position.valid || position.hdop <= GPS_HDOP_THRESHOLD) {
-        //forklift is inside => position retrieved through BLE
+        //forklift is inside, gps signal is too weak
+        is_outside = false;
+        //retrieve position via BLE
         ble_packets = perform_ble_scan(200); //200 is the scan duration in ms
-        //ble_packets is an array of Ble_packet
         if (ble_packets.size >= 3) {
             beacons_position = [];
             distances = [];
@@ -166,8 +178,8 @@ Position get_position() {
                 dist = estimate_distance_rssi(pkt.rssi);
                 distances.append(dist);
             }
-            //retrieve local coordinates
-            local_coord = least_squares_trialateration(beacons_position, distances);
+            //retrieve local coordinates with a least square function
+            local_coord = trilateration(beacons_position, distances);
             //convert local coordinates into absolute coordinates
             absolute_coord = local_to_absolute(local_coord.x, local_coord.y);
             return {
@@ -179,10 +191,21 @@ Position get_position() {
             //insufficient number of data
             return {lat: 0.0, long: 0.0, valid: false }
         }
-
     } else {
         //return gps position
         return position;
     }
 }
 \end{minted}
+This function returns the forklift's position. This is done using the GPS module, if its signal is weak or unavailable, performs a BLE scan to collect RSSI data from nearby BLE beacons. \\
+Then estimates distances using a log-distance path loss model and applies least-squares trilateration to compute indoor position, then it converts it to absolute coordinates.
+\subsubsection{Setup Accelerometer}
+\begin{minted}{cpp}
+void setup_accelerometer_interrupt() {
+    bmi160.set_ODR(200); //set frequence of 200 Hz
+    bmi160.enable_interrupt_on_threshold();
+    attach_interrupt(pin=ACC_INT_PIN, mode=RISE);
+}
+\end{minted}
+
+This setup function sets the accelerometer's output data rate (ODR) to 200 Hz and enables an interrupt when acceleration exceeds a predefined threshold (5g). Attaches a rising-edge interrupt to the corresponding GPIO pin to wake the board and trigger impact handling logic.

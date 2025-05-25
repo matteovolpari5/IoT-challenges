@@ -1,0 +1,15 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{publish\PYGZus{}message}\PYG{p}{(}\PYG{n}{String}\PYG{+w}{ }\PYG{n}{topic}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{Message}\PYG{+w}{ }\PYG{n}{message}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{c+c1}{//check how the message should be sent}
+\PYG{+w}{    }\PYG{n}{payload}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{serialize\PYGZus{}to\PYGZus{}json}\PYG{p}{(}\PYG{n}{message}\PYG{p}{);}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{is\PYGZus{}outside}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{c+c1}{//forklift is inside, message published to BLE beacon}
+\PYG{+w}{        }\PYG{n}{String}\PYG{+w}{ }\PYG{n}{ble\PYGZus{}payload}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{build\PYGZus{}json\PYGZus{}payload}\PYG{p}{(}\PYG{n}{topic}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{payload}\PYG{p}{);}
+\PYG{+w}{        }\PYG{c+c1}{//send message to all ble beacons}
+\PYG{+w}{        }\PYG{n}{ble\PYGZus{}advertise}\PYG{p}{(}\PYG{n}{ble\PYGZus{}payload}\PYG{p}{);}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{k}{else}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{c+c1}{//use nb\PYGZhy{}IoT}
+\PYG{+w}{        }\PYG{n}{mqtt\PYGZus{}publish}\PYG{p}{(}\PYG{n}{topic}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{payload}\PYG{p}{)}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

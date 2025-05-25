@@ -1,0 +1,36 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{Position}\PYG{+w}{ }\PYG{n+nf}{get\PYGZus{}position}\PYG{p}{()}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{position}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{get\PYGZus{}gps\PYGZus{}position}\PYG{p}{();}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{o}{!}\PYG{n}{position}\PYG{p}{.}\PYG{n}{valid}\PYG{+w}{ }\PYG{o}{||}\PYG{+w}{ }\PYG{n}{position}\PYG{p}{.}\PYG{n}{hdop}\PYG{+w}{ }\PYG{o}{\PYGZlt{}=}\PYG{+w}{ }\PYG{n}{GPS\PYGZus{}HDOP\PYGZus{}THRESHOLD}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{c+c1}{//forklift is inside, gps signal is too weak}
+\PYG{+w}{        }\PYG{n}{is\PYGZus{}outside}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n+nb}{false}\PYG{p}{;}
+\PYG{+w}{        }\PYG{c+c1}{//retrieve position via BLE}
+\PYG{+w}{        }\PYG{n}{ble\PYGZus{}packets}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{perform\PYGZus{}ble\PYGZus{}scan}\PYG{p}{(}\PYG{l+m+mi}{200}\PYG{p}{);}\PYG{+w}{ }\PYG{c+c1}{//200 is the scan duration in ms}
+\PYG{+w}{        }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{ble\PYGZus{}packets}\PYG{p}{.}\PYG{n}{size}\PYG{+w}{ }\PYG{o}{\PYGZgt{}=}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{n}{beacons\PYGZus{}position}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{[];}
+\PYG{+w}{            }\PYG{n}{distances}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{[];}
+\PYG{+w}{            }\PYG{k}{for}\PYG{+w}{ }\PYG{n}{pkt}\PYG{+w}{ }\PYG{n}{in}\PYG{+w}{ }\PYG{n}{ble\PYGZus{}packet}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n}{beacons\PYGZus{}position}\PYG{p}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{pkt}\PYG{p}{.}\PYG{n}{beacon\PYGZus{}position}\PYG{p}{);}
+\PYG{+w}{                }\PYG{c+c1}{//distance estimation using log\PYGZhy{}distance model}
+\PYG{+w}{                }\PYG{n}{dist}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{estimate\PYGZus{}distance\PYGZus{}rssi}\PYG{p}{(}\PYG{n}{pkt}\PYG{p}{.}\PYG{n}{rssi}\PYG{p}{);}
+\PYG{+w}{                }\PYG{n}{distances}\PYG{p}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{dist}\PYG{p}{);}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{            }\PYG{c+c1}{//retrieve local coordinates with a least square function}
+\PYG{+w}{            }\PYG{n}{local\PYGZus{}coord}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{trilateration}\PYG{p}{(}\PYG{n}{beacons\PYGZus{}position}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{distances}\PYG{p}{);}
+\PYG{+w}{            }\PYG{c+c1}{//convert local coordinates into absolute coordinates}
+\PYG{+w}{            }\PYG{n}{absolute\PYGZus{}coord}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{local\PYGZus{}to\PYGZus{}absolute}\PYG{p}{(}\PYG{n}{local\PYGZus{}coord}\PYG{p}{.}\PYG{n}{x}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{local\PYGZus{}coord}\PYG{p}{.}\PYG{n}{y}\PYG{p}{);}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{n+nl}{lat}\PYG{p}{:}\PYG{+w}{ }\PYG{n}{absolute\PYGZus{}coord}\PYG{p}{.}\PYG{n}{lat}\PYG{p}{,}
+\PYG{+w}{                }\PYG{n+nl}{long}\PYG{p}{:}\PYG{+w}{ }\PYG{n}{absolute\PYGZus{}coord}\PYG{p}{.}\PYG{k+kt}{long}\PYG{p}{,}
+\PYG{+w}{                }\PYG{n+nl}{valid}\PYG{p}{:}\PYG{+w}{ }\PYG{n+nb}{true}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{k}{else}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{c+c1}{//insufficient number of data}
+\PYG{+w}{            }\PYG{k}{return}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{n}{lat}\PYG{o}{:}\PYG{+w}{ }\PYG{l+m+mf}{0.0}\PYG{p}{,}\PYG{+w}{ }\PYG{k+kt}{long}\PYG{o}{:}\PYG{+w}{ }\PYG{l+m+mf}{0.0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{valid}\PYG{o}{:}\PYG{+w}{ }\PYG{n+nb}{false}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{k}{else}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{c+c1}{//return gps position}
+\PYG{+w}{        }\PYG{k}{return}\PYG{+w}{ }\PYG{n}{position}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}
