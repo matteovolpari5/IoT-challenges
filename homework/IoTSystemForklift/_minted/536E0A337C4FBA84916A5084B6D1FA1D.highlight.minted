@@ -1,0 +1,7 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{setup\PYGZus{}accelerometer\PYGZus{}interrupt}\PYG{p}{(}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{bmi160}\PYG{p}{.}\PYG{n}{set\PYGZus{}ODR}\PYG{p}{(}\PYG{l+m+mi}{200}\PYG{p}{)}\PYG{p}{;}\PYG{+w}{ }\PYG{c+c1}{//set frequence of 200 Hz}
+\PYG{+w}{    }\PYG{n}{bmi160}\PYG{p}{.}\PYG{n}{enable\PYGZus{}interrupt\PYGZus{}on\PYGZus{}threshold}\PYG{p}{(}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{attach\PYGZus{}interrupt}\PYG{p}{(}\PYG{n}{pin}\PYG{o}{=}\PYG{n}{ACC\PYGZus{}INT\PYGZus{}PIN}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{mode}\PYG{o}{=}\PYG{n}{RISE}\PYG{p}{)}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\end{MintedVerbatim}

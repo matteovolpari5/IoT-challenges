@@ -1,0 +1,35 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k+kt}{void}\PYG{+w}{ }\PYG{n+nf}{loop}\PYG{p}{(}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{current\PYGZus{}time}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{now}\PYG{p}{(}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{n}{wake\PYGZus{}reason\PYGZus{}interrupt}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{c+c1}{//impact detected}
+\PYG{+w}{        }\PYG{n}{position}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{get\PYGZus{}position}\PYG{p}{(}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{impact\PYGZus{}message}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{            }\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{messageID}\PYG{l+s}{\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{n}{generate\PYGZus{}uuid}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,}
+\PYG{+w}{            }\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{forkliftID}\PYG{l+s}{\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{n}{FORKLIFT\PYGZus{}ID}\PYG{p}{,}
+\PYG{+w}{            }\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{timestamp}\PYG{l+s}{\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{n}{current\PYGZus{}time}\PYG{p}{,}
+\PYG{+w}{            }\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{position}\PYG{l+s}{\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{                }\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{lat}\PYG{l+s}{\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{n}{position}\PYG{p}{.}\PYG{n}{lat}\PYG{p}{,}
+\PYG{+w}{                }\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{lng}\PYG{l+s}{\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{n}{position}\PYG{p}{.}\PYG{n}{lng}
+\PYG{+w}{            }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{n}{publish\PYGZus{}message}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{warehouse/}\PYG{l+s}{\PYGZdq{}}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{FORKLIFT\PYGZus{}ID}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{/impact}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{impact\PYGZus{}message}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}\PYG{+w}{ }\PYG{k}{else}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{        }\PYG{c+c1}{//status measurments}
+\PYG{+w}{        }\PYG{n}{position}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{get\PYGZus{}position}\PYG{p}{(}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{gyro}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{read\PYGZus{}gyroscope}\PYG{p}{(}\PYG{n}{wheel}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{        }\PYG{c+c1}{//compute speed}
+\PYG{+w}{        }\PYG{n}{speed}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{gyro}\PYG{p}{.}\PYG{n}{z}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{wheel\PYGZus{}radius}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{status\PYGZus{}message}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{               }\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{messageID}\PYG{l+s}{\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{n}{generate\PYGZus{}uuid}\PYG{p}{(}\PYG{p}{)}\PYG{p}{,}
+\PYG{+w}{                }\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{forkliftID}\PYG{l+s}{\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{n}{FORKLIFT\PYGZus{}ID}\PYG{p}{,}
+\PYG{+w}{                }\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{timestamp}\PYG{l+s}{\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{n}{current\PYGZus{}time}\PYG{p}{,}
+\PYG{+w}{                }\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{speed}\PYG{l+s}{\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{n}{speed}\PYG{p}{,}
+\PYG{+w}{                }\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{position}\PYG{l+s}{\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{lat}\PYG{l+s}{\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{n}{position}\PYG{p}{.}\PYG{n}{lat}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{lng}\PYG{l+s}{\PYGZdq{}}\PYG{o}{:}\PYG{+w}{ }\PYG{n}{position}\PYG{p}{.}\PYG{n}{lng}\PYG{+w}{ }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{                }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{        }\PYG{n}{publish\PYGZus{}message}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{warehouse/}\PYG{l+s}{\PYGZdq{}}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{FORKLIFT\PYGZus{}ID}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}}\PYG{l+s}{/status}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{status\PYGZus{}message}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{    }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{    }\PYG{n}{enable\PYGZus{}timer\PYGZus{}wakeup}\PYG{p}{(}\PYG{n}{STATUS\PYGZus{}INTERVAL}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{deep\PYGZus{}sleep}\PYG{p}{(}\PYG{p}{)}\PYG{p}{;}
+\PYG{p}{\PYGZcb{}}
+\end{MintedVerbatim}

@@ -40,11 +40,11 @@ Messages are published on two different topics:
 \begin{itemize}
 \item \verb|warehouse/<forkliftID>/impact|: topic used to publish impact detection messages, containing messageID, forkliftID, timestamp and position.
 \item \verb|warehouse/<forkliftID>/status|: topic used to publish regular data about the status of the forklifts, containing messageID, forkliftID, timestamp, speed and position.
-The forklift doesn’t send information about the travelled space, because it can be computed in the backend considering the value of speed and the time between one update and the following one.
+The forklift doesn’t send information about the travelled distance, because it can be computed in the backend considering the value of speed and the time between one update and the following one.
 \end{itemize}
 
 \section{Status monitoring}
-Forklift real time localization is performed using different technologies for the indoor and outdoor spaces. In the outdoor yard of the warehouse, forklifts use the NEO-M9N GNSS module to perform localization; this method combines an accuracy of about 1.5 to 2 meters, ideal for a large and open area, and low cost, making it an ideal choice for our system. In the indoor area of the warehouse, instead, forklifts are localized thanks to BLE RSSI, which is very low cost, reuses BLE beacons employed for communication and provides a reasonable accuracy of about 5 meters. Given the layout of the warehouse, we favoured using a simple and low cost solution, over a more precise and expensive one, such as UWB. BLE beacons periodically transmit packets containing a beacon identifier and the transmission power, forklifts who need to compute their position perform a BLE scan of 200 ms and receive Advertising packets from the beacons. Once the forklift has collected packets, it computes the distance from every beacon from which it received a packet using the log-distance path loss model. Finally, knowing the distance from beacons, the forklift identifies its position by triangulation with least-squares, and converts the obtained relative coordinates to absolute one, used also by GPS. The ESP32-C3 on the forklift checks if the GPS signal is strong enough, if it is, the forklift is in the outdoor yard, otherwise, the ESP-32 uses the BLE triangulation.\\ 
+Forklift real time localization is performed using different technologies for the indoor and outdoor spaces. In the outdoor yard of the warehouse, forklifts use the NEO-M9N GNSS module to perform localization; this method combines an accuracy of about 1.5 to 2 meters, ideal for a large and open area, and low cost, making it an ideal choice for our system. In the indoor area of the warehouse, instead, forklifts are localized thanks to BLE RSSI, which is very low cost, reuses BLE beacons employed for communication and provides a reasonable accuracy of about 5 meters. Given the layout of the warehouse, we favoured using a simple and low cost solution, over a more precise and expensive one, such as UWB. BLE beacons periodically transmit packets containing a beacon identifier and the transmission power, forklifts who need to compute their position perform a BLE scan of 200 ms and receive Advertising packets from the beacons. Once the forklift has collected packets, it computes the distance from every beacon from which it received a packet using the log-distance path loss model. Finally, knowing the distance from beacons, the forklift identifies its position by triangulation with least-squares, and converts the obtained relative coordinates to absolute one, used also by GPS. The ESP32-C3 on the forklift checks if the GPS signal is strong enough, if it is, the forklift is in the outdoor yard and uses the GPS measurement, otherwise, the ESP-32 is in the underground area and performs BLE triangulation.\\ 
 The system also monitors the speed and travelled distance by the forklifts, this is achieved by the ESP32-C3 thanks to BMI160 Gyroscope placed on a wheel of the forklift. Distance is computed by the backend, based on speed and the time elapsed between two following measurements. Position and speed data is sent from the ESP32-C3 to the backend every 5 seconds to guarantee real-time monitoring.
 
 \section{Impact detection}
@@ -135,7 +135,7 @@ void loop() {
                 "position": { "lat": position.lat, "lng": position.lng }
                 }
         publish_message("warehouse/" + FORKLIFT_ID + "/status", status_message);
-        }
+    }
     enable_timer_wakeup(STATUS_INTERVAL);
     deep_sleep();
 }
